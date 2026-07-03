@@ -24,7 +24,17 @@ const signupSchema = z.object({
 
 type SignupFormValues = z.infer<typeof signupSchema>;
 
+import { Suspense } from "react";
+
 export default function SignupPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen flex-col items-center justify-center bg-pink-50"><Loader2 className="animate-spin h-8 w-8 text-pink-500" /></div>}>
+      <SignupContent />
+    </Suspense>
+  );
+}
+
+function SignupContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("redirect") || "/";
