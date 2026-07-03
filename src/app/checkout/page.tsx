@@ -101,7 +101,7 @@ export default function CheckoutPage() {
           }));
           
         const productDocs = await Promise.all(
-          productRefs.map(p => transaction.get(p.ref))
+          productRefs.map((p: any) => transaction.get(p.ref))
         );
         
         // Write order

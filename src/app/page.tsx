@@ -28,6 +28,7 @@ type Product = {
   image?: string;
   images?: string[];
   isOutOfStock?: boolean;
+  stockQuantity?: number;
 };
 
 type Category = {

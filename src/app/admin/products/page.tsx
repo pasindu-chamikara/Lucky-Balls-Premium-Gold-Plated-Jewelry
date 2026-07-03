@@ -327,7 +327,7 @@ export default function AdminProductsPage() {
                 type="number" 
                 min="0" 
                 step="0.01" 
-                value={newProduct.price === "" ? "" : (newProduct.price === undefined || isNaN(newProduct.price as any) ? "" : newProduct.price)} 
+                value={(newProduct.price as any) === "" ? "" : (newProduct.price === undefined || isNaN(newProduct.price as any) ? "" : newProduct.price)} 
                 onChange={e => {
                   if (e.target.value === "") {
                     setNewProduct({...newProduct, price: "" as any});

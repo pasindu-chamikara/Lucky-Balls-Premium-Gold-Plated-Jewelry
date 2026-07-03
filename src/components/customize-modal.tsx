@@ -17,6 +17,7 @@ type Product = {
   price: number;
   description: string;
   isCustomizable: boolean;
+  customizationOptions?: any[];
   image?: string;
   images?: string[];
 };
@@ -80,7 +81,7 @@ export function CustomizeModal({ product, onClose }: { product: Product, onClose
           </div>
 
           <div className="space-y-6">
-            {product.customizationOptions?.map((opt) => (
+            {product.customizationOptions?.map((opt: any) => (
               <div key={opt.id} className="space-y-2">
                 <label className="block text-sm font-medium text-zinc-700">
                   {opt.label}
@@ -98,7 +99,7 @@ export function CustomizeModal({ product, onClose }: { product: Product, onClose
                     className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 focus:outline-none focus:border-pink-500 transition-colors appearance-none"
                   >
                     <option value="">Select an option</option>
-                    {opt.choices?.map(choice => (
+                    {opt.choices?.map((choice: string) => (
                       <option key={choice} value={choice}>{choice}</option>
                     ))}
                   </select>
