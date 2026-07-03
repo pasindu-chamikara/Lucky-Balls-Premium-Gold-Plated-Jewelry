@@ -35,7 +35,6 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          // Check if user exists in the 'admins' Firestore collection
           const adminDocRef = doc(db, "admins", user.uid);
           const adminDocSnap = await getDoc(adminDocRef);
 
@@ -58,6 +57,14 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
 
     return () => unsubscribe();
   }, [router]);
+
+  const addNotification = (title: string, message: string, href: string) => {
+    const id = Math.random().toString(36).substr(2, 9);
+    setNotifications(prev => [...prev, { id, title, message, href }]);
+    setTimeout(() => {
+      setNotifications(prev => prev.filter(n => n.id !== id));
+    }, 5000);
+  };
 
   useEffect(() => {
     if (loading) return;
@@ -92,14 +99,6 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
       unsubscribeMessages();
     };
   }, [loading]);
-
-  const addNotification = (title: string, message: string, href: string) => {
-    const id = Math.random().toString(36).substr(2, 9);
-    setNotifications(prev => [...prev, { id, title, message, href }]);
-    setTimeout(() => {
-      setNotifications(prev => prev.filter(n => n.id !== id));
-    }, 5000);
-  };
 
   const handleSignOut = async () => {
     try {
