@@ -73,7 +73,7 @@ export function Navbar() {
       <header className="pointer-events-auto w-full max-w-5xl rounded-full border border-zinc-200/50 bg-white/70 backdrop-blur-xl shadow-lg shadow-zinc-900/5 flex items-center justify-between px-4 py-2 transition-all duration-300">
 
         {/* Logo and Mobile Menu Toggle */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Button
             variant="ghost"
             size="sm"
@@ -85,10 +85,10 @@ export function Navbar() {
 
           <Link 
             href="/" 
-            className="flex items-center gap-3 text-lg font-bold text-zinc-900 group z-50"
+            className="flex items-center gap-2 sm:gap-3 text-base sm:text-lg font-bold text-zinc-900 group z-50"
             onClick={() => setActiveHash("")}
           >
-            <div className="relative h-9 w-9 overflow-hidden rounded-full border border-zinc-100 transition-transform duration-300 group-hover:scale-105 shadow-sm">
+            <div className="relative h-8 w-8 sm:h-9 sm:w-9 overflow-hidden rounded-full border border-zinc-100 transition-transform duration-300 group-hover:scale-105 shadow-sm shrink-0">
               <Image
                 src="/logo.jpeg"
                 alt="Lucky Balls Logo"
@@ -97,7 +97,7 @@ export function Navbar() {
                 className="object-cover"
               />
             </div>
-            <span className="text-zinc-900 font-extrabold tracking-tight hidden sm:inline-block">
+            <span className="text-zinc-900 font-extrabold tracking-tight">
               LUCKY BALLS
             </span>
           </Link>
