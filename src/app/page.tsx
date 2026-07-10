@@ -340,37 +340,11 @@ export default function Home() {
                 ].map((video, idx) => (
                   <div
                     key={idx}
-                    className="relative aspect-[4/5] overflow-hidden group bg-zinc-100 flex items-center justify-center shadow-md border border-zinc-100 hover:border-pink-200 hover:shadow-2xl hover:shadow-pink-500/20 hover:-translate-y-2 hover:scale-[1.02] transition-all duration-500 cursor-pointer"
-                    onMouseEnter={(e) => {
-                      const v = e.currentTarget.querySelector('video');
-                      if (v) v.play().catch(() => { });
-                    }}
-                    onMouseLeave={(e) => {
-                      const v = e.currentTarget.querySelector('video');
-                      if (v) {
-                        v.pause();
-                        v.currentTime = 0;
-                      }
-                    }}
-                    onClick={(e) => {
-                      const v = e.currentTarget.querySelector('video');
-                      if (v) {
-                        if (v.paused) {
-                          v.play().catch(() => { });
-                        } else {
-                          v.pause();
-                        }
-                      }
-                    }}
+                    className="relative aspect-[4/5] overflow-hidden group bg-zinc-100 flex items-center justify-center shadow-md border border-zinc-100 hover:border-pink-200 hover:shadow-2xl hover:shadow-pink-500/20 hover:-translate-y-2 hover:scale-[1.02] transition-all duration-500"
                   >
-                    <div className="absolute inset-0 z-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-300">
-                      {/* Luxurious Play icon */}
-                      <div className="w-10 h-10 sm:w-14 sm:h-14 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.6)] border border-white/50">
-                        <svg className="w-4 h-4 sm:w-6 sm:h-6 text-white ml-0.5 sm:ml-1 animate-pulse drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                      </div>
-                    </div>
                     <video
                       src={video.src}
+                      autoPlay
                       loop
                       muted
                       playsInline
