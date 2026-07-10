@@ -3,7 +3,7 @@ import { Navbar } from "@/components/navbar";
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       <Navbar />
       <main className="mx-auto max-w-4xl px-6 py-20 lg:px-8">
         <div className="text-center mb-16">
@@ -59,7 +59,7 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="text-2xl font-bold text-zinc-900 mb-4">6. Contact Us</h2>
             <p>
-              For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail at <a href="mailto:info@luckyballs.lk" className="text-pink-600 hover:text-pink-500 font-medium">info@luckyballs.lk</a> or via our Contact page.
+              For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail at <a href="mailto:info@luckyballs.lk" className="text-rose-600 hover:text-rose-600 font-medium">info@luckyballs.lk</a> or via our Contact page.
             </p>
           </section>
         </div>

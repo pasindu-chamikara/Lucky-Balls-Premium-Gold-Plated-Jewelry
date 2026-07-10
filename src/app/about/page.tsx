@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       <Navbar />
       <main className="mx-auto max-w-4xl px-6 py-20 lg:px-8">
         <div className="text-center mb-16">
@@ -21,6 +21,8 @@ export default function AboutPage() {
               src="/logo.jpeg"
               alt="Brand Image"
               fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 1024px"
               className="object-cover"
             />
           </div>

@@ -6,8 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "@/firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/firebase/firestore";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -31,8 +33,16 @@ export default function AdminLoginPage() {
   const onSubmit = async (data: LoginFormValues) => {
     setAuthError("");
     try {
-      await signInWithEmailAndPassword(auth, data.email, data.password);
-      router.push("/admin/dashboard");
+      const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
+      const adminDocRef = doc(db, "admins", userCredential.user.uid);
+      const adminDocSnap = await getDoc(adminDocRef);
+
+      if (adminDocSnap.exists()) {
+        router.push("/admin/dashboard");
+      } else {
+        await signOut(auth);
+        setAuthError("Unauthorized access. Admins only.");
+      }
     } catch (error: any) {
       setAuthError("Invalid credentials or authentication failed.");
     }
@@ -59,7 +69,7 @@ export default function AdminLoginPage() {
             <input
               id="email"
               type="email"
-              className="w-full rounded-2xl border border-zinc-200 px-4 py-3 outline-none ring-0 transition focus:border-rose-500"
+              className="w-full rounded-2xl border border-zinc-200 px-4 py-3 text-zinc-900 outline-none ring-0 transition focus:border-rose-500"
               {...register("email")}
             />
             {errors.email ? <p className="mt-2 text-sm text-rose-600">{errors.email.message}</p> : null}
@@ -72,7 +82,7 @@ export default function AdminLoginPage() {
             <input
               id="password"
               type="password"
-              className="w-full rounded-2xl border border-zinc-200 px-4 py-3 outline-none ring-0 transition focus:border-rose-500"
+              className="w-full rounded-2xl border border-zinc-200 px-4 py-3 text-zinc-900 outline-none ring-0 transition focus:border-rose-500"
               {...register("password")}
             />
             {errors.password ? <p className="mt-2 text-sm text-rose-600">{errors.password.message}</p> : null}

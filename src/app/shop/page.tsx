@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { SectionTitle } from "@/components/section-title";
@@ -32,7 +33,8 @@ type Product = {
   stockQuantity?: number;
 };
 
-export default function ShopPage() {
+function ShopContent() {
+  const searchParams = useSearchParams();
   const { addToCart } = useCart();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -55,20 +57,6 @@ export default function ShopPage() {
         const allProducts = prodSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
         setCategories(allCategories);
         setProducts(allProducts);
-
-        // Read query parameters
-        const params = new URLSearchParams(window.location.search);
-        const categoryIdParam = params.get('category');
-        const categoryNameParam = params.get('categoryName');
-
-        if (categoryIdParam) {
-          setSelectedCategory(categoryIdParam);
-        } else if (categoryNameParam) {
-          const found = allCategories.find(c => c.name.toLowerCase() === categoryNameParam.toLowerCase());
-          if (found) {
-            setSelectedCategory(found.id);
-          }
-        }
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
@@ -77,6 +65,24 @@ export default function ShopPage() {
     }
     fetchStoreData();
   }, []);
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      const categoryIdParam = searchParams.get('category');
+      const categoryNameParam = searchParams.get('categoryName');
+
+      if (categoryIdParam) {
+        setSelectedCategory(categoryIdParam);
+      } else if (categoryNameParam) {
+        const found = categories.find(c => c.name.toLowerCase() === categoryNameParam.toLowerCase());
+        if (found) {
+          setSelectedCategory(found.id);
+        }
+      } else {
+        setSelectedCategory("all");
+      }
+    }
+  }, [searchParams, categories]);
 
   const filteredProducts = products.filter(product => {
     // 1. Search Query
@@ -113,10 +119,10 @@ export default function ShopPage() {
   });
 
   return (
-    <div className="min-h-screen bg-pink-50 text-zinc-900 font-sans selection:bg-pink-500/30 flex flex-col">
+    <div className="min-h-screen text-zinc-900 font-sans selection:bg-pink-500/30 flex flex-col">
       <Navbar />
       
-      <main className="flex-1 mx-auto max-w-7xl px-6 py-16 lg:px-8 w-full">
+      <main className="flex-1 mx-auto max-w-7xl px-6 pt-28 pb-16 lg:px-8 w-full">
         <div className="mb-10 text-center">
           <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl drop-shadow-sm mb-4">
             The Shop
@@ -178,7 +184,7 @@ export default function ShopPage() {
           </div>
         </div>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {loading ? (
             <div className="col-span-full flex justify-center py-20">
               <div className="h-8 w-8 animate-spin rounded-full border-4 border-pink-500 border-t-transparent"></div>
@@ -188,17 +194,18 @@ export default function ShopPage() {
               {searchQuery ? `No products found matching "${searchQuery}".` : "No products available at the moment. Please check back soon!"}
             </div>
           ) : (
-            filteredProducts.map((product) => (
+            filteredProducts.map((product, index) => (
               <ProductCard 
                 key={product.id} 
+                id={product.id}
+                priority={index < 4}
                 name={product.name}
-                price={`Rs. ${product.price.toFixed(2)}`}
+                price={`Rs. ${Math.round(product.price).toLocaleString('en-US')}`}
                 description={product.description}
                 badge={product.isFeaturedThisWeek ? "Featured" : undefined}
                 image={product.image || "/images/gift-basket.svg"}
                 isOutOfStock={product.isOutOfStock || (product.stockQuantity !== undefined && product.stockQuantity <= 0)}
                 onShopClick={(quantity) => addToCart(product, undefined, quantity)}
-                onImageClick={() => setSelectedProduct(product)}
               />
             ))
           )}
@@ -211,5 +218,13 @@ export default function ShopPage() {
       
       <Footer />
     </div>
+  );
+}
+
+export default function ShopPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-zinc-50"><p>Loading shop...</p></div>}>
+      <ShopContent />
+    </Suspense>
   );
 }

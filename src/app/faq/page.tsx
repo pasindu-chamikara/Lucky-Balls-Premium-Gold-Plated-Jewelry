@@ -30,7 +30,7 @@ export default function FAQPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       <Navbar />
       <main className="mx-auto max-w-3xl px-6 py-20 lg:px-8">
         <div className="text-center mb-16">
@@ -51,7 +51,7 @@ export default function FAQPage() {
         
         <div className="mt-16 text-center">
           <p className="text-zinc-600">Still have questions?</p>
-          <a href="/contact" className="mt-2 inline-block font-semibold text-pink-600 hover:text-pink-700 underline underline-offset-4">
+          <a href="/contact" className="mt-2 inline-block font-semibold text-rose-600 hover:text-rose-600 underline underline-offset-4">
             Contact our support team
           </a>
         </div>

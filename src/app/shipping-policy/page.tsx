@@ -3,7 +3,7 @@ import { Navbar } from "@/components/navbar";
 
 export default function ShippingPolicyPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       <Navbar />
       <main className="mx-auto max-w-4xl px-6 py-20 lg:px-8">
         <div className="text-center mb-16">
@@ -45,7 +45,7 @@ export default function ShippingPolicyPage() {
               When your order has shipped, you will receive an email notification from us which will include a tracking number or delivery status update. Please allow 24 hours for the tracking information to become available. 
             </p>
             <p>
-              If you haven't received your order within 5 days of receiving your shipping confirmation email, please contact us at <a href="mailto:info@luckyballs.lk" className="text-pink-600 hover:text-pink-500 font-medium">info@luckyballs.lk</a> or via WhatsApp with your name and order number, and we will look into it for you.
+              If you haven't received your order within 5 days of receiving your shipping confirmation email, please contact us at <a href="mailto:info@luckyballs.lk" className="text-rose-600 hover:text-rose-600 font-medium">info@luckyballs.lk</a> or via WhatsApp with your name and order number, and we will look into it for you.
             </p>
           </section>
 

@@ -92,7 +92,6 @@ export default function AdminCustomersPage() {
       <div className="rounded-2xl border border-zinc-200/60 bg-white shadow-sm overflow-hidden">
         <div className="border-b border-zinc-100 bg-zinc-50/50 px-6 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h2 className="text-lg font-semibold text-zinc-900 flex items-center gap-2">
-            <Users size={20} className="text-pink-500" />
             All Customers ({customers.length})
           </h2>
           <div className="relative">
@@ -136,7 +135,7 @@ export default function AdminCustomersPage() {
                   <tr key={customer.id} className="hover:bg-zinc-50/50">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-pink-100 text-pink-600 font-bold text-sm">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-pink-100 text-rose-600 font-bold text-sm">
                           {customer.fullName.charAt(0)}
                         </div>
                         <div>
@@ -161,7 +160,7 @@ export default function AdminCustomersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <p className="font-semibold text-pink-600">Rs. {customer.totalSpent.toFixed(2)}</p>
+                      <p className="font-semibold text-rose-600">Rs. {customer.totalSpent.toFixed(2)}</p>
                       {customer.lastOrderDate && (
                         <p className="text-xs text-zinc-400 mt-0.5">
                           Last active: {new Date(customer.lastOrderDate.toDate()).toLocaleDateString()}

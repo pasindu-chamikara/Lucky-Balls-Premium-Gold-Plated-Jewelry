@@ -6,10 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "@/firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/firestore";
+
 import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
@@ -26,7 +27,7 @@ import { Suspense } from "react";
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="flex min-h-screen flex-col items-center justify-center bg-pink-50"><Loader2 className="animate-spin h-8 w-8 text-pink-500" /></div>}>
+    <Suspense fallback={<div className="flex min-h-screen flex-col items-center justify-center bg-pink-50"><Loader2 className="animate-spin h-8 w-8 text-rose-600" /></div>}>
       <LoginContent />
     </Suspense>
   );
@@ -51,33 +52,34 @@ function LoginContent() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
       
-      // Check if the user is an admin
       const adminDocRef = doc(db, "admins", userCredential.user.uid);
       const adminDocSnap = await getDoc(adminDocRef);
 
       if (adminDocSnap.exists()) {
-        router.push("/admin/dashboard");
-      } else {
-        router.push(redirectPath);
+        await signOut(auth);
+        setAuthError("Admin accounts cannot log in here. Please use the Admin Portal.");
+        return;
       }
+
+      router.push(redirectPath);
     } catch (error: any) {
       setAuthError("Invalid email or password. Please try again.");
     }
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-pink-50 text-zinc-900">
+    <div className="flex min-h-screen flex-col text-zinc-900">
       <Navbar />
       <main className="flex-1 flex flex-col items-center justify-center px-6 py-20 lg:px-8">
         <div className="w-full max-w-md rounded-3xl border border-zinc-200 bg-white/50 p-8 shadow-[0_0_15px_rgba(219,39,119,0.1)] backdrop-blur-sm">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-zinc-900 mb-2">Welcome Back</h1>
-            <p className="text-zinc-9000">Sign in to your Lucky Balls account</p>
+            <p className="text-zinc-700">Sign in to your Lucky Balls account</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {authError && (
-              <div className="rounded-xl bg-rose-500/10 border border-rose-500/20 p-4 text-sm text-rose-400 text-center">
+              <div className="rounded-xl bg-rose-500/10 border border-rose-500/20 p-4 text-sm text-rose-600 text-center">
                 {authError}
               </div>
             )}
@@ -91,7 +93,7 @@ function LoginContent() {
                 className="w-full rounded-xl border border-zinc-200 bg-white/80 px-4 py-3 outline-none text-zinc-900 transition focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
                 {...register("email")}
               />
-              {errors.email ? <p className="mt-2 text-sm text-rose-400">{errors.email.message}</p> : null}
+              {errors.email ? <p className="mt-2 text-sm text-rose-600">{errors.email.message}</p> : null}
             </div>
 
             <div>
@@ -104,7 +106,7 @@ function LoginContent() {
                 className="w-full rounded-xl border border-zinc-200 bg-white/80 px-4 py-3 outline-none text-zinc-900 transition focus:border-pink-500 focus:ring-1 focus:ring-pink-500"
                 {...register("password")}
               />
-              {errors.password ? <p className="mt-2 text-sm text-rose-400">{errors.password.message}</p> : null}
+              {errors.password ? <p className="mt-2 text-sm text-rose-600">{errors.password.message}</p> : null}
             </div>
 
             <Button type="submit" className="w-full bg-pink-600-white mt-4 py-6" disabled={isSubmitting}>
@@ -113,9 +115,9 @@ function LoginContent() {
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-zinc-9000">
+          <p className="mt-6 text-center text-sm text-zinc-700">
             Don't have an account?{" "}
-            <Link href={`/signup?redirect=${encodeURIComponent(redirectPath)}`} className="font-semibold text-pink-600 hover:text-pink-600">
+            <Link href={`/signup?redirect=${encodeURIComponent(redirectPath)}`} className="font-semibold text-rose-600 hover:text-rose-600">
               Sign up
             </Link>
           </p>

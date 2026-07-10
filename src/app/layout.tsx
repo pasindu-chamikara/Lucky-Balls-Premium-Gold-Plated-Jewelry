@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const poppins = Poppins({
+  weight: ["400", "500", "600", "700", "800"],
   subsets: ["latin"],
+  variable: "--font-poppins",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const cormorantGaramond = Cormorant_Garamond({
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
+  variable: "--font-cormorant",
 });
 
 export const metadata: Metadata = {
@@ -28,10 +30,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${poppins.variable} ${cormorantGaramond.variable} h-full antialiased`}
       data-scroll-behavior="smooth"
     >
-      <body className="min-h-full flex flex-col bg-white text-zinc-900">
+      <head>
+      </head>
+      <body className="min-h-full flex flex-col bg-gradient-to-br from-pink-200 via-pink-50 to-gold-200 bg-fixed text-zinc-900 animate-bg-gradient font-sans">
         {/* Marketing Pixels */}
         {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
           <script dangerouslySetInnerHTML={{

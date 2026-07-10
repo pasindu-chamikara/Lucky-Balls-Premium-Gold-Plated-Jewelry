@@ -163,7 +163,7 @@ export default function CheckoutPage() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-pink-50">
-        <Loader2 className="h-8 w-8 animate-spin text-pink-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
       </div>
     );
   }
@@ -172,17 +172,17 @@ export default function CheckoutPage() {
 
   if (isSuccess) {
     return (
-      <div className="flex min-h-screen flex-col bg-pink-50 text-zinc-900">
+      <div className="flex min-h-screen flex-col text-zinc-900">
         <Navbar />
-        <main className="flex flex-1 items-center justify-center px-6 py-20 lg:px-8">
+        <main className="flex flex-1 items-center justify-center px-6 pt-28 pb-20 lg:px-8">
           <div className="mx-auto max-w-md rounded-2xl border border-pink-500/30 bg-white/80 p-10 text-center shadow-[0_0_30px_rgba(219,39,119,0.15)] backdrop-blur-sm">
-            <CheckCircle2 className="mx-auto mb-6 h-20 w-20 text-pink-500" />
+            <CheckCircle2 className="mx-auto mb-6 h-20 w-20 text-rose-600" />
             <h1 className="mb-4 text-3xl font-bold text-zinc-900">Order Confirmed!</h1>
             <p className="mb-2 text-lg text-zinc-700">Thank you for your purchase.</p>
-            <p className="mb-2 text-sm text-zinc-9000">
-              Your order ID is: <span className="font-mono text-pink-600">{orderId}</span>
+            <p className="mb-2 text-sm text-zinc-700">
+              Your order ID is: <span className="font-mono text-rose-600">{orderId}</span>
             </p>
-            <p className="mb-8 text-sm font-medium text-pink-600">
+            <p className="mb-8 text-sm font-medium text-rose-600">
               Please save your order ID for future reference.
             </p>
             <Link href="/">
@@ -199,12 +199,12 @@ export default function CheckoutPage() {
 
   if (cart.length === 0) {
     return (
-      <div className="flex min-h-screen flex-col bg-pink-50 text-zinc-900">
+      <div className="flex min-h-screen flex-col text-zinc-900">
         <Navbar />
-        <main className="flex flex-1 items-center justify-center px-6 py-20 lg:px-8">
+        <main className="flex flex-1 items-center justify-center px-6 pt-28 pb-20 lg:px-8">
           <div className="text-center">
             <h1 className="mb-4 text-3xl font-bold text-zinc-900">Your cart is empty</h1>
-            <p className="mb-8 text-zinc-9000">Please add items to your cart before checking out.</p>
+            <p className="mb-8 text-zinc-700">Please add items to your cart before checking out.</p>
             <Link href="/">
               <Button className="bg-pink-600 text-white hover:bg-pink-500">Go to Shop</Button>
             </Link>
@@ -216,9 +216,9 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-pink-50 text-zinc-900">
+    <div className="flex min-h-screen flex-col text-zinc-900">
       <Navbar />
-      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-12 lg:px-8">
+      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 pt-28 pb-12 lg:px-8">
         <h1 className="mb-8 text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl">Checkout</h1>
         
         <div className="grid gap-12 lg:grid-cols-[1fr_400px]">
@@ -229,7 +229,7 @@ export default function CheckoutPage() {
               
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="fullName" className="mb-1 block text-sm font-medium text-zinc-9000">Full Name</label>
+                  <label htmlFor="fullName" className="mb-1 block text-sm font-medium text-zinc-700">Full Name</label>
                   <input
                     {...register("fullName")}
                     type="text"
@@ -241,7 +241,7 @@ export default function CheckoutPage() {
                 
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
-                    <label htmlFor="email" className="mb-1 block text-sm font-medium text-zinc-9000">Email Address</label>
+                    <label htmlFor="email" className="mb-1 block text-sm font-medium text-zinc-700">Email Address</label>
                     <input
                       {...register("email")}
                       type="email"
@@ -251,7 +251,7 @@ export default function CheckoutPage() {
                     {errors.email && <p className="mt-1 text-sm text-red-400">{errors.email.message}</p>}
                   </div>
                   <div>
-                    <label htmlFor="phone" className="mb-1 block text-sm font-medium text-zinc-9000">Phone Number</label>
+                    <label htmlFor="phone" className="mb-1 block text-sm font-medium text-zinc-700">Phone Number</label>
                     <input
                       {...register("phone")}
                       type="tel"
@@ -263,7 +263,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="address" className="mb-1 block text-sm font-medium text-zinc-9000">Delivery Address</label>
+                  <label htmlFor="address" className="mb-1 block text-sm font-medium text-zinc-700">Delivery Address</label>
                   <textarea
                     {...register("address")}
                     id="address"
@@ -275,7 +275,7 @@ export default function CheckoutPage() {
 
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
-                    <label htmlFor="city" className="mb-1 block text-sm font-medium text-zinc-9000">City</label>
+                    <label htmlFor="city" className="mb-1 block text-sm font-medium text-zinc-700">City</label>
                     <input
                       {...register("city")}
                       type="text"
@@ -285,7 +285,7 @@ export default function CheckoutPage() {
                     {errors.city && <p className="mt-1 text-sm text-red-400">{errors.city.message}</p>}
                   </div>
                   <div>
-                    <label htmlFor="postalCode" className="mb-1 block text-sm font-medium text-zinc-9000">Postal Code</label>
+                    <label htmlFor="postalCode" className="mb-1 block text-sm font-medium text-zinc-700">Postal Code</label>
                     <input
                       {...register("postalCode")}
                       type="text"
@@ -298,7 +298,7 @@ export default function CheckoutPage() {
               </div>
 
               <div className="mt-8 rounded-xl border border-zinc-200 bg-white/50 p-4">
-                <p className="text-sm text-zinc-9000">Payment Method</p>
+                <p className="text-sm text-zinc-700">Payment Method</p>
                 <p className="text-lg font-medium text-zinc-900">Cash on Delivery</p>
               </div>
 
@@ -332,13 +332,13 @@ export default function CheckoutPage() {
                       alt={item.name} 
                       fill 
                       sizes="64px"
-                      className="object-cover opacity-90" 
+                      className="object-cover" 
                     />
                   </div>
                   <div className="flex flex-1 flex-col justify-center">
                     <h4 className="text-sm font-bold text-zinc-900 line-clamp-1">{item.name}</h4>
-                    <p className="text-xs text-zinc-9000">Qty: {item.quantity}</p>
-                    <p className="text-sm font-bold text-pink-600">Rs. {(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="text-xs text-zinc-700">Qty: {item.quantity}</p>
+                    <p className="text-sm font-bold text-rose-600">Rs. {(item.price * item.quantity).toFixed(2)}</p>
                   </div>
                 </div>
               ))}
@@ -351,12 +351,12 @@ export default function CheckoutPage() {
               </div>
               <div className="flex justify-between text-zinc-700">
                 <span>Shipping</span>
-                <span className="text-pink-600">{shippingFee === null ? "..." : shippingFee === 0 ? "Free" : `Rs. ${shippingFee.toFixed(2)}`}</span>
+                <span className="text-rose-600">{shippingFee === null ? "..." : shippingFee === 0 ? "Free" : `Rs. ${shippingFee.toFixed(2)}`}</span>
               </div>
             </div>
             <div className="flex justify-between border-t border-zinc-200 pt-4 text-xl font-bold text-zinc-900">
               <span>Total</span>
-              <span className="text-pink-600">Rs. {(totalPrice + (shippingFee || 0)).toFixed(2)}</span>
+              <span className="text-rose-600">Rs. {(totalPrice + (shippingFee || 0)).toFixed(2)}</span>
             </div>
           </div>
         </div>

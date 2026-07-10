@@ -78,11 +78,11 @@ export default function AdminProductsPage() {
     e.preventDefault();
     if (!newProduct.name || !newProduct.categoryId) return;
 
-    // Validation for max 3 pinned items
+    // Validation for max 4 pinned items
     if (newProduct.isPinnedForHome) {
       const currentlyPinned = products.filter(p => p.isPinnedForHome && p.id !== editingProductId);
-      if (currentlyPinned.length >= 3) {
-        alert("You can only pin a maximum of 3 items for the homepage. Please unpin an item first.");
+      if (currentlyPinned.length >= 4) {
+        alert("You can only pin a maximum of 4 items for the homepage. Please unpin an item first.");
         return;
       }
     }
@@ -171,8 +171,8 @@ export default function AdminProductsPage() {
       
       if (newStatus) {
         const currentlyPinned = products.filter(p => p.isPinnedForHome);
-        if (currentlyPinned.length >= 3) {
-          alert("You can only pin a maximum of 3 items for the homepage. Please unpin an item first.");
+        if (currentlyPinned.length >= 4) {
+          alert("You can only pin a maximum of 4 items for the homepage. Please unpin an item first.");
           return;
         }
       }
@@ -287,8 +287,8 @@ export default function AdminProductsPage() {
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-4">
                   <div className="flex-1">
-                    <input type="file" multiple accept="image/*" onChange={handleImageUpload} disabled={isUploadingImage} className="w-full text-sm text-zinc-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100" />
-                    {isUploadingImage && <p className="text-xs text-pink-600 mt-2 font-medium animate-pulse">Uploading image(s) securely...</p>}
+                    <input type="file" multiple accept="image/*" onChange={handleImageUpload} disabled={isUploadingImage} className="w-full text-sm text-zinc-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-rose-600 hover:file:bg-pink-100" />
+                    {isUploadingImage && <p className="text-xs text-rose-600 mt-2 font-medium animate-pulse">Uploading image(s) securely...</p>}
                   </div>
                 </div>
 
@@ -392,9 +392,9 @@ export default function AdminProductsPage() {
 
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2 p-3 bg-pink-50 border border-pink-100 rounded-lg">
-                <input type="checkbox" id="featured" checked={newProduct.isFeaturedThisWeek} onChange={e => setNewProduct({...newProduct, isFeaturedThisWeek: e.target.checked})} className="rounded text-pink-600 focus:ring-pink-500" />
-                <label htmlFor="featured" className="text-sm font-medium text-pink-900 flex items-center gap-2">
-                  <Star size={16} className="text-pink-600" />
+                <input type="checkbox" id="featured" checked={newProduct.isFeaturedThisWeek} onChange={e => setNewProduct({...newProduct, isFeaturedThisWeek: e.target.checked})} className="rounded text-rose-600 focus:ring-pink-500" />
+                <label htmlFor="featured" className="text-sm font-medium text-rose-600 flex items-center gap-2">
+                  <Star size={16} className="text-rose-600" />
                   Make this the "Featured This Week" item on homepage
                 </label>
               </div>
@@ -418,7 +418,7 @@ export default function AdminProductsPage() {
 
 
             <div className="flex gap-3 pt-4">
-              <Button type="submit" className="bg-pink-600 hover:bg-pink-500">
+              <Button type="submit" variant="custom" className="bg-pink-600 hover:bg-pink-500 text-white px-5 rounded-full" disabled={isUploadingImage || !newProduct.name || !newProduct.price || !newProduct.categoryId}>
                 {editingProductId ? "Update Product" : "Save Product"}
               </Button>
               <Button type="button" variant="outline" onClick={() => {
@@ -431,13 +431,13 @@ export default function AdminProductsPage() {
         </div>
       ) : (
         <div className="bg-white rounded-2xl border border-zinc-200/60 shadow-sm overflow-hidden">
-          <div className="border-b border-zinc-100 bg-zinc-50/50 px-6 py-5 flex justify-between items-center">
+          <div className="border-b border-zinc-100 bg-zinc-50/50 px-4 sm:px-6 py-4 sm:py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
             <h2 className="text-lg font-semibold text-zinc-900">All Products</h2>
-            <Button onClick={() => {
+            <Button variant="custom" className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto px-5 rounded-full font-medium transition-colors" onClick={() => {
               setEditingProductId(null);
               setNewProduct({ name: "", price: "" as any, description: "", categoryId: "", subcategoryId: "", isFeaturedThisWeek: false, isPinnedForHome: false, isCustomizable: false, customizationOptions: [], image: "", images: [], targetGender: "both", isOutOfStock: false, stockQuantity: 0 });
               setIsAdding(true);
-            }} className="bg-pink-600 hover:bg-pink-500 text-white"><Plus size={16} className="mr-2"/> Add Product</Button>
+            }}><Plus size={16} className="mr-2"/> Add Product</Button>
           </div>
           
           {loading ? (
@@ -447,103 +447,104 @@ export default function AdminProductsPage() {
           ) : products.length === 0 ? (
             <div className="p-10 text-center text-zinc-500">No products found.</div>
           ) : (
-            <table className="w-full text-left text-sm text-zinc-600">
-              <thead className="bg-zinc-50 text-zinc-500 border-b">
-                <tr>
-                  <th className="px-6 py-4 font-medium">Image</th>
-                  <th className="px-6 py-4 font-medium">Name</th>
-                  <th className="px-6 py-4 font-medium">Price</th>
-                  <th className="px-6 py-4 font-medium">Category</th>
-                  <th className="px-6 py-4 font-medium">Audience</th>
-                  <th className="px-6 py-4 font-medium">Featured</th>
-                  <th className="px-6 py-4 font-medium">Pinned</th>
-                  <th className="px-6 py-4 font-medium">Stock/Qty</th>
-
-                  <th className="px-6 py-4"></th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-zinc-100">
-                {products.map(p => (
-                  <tr key={p.id} className="hover:bg-zinc-50/50">
-                    <td className="px-6 py-4">
-                      {p.image ? (
-                        <div className="h-10 w-10 rounded overflow-hidden border border-zinc-200 bg-white">
-                          <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
-                        </div>
-                      ) : (
-                        <div className="h-10 w-10 rounded border border-dashed border-zinc-300 flex items-center justify-center bg-zinc-50 text-zinc-400">
-                          <ImageIcon size={16} />
-                        </div>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 font-medium text-zinc-900">{p.name}</td>
-                    <td className="px-6 py-4">Rs. {p.price.toFixed(2)}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col">
-                        <span className="text-zinc-900">{categories.find(c => c.id === p.categoryId)?.name || "Unknown"}</span>
-                        {p.subcategoryId && <span className="text-xs text-zinc-500">↳ {categories.find(c => c.id === p.categoryId)?.subcategories.find(s => s.id === p.subcategoryId)?.name}</span>}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="capitalize px-2 py-1 bg-zinc-100 text-zinc-600 rounded-md text-xs font-medium">
-                        {p.targetGender || "both"}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <button 
-                        onClick={() => handleToggleFeatured(p.id, p.isFeaturedThisWeek)}
-                        className="p-1 rounded-md hover:bg-pink-50 transition-colors"
-                        title={p.isFeaturedThisWeek ? "Remove from featured" : "Set as featured"}
-                      >
-                        {p.isFeaturedThisWeek ? <Star size={18} className="text-pink-500 fill-pink-500" /> : <Star size={18} className="text-zinc-300" />}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4">
-                      <button 
-                        onClick={() => handleTogglePinned(p.id, p.isPinnedForHome)}
-                        className="p-1 rounded-md hover:bg-blue-50 transition-colors"
-                        title={p.isPinnedForHome ? "Unpin from home" : "Pin to home"}
-                      >
-                        {p.isPinnedForHome ? <Star size={18} className="text-blue-500 fill-blue-500" /> : <Star size={18} className="text-zinc-300" />}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 flex flex-col gap-2">
-                      <span className="text-zinc-600 font-medium">Qty: {p.stockQuantity ?? 0}</span>
-                      <button 
-                        onClick={() => handleToggleOutOfStock(p.id, p.isOutOfStock || false)}
-                        className={`px-2 py-1 rounded-md text-xs font-medium transition-colors w-fit ${p.isOutOfStock ? "bg-red-100 text-red-600 hover:bg-red-200" : "bg-green-100 text-green-600 hover:bg-green-200"}`}
-                      >
-                        {p.isOutOfStock ? "Out of Stock" : "In Stock"}
-                      </button>
-                    </td>
-
-                    <td className="px-6 py-4 text-right">
-                      <Button variant="ghost" size="icon" onClick={() => {
-                        setEditingProductId(p.id);
-                        setNewProduct({
-                          name: p.name,
-                          price: p.price,
-                          description: p.description,
-                          categoryId: p.categoryId,
-                          subcategoryId: p.subcategoryId,
-                          isFeaturedThisWeek: p.isFeaturedThisWeek,
-                          isPinnedForHome: p.isPinnedForHome || false,
-                          isCustomizable: p.isCustomizable,
-                          customizationOptions: p.customizationOptions || [],
-                          image: p.image || "",
-                          images: p.images || (p.image ? [p.image] : []),
-                          targetGender: p.targetGender || "both",
-                          isOutOfStock: p.isOutOfStock || false,
-                          stockQuantity: p.stockQuantity || 0
-                        });
-                        setIsAdding(true);
-                      }} className="text-zinc-500 hover:text-pink-600 hover:bg-pink-50"><Edit2 size={16} /></Button>
-                      <Button variant="ghost" size="icon" onClick={() => handleDelete(p.id)} className="text-rose-500 hover:text-rose-700 hover:bg-rose-50"><Trash2 size={16} /></Button>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm text-zinc-600">
+                <thead className="bg-zinc-50 text-zinc-500 border-b">
+                  <tr>
+                    <th className="px-6 py-4 font-medium">Image</th>
+                    <th className="px-6 py-4 font-medium">Name</th>
+                    <th className="px-6 py-4 font-medium">Price</th>
+                    <th className="px-6 py-4 font-medium">Category</th>
+                    <th className="px-6 py-4 font-medium">Audience</th>
+                    <th className="px-6 py-4 font-medium">Featured</th>
+                    <th className="px-6 py-4 font-medium">Pinned</th>
+                    <th className="px-6 py-4 font-medium">Stock/Qty</th>
+                    <th className="px-6 py-4"></th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-zinc-100">
+                  {products.map(p => (
+                    <tr key={p.id} className="hover:bg-zinc-50/50">
+                      <td className="px-6 py-4">
+                        {p.image ? (
+                          <div className="h-10 w-10 rounded overflow-hidden border border-zinc-200 bg-white">
+                            <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
+                          </div>
+                        ) : (
+                          <div className="h-10 w-10 rounded border border-dashed border-zinc-300 flex items-center justify-center bg-zinc-50 text-zinc-400">
+                            <ImageIcon size={16} />
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 font-medium text-zinc-900">{p.name}</td>
+                      <td className="px-6 py-4">Rs. {p.price.toFixed(2)}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col">
+                          <span className="text-zinc-900">{categories.find(c => c.id === p.categoryId)?.name || "Unknown"}</span>
+                          {p.subcategoryId && <span className="text-xs text-zinc-500">↳ {categories.find(c => c.id === p.categoryId)?.subcategories.find(s => s.id === p.subcategoryId)?.name}</span>}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="capitalize px-2 py-1 bg-zinc-100 text-zinc-600 rounded-md text-xs font-medium">
+                          {p.targetGender || "both"}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <button 
+                          onClick={() => handleToggleFeatured(p.id, p.isFeaturedThisWeek)}
+                          className="p-1 rounded-md hover:bg-pink-50 transition-colors"
+                          title={p.isFeaturedThisWeek ? "Remove from featured" : "Set as featured"}
+                        >
+                          {p.isFeaturedThisWeek ? <Star size={18} className="text-rose-600 fill-pink-500" /> : <Star size={18} className="text-zinc-300" />}
+                        </button>
+                      </td>
+                      <td className="px-6 py-4">
+                        <button 
+                          onClick={() => handleTogglePinned(p.id, p.isPinnedForHome)}
+                          className="p-1 rounded-md hover:bg-blue-50 transition-colors"
+                          title={p.isPinnedForHome ? "Unpin from home" : "Pin to home"}
+                        >
+                          {p.isPinnedForHome ? <Star size={18} className="text-blue-500 fill-blue-500" /> : <Star size={18} className="text-zinc-300" />}
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 flex flex-col gap-2 min-w-[120px]">
+                        <span className="text-zinc-600 font-medium">Qty: {p.stockQuantity ?? 0}</span>
+                        <button 
+                          onClick={() => handleToggleOutOfStock(p.id, p.isOutOfStock || false)}
+                          className={`px-2 py-1 rounded-md text-xs font-medium transition-colors w-fit ${p.isOutOfStock ? "bg-red-100 text-red-600 hover:bg-red-200" : "bg-green-100 text-green-600 hover:bg-green-200"}`}
+                        >
+                          {p.isOutOfStock ? "Out of Stock" : "In Stock"}
+                        </button>
+                      </td>
+
+                      <td className="px-6 py-4 text-right flex justify-end gap-1 whitespace-nowrap min-w-[100px]">
+                        <Button variant="ghost" size="icon" onClick={() => {
+                          setEditingProductId(p.id);
+                          setNewProduct({
+                            name: p.name,
+                            price: p.price,
+                            description: p.description,
+                            categoryId: p.categoryId,
+                            subcategoryId: p.subcategoryId,
+                            isFeaturedThisWeek: p.isFeaturedThisWeek,
+                            isPinnedForHome: p.isPinnedForHome || false,
+                            isCustomizable: p.isCustomizable,
+                            customizationOptions: p.customizationOptions || [],
+                            image: p.image || "",
+                            images: p.images || (p.image ? [p.image] : []),
+                            targetGender: p.targetGender || "both",
+                            isOutOfStock: p.isOutOfStock || false,
+                            stockQuantity: p.stockQuantity || 0
+                          });
+                          setIsAdding(true);
+                        }} className="text-zinc-500 hover:text-rose-600 hover:bg-pink-50"><Edit2 size={16} /></Button>
+                        <Button variant="rose-ghost" size="icon" onClick={() => handleDelete(p.id)}><Trash2 size={16} /></Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
       )}

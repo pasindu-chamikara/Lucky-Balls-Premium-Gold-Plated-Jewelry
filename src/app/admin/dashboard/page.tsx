@@ -121,35 +121,35 @@ export default function AdminDashboardPage() {
   const renderNextAction = (order: any) => {
     if (!order.status || order.status === 'pending') {
       return (
-        <Button onClick={() => handleUpdateOrderStatus(order.id, 'confirmed')} size="sm" className="bg-blue-500 hover:bg-blue-600 text-white h-8 text-xs flex items-center gap-1">
+        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'confirmed')} size="sm" className="bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-medium h-8 text-xs flex items-center gap-1 transition px-3 rounded-full">
           <CheckCircle size={14} /> Confirm
         </Button>
       );
     }
     if (order.status === 'confirmed') {
       return (
-        <Button onClick={() => handleUpdateOrderStatus(order.id, 'processing')} size="sm" className="bg-indigo-500 hover:bg-indigo-600 text-white h-8 text-xs flex items-center gap-1">
+        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'processing')} size="sm" className="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 font-medium h-8 text-xs flex items-center gap-1 transition px-3 rounded-full">
           <Settings size={14} /> Process
         </Button>
       );
     }
     if (order.status === 'processing') {
       return (
-        <Button onClick={() => handleUpdateOrderStatus(order.id, 'packed')} size="sm" className="bg-purple-500 hover:bg-purple-600 text-white h-8 text-xs flex items-center gap-1">
+        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'packed')} size="sm" className="bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 font-medium h-8 text-xs flex items-center gap-1 transition px-3 rounded-full">
           <Box size={14} /> Pack
         </Button>
       );
     }
     if (order.status === 'packed') {
       return (
-        <Button onClick={() => handleUpdateOrderStatus(order.id, 'dispatched')} size="sm" className="bg-orange-500 hover:bg-orange-600 text-white h-8 text-xs flex items-center gap-1">
+        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'dispatched')} size="sm" className="bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200 font-medium h-8 text-xs flex items-center gap-1 transition px-3 rounded-full">
           <Truck size={14} /> Dispatch
         </Button>
       );
     }
     if (order.status === 'dispatched') {
       return (
-        <Button onClick={() => handleUpdateOrderStatus(order.id, 'delivered')} size="sm" className="bg-emerald-500 hover:bg-emerald-600 text-white h-8 text-xs flex items-center gap-1">
+        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'delivered')} size="sm" className="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 font-medium h-8 text-xs flex items-center gap-1 transition px-3 rounded-full">
           <Package size={14} /> Deliver
         </Button>
       );
@@ -167,8 +167,8 @@ export default function AdminDashboardPage() {
           }
         }}
         size="sm" 
-        variant="outline"
-        className="text-rose-500 border-rose-200 hover:bg-rose-50 h-8 text-xs flex items-center gap-1"
+        variant="custom"
+        className="bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 font-medium h-8 text-xs flex items-center gap-1 transition px-3 rounded-full"
       >
         <Ban size={14} /> Cancel
       </Button>
@@ -178,26 +178,25 @@ export default function AdminDashboardPage() {
   return (
     <AdminLayout title="Overview Dashboard">
       {/* Stats Grid */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 sm:gap-6 lg:grid-cols-4">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.label} className="rounded-2xl border border-zinc-200/60 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-start justify-between">
+            <div key={stat.label} className="rounded-2xl border border-zinc-200/60 bg-white p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
                 <div>
-                  <p className="text-sm font-medium text-zinc-500">{stat.label}</p>
-                  <p className="mt-2 text-3xl font-bold text-zinc-900">{stat.value}</p>
+                  <p className="text-xs sm:text-sm font-medium text-zinc-500">{stat.label}</p>
+                  <p className="mt-1 sm:mt-2 text-xl sm:text-3xl font-bold text-zinc-900">{stat.value}</p>
                 </div>
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-pink-50 text-pink-600">
-                  <Icon size={24} />
+                <div className="hidden">
                 </div>
               </div>
-              <div className="mt-4 flex items-center gap-2 text-sm">
-                <span className={`flex items-center gap-1 font-medium px-2 py-0.5 rounded-full ${stat.trend === 'Live' ? 'bg-pink-50 text-pink-600' : 'bg-zinc-100 text-zinc-600'}`}>
-                  {stat.trend !== 'Live' && <TrendingUp size={14} />}
+              <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-[10px] sm:text-sm">
+                <span className={`w-fit flex items-center gap-1 font-medium px-2 py-0.5 rounded-full ${stat.trend === 'Live' ? 'bg-zinc-100 text-zinc-900' : 'bg-zinc-50 text-zinc-500'}`}>
+                  {stat.trend !== 'Live' && <TrendingUp size={12} className="sm:w-[14px] sm:h-[14px]" />}
                   {stat.trend}
                 </span>
-                <span className="text-zinc-400">{stat.trend === 'Live' ? 'From database' : 'No data yet'}</span>
+                <span className="text-zinc-400 hidden sm:inline">{stat.trend === 'Live' ? 'From database' : 'No data yet'}</span>
               </div>
             </div>
           );
@@ -206,25 +205,25 @@ export default function AdminDashboardPage() {
 
       {/* Low Stock Alerts */}
       {lowStockProducts.length > 0 && (
-        <div className="mt-10 rounded-2xl border border-red-200/60 bg-white shadow-sm overflow-hidden">
-          <div className="border-b border-red-100 bg-red-50/50 px-6 py-4 flex items-center gap-2">
-            <span className="flex h-2.5 w-2.5 rounded-full bg-red-500 animate-pulse"></span>
-            <h2 className="text-lg font-semibold text-red-900">Low Stock Alerts</h2>
+        <div className="mt-10 rounded-2xl border border-amber-200/60 bg-white shadow-sm overflow-hidden">
+          <div className="border-b border-amber-100 bg-amber-50/50 px-6 py-4 flex items-center gap-2">
+            <span className="flex h-2.5 w-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+            <h2 className="text-lg font-semibold text-amber-900">Low Stock Alerts</h2>
           </div>
           <div className="p-0">
             <ul className="divide-y divide-zinc-100">
               {lowStockProducts.map(product => (
-                <li key={product.id} className="flex items-center justify-between p-4 hover:bg-zinc-50/50">
+                <li key={product.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 hover:bg-zinc-50/50 gap-4 sm:gap-0">
                   <div className="flex items-center gap-4">
                     <div className="h-12 w-12 overflow-hidden rounded-lg border border-zinc-200">
                       <img src={product.image || "/images/gift-basket.svg"} alt={product.name} className="h-full w-full object-cover" />
                     </div>
                     <div>
                       <p className="font-medium text-zinc-900">{product.name}</p>
-                      <p className="text-sm font-semibold text-red-600 mt-0.5">Only {product.stockQuantity} left in stock</p>
+                      <p className="text-sm font-medium text-amber-700 mt-0.5">Only {product.stockQuantity} left in stock</p>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm" onClick={() => window.location.href = '/admin/products'} className="border-red-200 text-red-600 hover:bg-red-50">
+                  <Button variant="outline" size="sm" className="w-full sm:w-auto mt-2 sm:mt-0 font-medium" onClick={() => window.location.href = '/admin/products'}>
                     Manage Stock
                   </Button>
                 </li>
@@ -237,12 +236,11 @@ export default function AdminDashboardPage() {
       {/* Store Settings Section */}
       <div className="mt-10 rounded-2xl border border-zinc-200/60 bg-white shadow-sm overflow-hidden p-6">
         <h2 className="text-lg font-semibold text-zinc-900 mb-4 flex items-center gap-2">
-          <Settings size={20} className="text-pink-500" />
           Store Configuration
         </h2>
         
-        <div className="flex items-end gap-4 max-w-sm">
-          <div className="flex-1">
+        <div className="flex flex-col sm:flex-row sm:items-end gap-4 max-w-sm">
+          <div className="flex-1 w-full">
             <label htmlFor="shippingFee" className="block text-sm font-medium text-zinc-600 mb-1">
               Standard Shipping Fee ($)
             </label>
@@ -272,7 +270,8 @@ export default function AdminDashboardPage() {
               }
             }}
             disabled={isUpdatingShipping}
-            className="bg-pink-600 hover:bg-pink-700 text-white"
+            variant="custom"
+            className="bg-zinc-900 hover:bg-zinc-800 text-white w-full sm:w-auto px-5 h-11 rounded-full font-medium transition"
           >
             {isUpdatingShipping ? "Saving..." : "Save"}
           </Button>
@@ -283,15 +282,14 @@ export default function AdminDashboardPage() {
       <div className="mt-10 rounded-2xl border border-zinc-200/60 bg-white shadow-sm overflow-hidden">
         <div className="border-b border-zinc-100 bg-zinc-50/50 px-6 py-5 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-zinc-900 flex items-center gap-2">
-            <Package size={20} className="text-pink-500" />
             Recent Orders
           </h2>
-          <Button variant="ghost" size="sm" className="text-pink-600 hover:text-pink-700 hover:bg-pink-50">View All</Button>
+          <Button variant="custom" size="sm" className="text-rose-600 hover:text-rose-700 hover:bg-pink-50 px-4 h-9 rounded-full font-medium transition" onClick={() => window.location.href = '/admin/bookings'}>View All</Button>
         </div>
         
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-zinc-600">
-            <thead className="bg-white text-zinc-500">
+        <div className="">
+          <table className="w-full text-left text-sm text-zinc-600 block sm:table">
+            <thead className="bg-white text-zinc-500 hidden sm:table-header-group">
               <tr>
                 <th className="px-6 py-4 font-medium">Order ID</th>
                 <th className="px-6 py-4 font-medium">Customer</th>
@@ -301,7 +299,7 @@ export default function AdminDashboardPage() {
                 <th className="px-6 py-4 font-medium text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100 bg-white">
+            <tbody className="divide-y divide-zinc-100 bg-white block sm:table-row-group">
               {loading ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-zinc-500">
@@ -316,26 +314,37 @@ export default function AdminDashboardPage() {
                 </tr>
               ) : (
                 orders.slice(0, 5).map((order) => (
-                  <tr key={order.id} className="hover:bg-zinc-50/50">
-                    <td className="px-6 py-4 font-mono text-xs">{order.id}</td>
-                    <td className="px-6 py-4">{order.customerInfo?.fullName || 'Unknown'}</td>
-                    <td className="px-6 py-4">
-                      {order.createdAt ? new Date(order.createdAt.toDate()).toLocaleDateString() : 'Just now'}
+                  <tr key={order.id} className="hover:bg-zinc-50/50 block sm:table-row p-4 sm:p-0 border-b border-zinc-100 sm:border-0 last:border-0">
+                    <td className="px-0 sm:px-6 py-1.5 sm:py-4 flex justify-between sm:table-cell items-center">
+                      <span className="sm:hidden text-zinc-400 font-medium text-xs">Order ID</span>
+                      <span className="font-mono text-xs">{order.id}</span>
                     </td>
-                    <td className="px-6 py-4 font-medium text-zinc-900">Rs. {order.totalPrice?.toFixed(2) || '0.00'}</td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${getStatusColor(order.status)}`}>
+                    <td className="px-0 sm:px-6 py-1.5 sm:py-4 flex justify-between sm:table-cell items-center">
+                      <span className="sm:hidden text-zinc-400 font-medium text-xs">Customer</span>
+                      <span className="font-medium text-zinc-900">{order.customerInfo?.fullName || 'Unknown'}</span>
+                    </td>
+                    <td className="px-0 sm:px-6 py-1.5 sm:py-4 flex justify-between sm:table-cell items-center">
+                      <span className="sm:hidden text-zinc-400 font-medium text-xs">Date</span>
+                      <span>{order.createdAt ? new Date(order.createdAt.toDate()).toLocaleDateString() : 'Just now'}</span>
+                    </td>
+                    <td className="px-0 sm:px-6 py-1.5 sm:py-4 flex justify-between sm:table-cell items-center">
+                      <span className="sm:hidden text-zinc-400 font-medium text-xs">Amount</span>
+                      <span className="font-medium text-zinc-900">Rs. {order.totalPrice?.toFixed(2) || '0.00'}</span>
+                    </td>
+                    <td className="px-0 sm:px-6 py-1.5 sm:py-4 flex justify-between sm:table-cell items-center">
+                      <span className="sm:hidden text-zinc-400 font-medium text-xs">Status</span>
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[10px] sm:text-xs font-semibold capitalize ${getStatusColor(order.status)}`}>
                         {order.status || 'pending'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right flex justify-end gap-2">
+                    <td className="px-0 sm:px-6 py-3 sm:py-4 text-right flex flex-wrap justify-end sm:justify-end gap-2 sm:whitespace-nowrap sm:min-w-[250px] mt-3 sm:mt-0 border-t border-zinc-100 sm:border-0 pt-4 sm:pt-4">
                       {renderCancelAction(order)}
                       {renderNextAction(order)}
                       <Button 
                         onClick={() => setSelectedOrder(order)}
                         size="sm" 
                         variant="ghost"
-                        className="text-zinc-500 hover:text-pink-600 hover:bg-pink-50 h-8 text-xs flex items-center gap-1"
+                        className="text-zinc-500 hover:text-rose-600 hover:bg-pink-50 h-8 text-xs flex items-center gap-1"
                       >
                         <Eye size={14} /> View
                       </Button>
@@ -352,7 +361,6 @@ export default function AdminDashboardPage() {
       <div className="mt-10 rounded-2xl border border-zinc-200/60 bg-white shadow-sm overflow-hidden">
         <div className="border-b border-zinc-100 bg-zinc-50/50 px-6 py-5 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-zinc-900 flex items-center gap-2">
-            <MessageSquare size={20} className="text-pink-500" />
             Customer Feedback
           </h2>
         </div>
@@ -367,7 +375,7 @@ export default function AdminDashboardPage() {
                 <li key={fb.id} className="p-6 hover:bg-zinc-50/50">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pink-100 text-pink-600 font-bold">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pink-100 text-rose-600 font-bold">
                         {fb.customerName?.charAt(0) || 'C'}
                       </div>
                       <div>
@@ -402,7 +410,7 @@ export default function AdminDashboardPage() {
           <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-xl" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-100 flex items-center justify-between">
               <h3 className="text-lg font-semibold text-zinc-900">Booking Details <span className="text-zinc-400 font-normal text-sm ml-2">#{selectedOrder.id}</span></h3>
-              <Button variant="ghost" size="sm" onClick={() => setSelectedOrder(null)} className="h-8 w-8 p-0 rounded-full text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100">
+              <Button variant="custom" size="sm" onClick={() => setSelectedOrder(null)} className="h-8 w-8 p-0 flex items-center justify-center rounded-full text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 transition">
                 <X size={18} />
               </Button>
             </div>
@@ -455,7 +463,7 @@ export default function AdminDashboardPage() {
                         <h5 className="font-medium text-zinc-900">{item.name}</h5>
                         <p className="text-sm text-zinc-500 mt-1">Qty: {item.quantity} × Rs. {item.price?.toFixed(2) || '0.00'}</p>
                         {item.category && (
-                          <span className="text-[10px] uppercase tracking-wider font-semibold text-pink-600 bg-pink-50 inline-block px-2 py-0.5 rounded-full mt-2">
+                          <span className="text-[10px] uppercase tracking-wider font-semibold text-rose-600 bg-pink-50 inline-block px-2 py-0.5 rounded-full mt-2">
                             {item.category}
                           </span>
                         )}
@@ -475,7 +483,7 @@ export default function AdminDashboardPage() {
               {/* Order Summary */}
               <div className="flex items-center justify-between border-t border-zinc-100 pt-6">
                 <span className="font-medium text-zinc-600">Total Price</span>
-                <span className="text-2xl font-bold text-pink-600">Rs. {selectedOrder.totalPrice?.toFixed(2) || '0.00'}</span>
+                <span className="text-2xl font-bold text-rose-600">Rs. {selectedOrder.totalPrice?.toFixed(2) || '0.00'}</span>
               </div>
 
               {/* Feedback Summary (if exists) */}
@@ -503,7 +511,7 @@ export default function AdminDashboardPage() {
             </div>
             
             <div className="p-6 border-t border-zinc-100 bg-zinc-50/50 rounded-b-2xl flex justify-end">
-              <Button onClick={() => setSelectedOrder(null)} className="bg-zinc-900 text-white hover:bg-zinc-800">
+              <Button variant="custom" onClick={() => setSelectedOrder(null)} className="bg-zinc-900 text-white hover:bg-zinc-800 px-5 h-11 rounded-full font-medium transition">
                 Close
               </Button>
             </div>

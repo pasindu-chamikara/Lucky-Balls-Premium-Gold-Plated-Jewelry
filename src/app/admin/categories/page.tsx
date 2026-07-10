@@ -263,13 +263,13 @@ export default function AdminCategoriesPage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-zinc-700 mb-1">Category Image (Optional)</label>
-              <input type="file" accept="image/*" onChange={handleImageUpload} disabled={isUploadingImage} className="w-full text-sm text-zinc-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100" />
-              {isUploadingImage && <p className="text-xs text-pink-600 mt-2">Uploading image...</p>}
+              <input type="file" accept="image/*" onChange={handleImageUpload} disabled={isUploadingImage} className="w-full max-w-full overflow-hidden text-sm text-zinc-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-rose-600 hover:file:bg-pink-100" />
+              {isUploadingImage && <p className="text-xs text-rose-600 mt-2">Uploading image...</p>}
               {newCatImage && <img src={newCatImage} alt="Preview" className="mt-2 h-16 w-16 object-cover rounded-lg border border-zinc-200" />}
             </div>
             <Button 
               type="submit" 
-              className="w-full bg-pink-600 text-white hover:bg-pink-500"
+              className="w-full"
               disabled={!newCatName.trim()}
             >
               <Plus size={16} className="mr-2" />
@@ -295,8 +295,8 @@ export default function AdminCategoriesPage() {
           ) : (
             <div className="divide-y divide-zinc-100">
               {categories.map((category) => (
-                <div key={category.id} className="p-6 transition-colors hover:bg-zinc-50/50">
-                  <div className="flex items-center justify-between">
+                <div key={category.id} className="p-4 sm:p-6 transition-colors hover:bg-zinc-50/50">
+                  <div className="flex flex-col sm:flex-row sm:items-center items-start justify-between gap-4 sm:gap-0">
                     {editingCategoryId === category.id ? (
                       <div className="flex flex-col gap-2 flex-1 mr-4">
                         <div className="flex items-center gap-4">
@@ -311,7 +311,7 @@ export default function AdminCategoriesPage() {
                               <input type="file" accept="image/*" onChange={handleEditImageUpload} disabled={isUploadingImage} className="hidden" />
                             </label>
                           </div>
-                          <div className="flex items-center gap-2 flex-1">
+                          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 w-full mt-2 sm:mt-0">
                             <input
                               type="text"
                               value={editingCategoryName}
@@ -319,11 +319,11 @@ export default function AdminCategoriesPage() {
                               className="flex-1 rounded-lg border border-zinc-300 px-3 py-1.5 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none"
                               autoFocus
                             />
-                            <Button size="sm" onClick={() => handleEditCategory(category.id)} className="bg-pink-600 text-white" disabled={isUploadingImage}>Save</Button>
+                            <Button size="sm" onClick={() => handleEditCategory(category.id)} disabled={isUploadingImage}>Save</Button>
                             <Button size="sm" variant="ghost" onClick={() => setEditingCategoryId(null)}>Cancel</Button>
                           </div>
                         </div>
-                        {isUploadingImage && <span className="text-xs text-pink-600 ml-16">Uploading...</span>}
+                        {isUploadingImage && <span className="text-xs text-rose-600 ml-16">Uploading...</span>}
                       </div>
                     ) : (
                       <div className="flex items-center gap-4">
@@ -359,18 +359,13 @@ export default function AdminCategoriesPage() {
                             setEditingCategoryName(category.name);
                             setEditingCategoryImage(category.image || "");
                           }}
-                          className="text-zinc-500 hover:text-pink-600 hover:bg-pink-50"
+                          className="text-zinc-500 hover:text-rose-600 hover:bg-pink-50"
                         >
                           <Edit2 size={16} />
                         </Button>
                       )}
 
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDeleteCategory(category.id)}
-                        className="text-rose-500 hover:text-rose-700 hover:bg-rose-50"
-                      >
+                      <Button variant="rose-ghost" size="sm" onClick={() => handleDeleteCategory(category.id)}>
                         <Trash2 size={18} />
                       </Button>
                     </div>
@@ -384,7 +379,7 @@ export default function AdminCategoriesPage() {
                           {category.subcategories.map((sub) => (
                             <li key={sub.id} className="flex items-center justify-between bg-white border border-zinc-100 rounded-lg p-3 shadow-sm">
                               {editingSubcatId === sub.id ? (
-                                <div className="flex items-center gap-2 flex-1 mr-4">
+                                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 flex-1 mr-4">
                                   <input
                                     type="text"
                                     value={editingSubcatName}
@@ -392,7 +387,7 @@ export default function AdminCategoriesPage() {
                                     className="flex-1 rounded-lg border border-zinc-300 px-3 py-1 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none"
                                     autoFocus
                                   />
-                                  <Button size="sm" onClick={() => handleEditSubcategory(category.id, sub.id)} className="bg-pink-600 text-white h-7 px-2 text-xs">Save</Button>
+                                  <Button size="sm" onClick={() => handleEditSubcategory(category.id, sub.id)} className="h-7 px-2 text-xs">Save</Button>
                                   <Button size="sm" variant="ghost" onClick={() => setEditingSubcatId(null)} className="h-7 px-2 text-xs">Cancel</Button>
                                 </div>
                               ) : (
@@ -409,17 +404,14 @@ export default function AdminCategoriesPage() {
                                       setEditingSubcatId(sub.id);
                                       setEditingSubcatName(sub.name);
                                     }}
-                                    className="text-zinc-400 hover:text-pink-600 transition-colors"
+                                    className="text-zinc-400 hover:text-rose-600 transition-colors"
                                   >
                                     <Edit2 size={14} />
                                   </button>
                                 )}
-                                <button 
-                                  onClick={() => handleDeleteSubcategory(category.id, sub.id)}
-                                  className="text-zinc-400 hover:text-rose-500 transition-colors"
-                                >
+                                <Button variant="rose-ghost" size="sm" onClick={() => handleDeleteSubcategory(category.id, sub.id)} className="h-7 px-2">
                                   <Trash2 size={14} />
-                                </button>
+                                </Button>
                               </div>
                             </li>
                           ))}
@@ -430,7 +422,7 @@ export default function AdminCategoriesPage() {
 
                       {/* Add Subcategory Controls */}
                       {addingSubcatTo === category.id ? (
-                        <div className="flex gap-2 mt-3 items-center">
+                        <div className="flex flex-col sm:flex-row gap-2 mt-3 items-stretch sm:items-center">
                           <input
                             type="text"
                             value={newSubcatName}
@@ -439,7 +431,7 @@ export default function AdminCategoriesPage() {
                             className="flex-1 rounded-lg border border-zinc-300 px-3 py-1.5 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none"
                             autoFocus
                           />
-                          <Button size="sm" onClick={() => handleAddSubcategory(category.id)} className="bg-pink-600 text-white">Save</Button>
+                          <Button size="sm" onClick={() => handleAddSubcategory(category.id)}>Save</Button>
                           <Button size="sm" variant="ghost" onClick={() => { setAddingSubcatTo(null); setNewSubcatName(""); }}>Cancel</Button>
                         </div>
                       ) : (

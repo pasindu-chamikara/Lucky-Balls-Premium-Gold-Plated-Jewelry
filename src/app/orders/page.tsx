@@ -130,8 +130,8 @@ export default function OrdersPage() {
     return (
       <div className="flex min-h-screen flex-col bg-pink-50">
         <Navbar />
-        <main className="flex flex-1 items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-pink-500" />
+        <main className="flex flex-1 items-center justify-center pt-28 pb-12">
+          <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
         </main>
         <Footer />
       </div>
@@ -167,27 +167,27 @@ export default function OrdersPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-pink-50 text-zinc-900">
+    <div className="flex min-h-screen flex-col text-zinc-900">
       <Navbar />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-12 lg:px-8">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-6 pt-28 pb-12 lg:px-8">
         <div className="mb-10 flex items-center justify-between">
           <div>
             <h1 className="text-4xl font-bold tracking-tight text-zinc-900 mb-2">My Orders</h1>
-            <p className="text-zinc-9000">Track the status of your recent purchases</p>
+            <p className="text-zinc-700">Track the status of your recent purchases</p>
           </div>
         </div>
         
         {loadingOrders ? (
           <div className="flex h-64 items-center justify-center rounded-2xl border border-zinc-200 bg-white/50 backdrop-blur-sm">
-            <Loader2 className="h-8 w-8 animate-spin text-pink-500" />
+            <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
           </div>
         ) : orders.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-zinc-200 bg-white/50 p-12 text-center backdrop-blur-sm">
             <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-white border border-zinc-200">
-              <ShoppingBag className="h-10 w-10 text-zinc-9000" />
+              <ShoppingBag className="h-10 w-10 text-zinc-700" />
             </div>
             <h2 className="mb-2 text-2xl font-bold text-zinc-900">No orders yet</h2>
-            <p className="mb-8 text-zinc-9000 max-w-sm">When you place an order, you'll be able to track its status here.</p>
+            <p className="mb-8 text-zinc-700 max-w-sm">When you place an order, you'll be able to track its status here.</p>
             <Link href="/">
               <Button className="bg-pink-600 text-white hover:bg-pink-500 shadow-[0_0_15px_rgba(219,39,119,0.3)]">
                 Start Shopping
@@ -204,18 +204,18 @@ export default function OrdersPage() {
                 <div className="border-b border-zinc-200 bg-white/50 px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex flex-wrap items-center gap-x-8 gap-y-2 text-sm">
                     <div>
-                      <p className="text-zinc-9000 mb-0.5">Order ID</p>
+                      <p className="text-zinc-700 mb-0.5">Order ID</p>
                       <p className="font-mono text-zinc-700">#{order.id}</p>
                     </div>
                     <div>
-                      <p className="text-zinc-9000 mb-0.5">Date</p>
+                      <p className="text-zinc-700 mb-0.5">Date</p>
                       <p className="text-zinc-700">
                         {order.createdAt ? new Date(order.createdAt.toMillis()).toLocaleDateString() : 'Just now'}
                       </p>
                     </div>
                     <div>
-                      <p className="text-zinc-9000 mb-0.5">Total Amount</p>
-                      <p className="font-bold text-pink-600">Rs. {order.totalPrice?.toFixed(2)}</p>
+                      <p className="text-zinc-700 mb-0.5">Total Amount</p>
+                      <p className="font-bold text-rose-600">Rs. {order.totalPrice?.toFixed(2)}</p>
                     </div>
                   </div>
                   
@@ -235,7 +235,7 @@ export default function OrdersPage() {
                         variant="outline" 
                         size="sm"
                         onClick={() => setFeedbackOrderId(order.id)}
-                        className="text-pink-600 hover:text-pink-700 hover:bg-pink-50 border-pink-200"
+                        className="text-rose-600 hover:text-rose-600 hover:bg-pink-50 border-pink-200"
                       >
                         Leave Feedback
                       </Button>
@@ -248,7 +248,7 @@ export default function OrdersPage() {
                 </div>
                 
                 <div className="px-6 py-6">
-                  <h4 className="mb-4 text-sm font-semibold text-zinc-9000 uppercase tracking-wider">Items in your order</h4>
+                  <h4 className="mb-4 text-sm font-semibold text-zinc-700 uppercase tracking-wider">Items in your order</h4>
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {order.items?.map((item: any, index: number) => (
                       <div key={index} className="flex gap-4 rounded-xl border border-zinc-200/50 bg-zinc-50/40 p-3">
@@ -264,9 +264,9 @@ export default function OrdersPage() {
                           )}
                         </div>
                         <div className="flex flex-col justify-center overflow-hidden py-1">
-                          <p className="truncate font-medium text-zinc-200">{item.name}</p>
-                          <p className="mt-1 text-sm text-zinc-9000">Qty: {item.quantity}</p>
-                          <p className="mt-auto font-medium text-pink-600">
+                          <p className="truncate font-medium text-zinc-900">{item.name}</p>
+                          <p className="mt-1 text-sm text-zinc-700">Qty: {item.quantity}</p>
+                          <p className="mt-auto font-medium text-rose-600">
                             Rs. {(item.price * (item.quantity || 1)).toFixed(2)}
                           </p>
                         </div>
@@ -329,7 +329,7 @@ export default function OrdersPage() {
                 <Button 
                   onClick={handleSubmitFeedback} 
                   disabled={isSubmittingFeedback}
-                  className="bg-pink-600 text-white hover:bg-pink-700"
+                  className="bg-pink-600 text-white hover:bg-pink-700 shadow-md"
                 >
                   {isSubmittingFeedback ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...</>

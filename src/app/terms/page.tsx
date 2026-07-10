@@ -3,7 +3,7 @@ import { Navbar } from "@/components/navbar";
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       <Navbar />
       <main className="mx-auto max-w-4xl px-6 py-20 lg:px-8">
         <div className="text-center mb-16">
@@ -60,7 +60,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-bold text-zinc-900 mb-4">7. Contact Information</h2>
             <p>
-              Questions about the Terms of Service should be sent to us at <a href="mailto:info@luckyballs.lk" className="text-pink-600 hover:text-pink-500 font-medium">info@luckyballs.lk</a>.
+              Questions about the Terms of Service should be sent to us at <a href="mailto:info@luckyballs.lk" className="text-rose-600 hover:text-rose-600 font-medium">info@luckyballs.lk</a>.
             </p>
           </section>
         </div>

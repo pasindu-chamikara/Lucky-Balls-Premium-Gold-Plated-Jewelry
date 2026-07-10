@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Truck, Coins, Headset, ShieldCheck, RefreshCcw, ArrowUp } from "lucide-react";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { db } from "@/firebase/config";
 
 export function Footer() {
   const [showTopBtn, setShowTopBtn] = useState(false);
+  const [categories, setCategories] = useState<{id: string, name: string}[]>([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +20,19 @@ export function Footer() {
       }
     };
     window.addEventListener("scroll", handleScroll);
+    
+    // Fetch categories
+    const fetchCats = async () => {
+      try {
+        const catSnap = await getDocs(query(collection(db, "categories"), orderBy("name")));
+        const allCats = catSnap.docs.map(doc => ({ id: doc.id, name: doc.data().name }));
+        setCategories(allCats.slice(0, 5));
+      } catch (error) {
+        console.error("Error fetching categories for footer:", error);
+      }
+    };
+    fetchCats();
+    
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -29,12 +45,12 @@ export function Footer() {
 
   return (
     <>
-      <section className="bg-black border-t border-zinc-800 py-12 relative overflow-hidden">
+      <section className="bg-black border-t border-zinc-800 py-6 relative overflow-hidden">
         {/* Subtle gold glow behind features */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-pink-400/5 rounded-full blur-[100px] pointer-events-none"></div>
 
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-start">
+        <div className="mx-auto max-w-7xl relative z-10">
+          <div className="flex overflow-x-auto md:grid md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8 items-start px-6 lg:px-8 pb-4 md:pb-0 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {[
               { icon: Truck, title: "Islandwide Delivery", desc: "Fast & reliable" },
               { icon: Coins, title: "Cash On Delivery", desc: "Pay at your door" },
@@ -44,9 +60,9 @@ export function Footer() {
             ].map((feature, i) => {
               const Icon = feature.icon;
               return (
-                <div key={i} className="flex flex-col items-center text-center group">
-                  <div className="h-16 w-16 bg-pink-400/10 text-pink-400 rounded-full flex items-center justify-center mb-4 transition-transform group-hover:-translate-y-1 group-hover:scale-110 duration-300 shadow-[0_0_15px_rgba(244,114,182,0.1)] group-hover:shadow-[0_0_20px_rgba(244,114,182,0.3)]">
-                    <Icon size={32} strokeWidth={1.5} />
+                <div key={i} className="flex-shrink-0 w-[140px] md:w-auto flex flex-col items-center text-center group snap-center">
+                  <div className="h-12 w-12 md:h-16 md:w-16 bg-pink-400/10 text-pink-400 rounded-full flex items-center justify-center mb-3 md:mb-4 transition-transform group-hover:-translate-y-1 group-hover:scale-110 duration-300 shadow-[0_0_15px_rgba(244,114,182,0.1)] group-hover:shadow-[0_0_20px_rgba(244,114,182,0.3)]">
+                    <Icon className="w-6 h-6 md:w-8 md:h-8" strokeWidth={1.5} />
                   </div>
                   <h4 className="text-white font-semibold text-[13px] uppercase tracking-wider mb-2">{feature.title}</h4>
                   <p className="text-zinc-400 text-xs">{feature.desc}</p>
@@ -65,31 +81,31 @@ export function Footer() {
         <div className="absolute -top-40 -left-40 w-96 h-96 bg-pink-400/5 rounded-full blur-[120px] pointer-events-none"></div>
         <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-pink-400/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-        <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-5 lg:gap-8">
+        <div className="mx-auto max-w-7xl px-6 py-8 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5 md:gap-12 lg:gap-8 text-center md:text-left">
             {/* Column 1: Brand */}
-            <div className="space-y-6">
-              <div className="relative inline-flex flex-col items-start gap-4 overflow-hidden group cursor-pointer">
-                <div className="relative h-40 w-40 shrink-0 overflow-hidden rounded-full border border-pink-400/50 shadow-[0_0_10px_rgba(244,114,182,0.3)]">
-                  <Image src="/logo.jpeg" alt="Lucky Balls Logo" fill sizes="150px" className="object-cover" />
+            <div className="space-y-4 md:space-y-6 flex flex-col items-center md:items-start">
+              <div className="relative inline-flex flex-col items-center md:items-start gap-3 overflow-hidden group cursor-pointer">
+                <div className="relative h-16 w-16 md:h-20 md:w-20 shrink-0 overflow-hidden rounded-full border border-pink-400/50 shadow-[0_0_10px_rgba(244,114,182,0.3)]">
+                  <Image src="/logo.jpeg" alt="Lucky Balls Logo" fill sizes="(max-width: 768px) 64px, 80px" className="object-cover" />
                 </div>
-                <h2 className="text-3xl font-bold text-pink-400 tracking-tight relative z-10">
+                <h2 className="text-2xl font-bold font-serif text-pink-400 tracking-tight relative z-10">
                   Lucky Balls
                 </h2>
                 {/* Animated shimmer on logo */}
                 <div className="absolute top-0 -inset-full h-full w-1/2 z-0 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 animate-[shimmer_2s_infinite]"></div>
               </div>
-              <p className="text-sm leading-relaxed text-zinc-400 max-w-xs">
+              <p className="text-sm leading-relaxed font-sans text-zinc-400 max-w-xs">
                 Premium Jewellery Crafted With Elegance. Discover stylish pieces designed to make every moment extraordinary.
               </p>
             </div>
 
             {/* Column 2: Quick Links */}
-            <div>
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-6">
+            <div className="flex flex-col items-center md:items-start">
+              <h3 className="text-sm font-bold font-sans text-white uppercase tracking-wider mb-4">
                 Quick Links
               </h3>
-              <ul className="space-y-4 text-sm text-zinc-400">
+              <ul className="space-y-2 text-sm font-medium text-zinc-400 font-sans flex flex-col items-center md:items-start">
                 {[
                   { label: "Home", href: "/" },
                   { label: "About Us", href: "/about" },
@@ -109,46 +125,43 @@ export function Footer() {
             </div>
 
             {/* Column 3: Categories */}
-            <div>
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-6">
+            <div className="flex flex-col items-center md:items-start">
+              <h3 className="text-sm font-bold font-sans text-white uppercase tracking-wider mb-4">
                 Categories
               </h3>
-              <ul className="space-y-4 text-sm text-zinc-400">
-                {[
-                  { label: "Rings", href: "/shop?categoryName=rings" },
-                  { label: "Necklaces", href: "/shop?categoryName=necklaces" },
-                  { label: "Bracelets", href: "/shop?categoryName=bracelets" },
-                  { label: "Earrings", href: "/shop?categoryName=earrings" }
-                ].map((link) => (
-                  <li key={link.label}>
-                    <Link href={link.href} className="relative inline-block group hover:text-pink-400 transition-colors duration-300">
-                      {link.label}
+              <ul className="space-y-2 text-sm font-medium text-zinc-400 font-sans flex flex-col items-center md:items-start">
+                {categories.length > 0 ? categories.map((cat) => (
+                  <li key={cat.id}>
+                    <Link href={`/shop?category=${cat.id}`} className="relative inline-block group hover:text-pink-400 transition-colors duration-300">
+                      {cat.name}
                       <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-pink-400 transition-all duration-300 group-hover:w-full"></span>
                     </Link>
                   </li>
-                ))}
+                )) : (
+                  <li className="opacity-50">Loading categories...</li>
+                )}
               </ul>
             </div>
 
             {/* Column 4: Contact Details */}
-            <div>
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-6">
+            <div className="flex flex-col items-center md:items-start">
+              <h3 className="text-sm font-bold font-sans text-white uppercase tracking-wider mb-4">
                 Contact
               </h3>
-              <ul className="space-y-4 text-sm text-zinc-400">
-                <li className="flex items-start gap-3">
+              <ul className="space-y-2 text-sm font-medium text-zinc-400 font-sans flex flex-col items-center md:items-start">
+                <li className="flex items-center md:items-start gap-3 text-left">
                   <span className="text-pink-400 mt-0.5">📞</span>
                   <a href="tel:0722801414" className="hover:text-pink-400 transition-colors duration-300">072 280 1414</a>
                 </li>
-                <li className="flex items-start gap-3">
+                <li className="flex items-center md:items-start gap-3 text-left">
                   <span className="text-pink-400 mt-0.5">✉️</span>
                   <span>info@luckyballs.lk</span>
                 </li>
-                <li className="flex items-start gap-3">
+                <li className="flex items-center md:items-start gap-3 text-left">
                   <span className="text-pink-400 mt-0.5">📍</span>
                   <span>Colombo, Sri Lanka</span>
                 </li>
-                <li className="flex items-start gap-3">
+                <li className="flex items-center md:items-start gap-3 text-left">
                   <span className="text-pink-400 mt-0.5">🕘</span>
                   <span>Mon - Sat | 9AM - 6PM</span>
                 </li>
@@ -156,11 +169,11 @@ export function Footer() {
             </div>
 
             {/* Column 5: Social Media */}
-            <div>
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-6">
+            <div className="flex flex-col items-center md:items-start">
+              <h3 className="text-sm font-bold font-sans text-white uppercase tracking-wider mb-4">
                 We're Social
               </h3>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap justify-center md:justify-start gap-4">
                 {[
                   {
                     label: "Facebook",
@@ -198,7 +211,7 @@ export function Footer() {
         <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-zinc-800 to-transparent"></div>
 
         {/* Bottom Footer */}
-        <div className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
+        <div className="mx-auto max-w-7xl px-6 py-4 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
 
 
@@ -218,7 +231,7 @@ export function Footer() {
       {/* Back to Top Button */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-8 right-8 z-50 p-3 rounded-full bg-pink-400 text-black shadow-[0_0_20px_rgba(244,114,182,0.4)] hover:bg-pink-500 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(244,114,182,0.6)] transition-all duration-300 ${showTopBtn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"
+        className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 p-2.5 md:p-3 rounded-full bg-pink-400 text-black shadow-[0_0_20px_rgba(244,114,182,0.4)] hover:bg-pink-500 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(244,114,182,0.6)] transition-all duration-300 ${showTopBtn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"
           }`}
         aria-label="Back to top"
       >

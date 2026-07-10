@@ -80,35 +80,35 @@ export default function AdminBookingsPage() {
   const renderNextAction = (order: any) => {
     if (!order.status || order.status === 'pending') {
       return (
-        <Button onClick={() => handleUpdateOrderStatus(order.id, 'confirmed')} size="sm" className="bg-blue-500 hover:bg-blue-600 text-white h-8 text-xs flex items-center gap-1">
+        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'confirmed')} size="sm" className="bg-blue-500 hover:bg-blue-600 text-white h-8 text-xs flex items-center gap-1">
           <CheckCircle size={14} /> Confirm
         </Button>
       );
     }
     if (order.status === 'confirmed') {
       return (
-        <Button onClick={() => handleUpdateOrderStatus(order.id, 'processing')} size="sm" className="bg-indigo-500 hover:bg-indigo-600 text-white h-8 text-xs flex items-center gap-1">
+        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'processing')} size="sm" className="bg-indigo-500 hover:bg-indigo-600 text-white h-8 text-xs flex items-center gap-1">
           <Settings size={14} /> Process
         </Button>
       );
     }
     if (order.status === 'processing') {
       return (
-        <Button onClick={() => handleUpdateOrderStatus(order.id, 'packed')} size="sm" className="bg-purple-500 hover:bg-purple-600 text-white h-8 text-xs flex items-center gap-1">
+        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'packed')} size="sm" className="bg-purple-500 hover:bg-purple-600 text-white h-8 text-xs flex items-center gap-1">
           <Box size={14} /> Pack
         </Button>
       );
     }
     if (order.status === 'packed') {
       return (
-        <Button onClick={() => handleUpdateOrderStatus(order.id, 'dispatched')} size="sm" className="bg-orange-500 hover:bg-orange-600 text-white h-8 text-xs flex items-center gap-1">
+        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'dispatched')} size="sm" className="bg-orange-500 hover:bg-orange-600 text-white h-8 text-xs flex items-center gap-1">
           <Truck size={14} /> Dispatch
         </Button>
       );
     }
     if (order.status === 'dispatched') {
       return (
-        <Button onClick={() => handleUpdateOrderStatus(order.id, 'delivered')} size="sm" className="bg-emerald-500 hover:bg-emerald-600 text-white h-8 text-xs flex items-center gap-1">
+        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'delivered')} size="sm" className="bg-emerald-500 hover:bg-emerald-600 text-white h-8 text-xs flex items-center gap-1">
           <Package size={14} /> Deliver
         </Button>
       );
@@ -126,8 +126,8 @@ export default function AdminBookingsPage() {
           }
         }}
         size="sm" 
-        variant="outline"
-        className="text-rose-500 border-rose-200 hover:bg-rose-50 h-8 text-xs flex items-center gap-1"
+        variant="rose-outline"
+        className="h-8 text-xs flex items-center gap-1"
       >
         <Ban size={14} /> Cancel
       </Button>
@@ -138,14 +138,13 @@ export default function AdminBookingsPage() {
     <AdminLayout title="Orders">
       {/* All Orders Section */}
       <div className="rounded-2xl border border-zinc-200/60 bg-white shadow-sm overflow-hidden">
-        <div className="border-b border-zinc-100 bg-zinc-50/50 px-6 py-5 flex items-center justify-between">
+        <div className="border-b border-zinc-100 bg-zinc-50/50 px-6 py-5 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
           <h2 className="text-lg font-semibold text-zinc-900 flex items-center gap-2">
-            <Package size={20} className="text-pink-500" />
             All Bookings
           </h2>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className="relative">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <div className="relative flex-1 sm:flex-none">
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={16} />
                 <input 
                   type="text" 
@@ -153,10 +152,10 @@ export default function AdminBookingsPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && setActiveSearchQuery(searchQuery)}
-                  className="pl-9 pr-4 py-1.5 text-sm text-zinc-900 bg-white border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent w-64"
+                  className="pl-9 pr-4 py-1.5 text-sm text-zinc-900 bg-white border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent w-full sm:w-64"
                 />
               </div>
-              <Button size="sm" onClick={() => setActiveSearchQuery(searchQuery)} className="bg-zinc-900 text-white hover:bg-zinc-800">
+              <Button variant="default" size="sm" onClick={() => setActiveSearchQuery(searchQuery)} className="shrink-0">
                 Search
               </Button>
             </div>
@@ -222,7 +221,7 @@ export default function AdminBookingsPage() {
                         onClick={() => setSelectedOrder(order)}
                         size="sm" 
                         variant="ghost"
-                        className="text-zinc-500 hover:text-pink-600 hover:bg-pink-50 h-8 text-xs flex items-center gap-1"
+                        className="text-zinc-500 hover:text-rose-600 hover:bg-pink-50 h-8 text-xs flex items-center gap-1"
                       >
                         <Eye size={14} /> View
                       </Button>
@@ -294,7 +293,7 @@ export default function AdminBookingsPage() {
                         <h5 className="font-medium text-zinc-900">{item.name}</h5>
                         <p className="text-sm text-zinc-500 mt-1">Qty: {item.quantity} × Rs. {item.price?.toFixed(2) || '0.00'}</p>
                         {item.category && (
-                          <span className="text-[10px] uppercase tracking-wider font-semibold text-pink-600 bg-pink-50 inline-block px-2 py-0.5 rounded-full mt-2">
+                          <span className="text-[10px] uppercase tracking-wider font-semibold text-rose-600 bg-pink-50 inline-block px-2 py-0.5 rounded-full mt-2">
                             {item.category}
                           </span>
                         )}
@@ -314,7 +313,7 @@ export default function AdminBookingsPage() {
               {/* Order Summary */}
               <div className="flex items-center justify-between border-t border-zinc-100 pt-6">
                 <span className="font-medium text-zinc-600">Total Price</span>
-                <span className="text-2xl font-bold text-pink-600">Rs. {selectedOrder.totalPrice?.toFixed(2) || '0.00'}</span>
+                <span className="text-2xl font-bold text-rose-600">Rs. {selectedOrder.totalPrice?.toFixed(2) || '0.00'}</span>
               </div>
             </div>
             

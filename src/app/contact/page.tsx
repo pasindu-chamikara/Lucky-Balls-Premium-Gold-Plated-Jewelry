@@ -42,7 +42,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       <Navbar />
       <main className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         <div className="text-center mb-16">
@@ -62,27 +62,27 @@ export default function ContactPage() {
             
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                <div className="bg-pink-100 p-3 rounded-full text-pink-600">
+                <div className="bg-pink-100 p-3 rounded-full text-rose-600">
                   <Phone size={20} />
                 </div>
                 <div>
                   <h4 className="font-semibold text-zinc-900">Phone & WhatsApp</h4>
-                  <p className="text-zinc-600 mt-1"><a href="tel:0722801414" className="hover:text-pink-600 font-medium">072 280 1414</a></p>
+                  <p className="text-zinc-600 mt-1"><a href="tel:0722801414" className="hover:text-rose-600 font-medium">072 280 1414</a></p>
                 </div>
               </div>
               
               <div className="flex items-start gap-4">
-                <div className="bg-pink-100 p-3 rounded-full text-pink-600">
+                <div className="bg-pink-100 p-3 rounded-full text-rose-600">
                   <Mail size={20} />
                 </div>
                 <div>
                   <h4 className="font-semibold text-zinc-900">Email</h4>
-                  <p className="text-zinc-600 mt-1"><a href="mailto:info@luckyballs.lk" className="hover:text-pink-600 font-medium">info@luckyballs.lk</a></p>
+                  <p className="text-zinc-600 mt-1"><a href="mailto:info@luckyballs.lk" className="hover:text-rose-600 font-medium">info@luckyballs.lk</a></p>
                 </div>
               </div>
               
               <div className="flex items-start gap-4">
-                <div className="bg-pink-100 p-3 rounded-full text-pink-600">
+                <div className="bg-pink-100 p-3 rounded-full text-rose-600">
                   <MapPin size={20} />
                 </div>
                 <div>
@@ -92,7 +92,7 @@ export default function ContactPage() {
               </div>
               
               <div className="flex items-start gap-4">
-                <div className="bg-pink-100 p-3 rounded-full text-pink-600">
+                <div className="bg-pink-100 p-3 rounded-full text-rose-600">
                   <Clock size={20} />
                 </div>
                 <div>
@@ -104,7 +104,7 @@ export default function ContactPage() {
             
             <div className="pt-6 border-t border-zinc-200">
               <a href="https://wa.me/luckyballs" target="_blank" rel="noopener noreferrer">
-                <Button className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-6 gap-2">
+                <Button variant="custom" className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-6 gap-2 font-semibold flex items-center justify-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2">
                   <Phone size={20} />
                   Message us on WhatsApp
                 </Button>
@@ -147,7 +147,7 @@ export default function ContactPage() {
                     <label htmlFor="message" className="block text-sm font-medium text-zinc-700 mb-1">Message</label>
                     <textarea id="message" name="message" required rows={4} className="w-full rounded-lg border border-zinc-300 bg-white text-zinc-900 px-4 py-2 focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500 placeholder:text-zinc-400" placeholder="How can we help you?"></textarea>
                   </div>
-                  <Button type="submit" disabled={isSubmitting} className="w-full bg-pink-600 hover:bg-pink-700 text-white py-6">
+                  <Button variant="rose" type="submit" disabled={isSubmitting} className="w-full py-6">
                     {isSubmitting ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -119,7 +119,7 @@ export default function AdminMessagesPage() {
                           {msg.name}
                         </h3>
                         {msg.status === 'unread' && (
-                          <span className="bg-pink-100 text-pink-700 text-xs px-2 py-0.5 rounded-full font-medium">New</span>
+                          <span className="bg-pink-100 text-rose-600 text-xs px-2 py-0.5 rounded-full font-medium">New</span>
                         )}
                       </div>
                       <p className="text-sm text-zinc-500 font-medium">{msg.email}</p>

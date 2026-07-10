@@ -54,13 +54,13 @@ export default function AdminFeedbacksPage() {
 
       <div className="rounded-2xl border border-zinc-200/60 bg-white shadow-sm overflow-hidden">
         <div className="border-b border-zinc-100 bg-zinc-50/50 px-6 py-4 flex items-center gap-2">
-          <MessageSquare size={18} className="text-pink-500" />
+          <MessageSquare size={18} className="text-rose-600" />
           <h2 className="font-semibold text-zinc-900">All Feedbacks ({feedbacks.length})</h2>
         </div>
         
         {loading ? (
           <div className="flex items-center justify-center p-12">
-            <Loader2 className="h-8 w-8 animate-spin text-pink-500" />
+            <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
           </div>
         ) : feedbacks.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-12 text-center">
@@ -78,7 +78,7 @@ export default function AdminFeedbacksPage() {
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pink-100 text-pink-600 font-bold text-lg">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pink-100 text-rose-600 font-bold text-lg">
                           {fb.customerName?.charAt(0) || 'C'}
                         </div>
                         <div>
@@ -92,10 +92,10 @@ export default function AdminFeedbacksPage() {
                           {fb.createdAt ? new Date(fb.createdAt.toDate()).toLocaleDateString() : 'Unknown Date'}
                         </div>
                         <Button 
-                          variant="ghost" 
+                          variant="danger-ghost" 
                           size="sm" 
                           onClick={() => handleDeleteFeedback(fb.id)}
-                          className="h-8 w-8 p-0 text-red-500 hover:bg-red-50 hover:text-red-600"
+                          className="h-8 w-8 p-0"
                           title="Delete Feedback"
                         >
                           <Trash2 size={16} />

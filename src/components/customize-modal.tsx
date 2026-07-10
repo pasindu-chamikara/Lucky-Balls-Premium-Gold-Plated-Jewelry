@@ -76,7 +76,7 @@ export function CustomizeModal({ product, onClose }: { product: Product, onClose
           
           <div className="mb-6">
             <h3 className="text-2xl font-bold text-zinc-900 mb-2">{product.name}</h3>
-            <p className="text-xl text-pink-600 font-medium mb-4">Rs. {product.price.toFixed(2)}</p>
+            <p className="text-xl text-rose-600 font-medium mb-4">Rs. {product.price.toFixed(2)}</p>
             <p className="text-zinc-700 leading-relaxed">{product.description}</p>
           </div>
 
@@ -107,9 +107,7 @@ export function CustomizeModal({ product, onClose }: { product: Product, onClose
               </div>
             ))}
             
-            {(!product.customizationOptions || product.customizationOptions.length === 0) && (
-              <p className="text-zinc-500 italic">No customization options available for this item.</p>
-            )}
+
           </div>
         </div>
 
@@ -133,7 +131,7 @@ export function CustomizeModal({ product, onClose }: { product: Product, onClose
               </button>
             </div>
           </div>
-          <Button onClick={handleAddToCart} className="w-full py-6 rounded-xl bg-pink-600 text-white font-bold text-lg shadow-[0_0_20px_rgba(219,39,119,0.3)] hover:bg-pink-500 transition-all">
+          <Button onClick={handleAddToCart} className="w-full py-6 rounded-xl bg-pink-600 text-zinc-900 font-bold text-lg shadow-[0_0_20px_rgba(219,39,119,0.3)] hover:bg-pink-500 transition-all">
             Add to Cart - Rs. {(product.price * quantity).toFixed(2)}
           </Button>
         </div>
