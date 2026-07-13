@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, HeartHandshake, ShieldCheck, Sparkles, Truck, Heart, Camera, ThumbsUp, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, BadgeCheck, HeartHandshake, ShieldCheck, Sparkles, Truck, Heart, Camera, ThumbsUp, ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { SectionTitle } from "@/components/section-title";
@@ -202,14 +202,27 @@ export default function Home() {
                 </Button>
               </Link>
             </div>
-            <div className="mt-8 sm:mt-10 flex flex-wrap justify-center lg:justify-start gap-4 sm:gap-6 text-xs sm:text-sm text-zinc-600 w-full">
-              <div className="flex items-center gap-2 bg-white/50 px-3 py-1.5 rounded-lg border border-zinc-200">
-                <Heart size={16} className="text-rose-600" fill="currentColor" />
-                Trusted by 10k+ besties
+            <div className="mt-8 sm:mt-12 flex flex-row flex-wrap items-center justify-center lg:justify-start gap-6 sm:gap-10 w-full border-t border-zinc-200/60 pt-6">
+              <div className="flex flex-col items-center lg:items-start">
+                <span className="text-2xl sm:text-3xl font-extrabold text-zinc-900">500+</span>
+                <span className="text-sm font-medium text-zinc-500">Happy Customers</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/50 px-3 py-1.5 rounded-lg border border-zinc-200">
-                <BadgeCheck size={16} className="text-rose-600" />
-                Custom aesthetic bundles
+              <div className="h-8 w-[1px] bg-zinc-200 hidden sm:block"></div>
+              <div className="flex flex-col items-center lg:items-start">
+                <span className="text-2xl sm:text-3xl font-extrabold text-zinc-900">250+</span>
+                <span className="text-sm font-medium text-zinc-500">Products</span>
+              </div>
+              <div className="h-8 w-[1px] bg-zinc-200 hidden sm:block"></div>
+              <div className="flex flex-col items-center lg:items-start">
+                <span className="text-2xl sm:text-3xl font-extrabold text-zinc-900">4.9</span>
+                <div className="flex items-center gap-1.5 text-sm font-medium text-zinc-500">
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} size={14} className="text-yellow-400 fill-yellow-400" />
+                    ))}
+                  </div>
+                  <span>Avg. Rating</span>
+                </div>
               </div>
             </div>
           </div>
