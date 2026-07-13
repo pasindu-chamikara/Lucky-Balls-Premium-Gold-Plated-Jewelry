@@ -69,8 +69,8 @@ export function Navbar() {
   };
 
   return (
-    <div className="fixed top-2 left-0 right-0 z-50 px-2 sm:px-4 flex justify-center pointer-events-none font-sans">
-      <header className="pointer-events-auto w-full max-w-5xl rounded-full border border-zinc-200/50 bg-white/70 backdrop-blur-xl shadow-lg shadow-zinc-900/5 flex items-center justify-between px-4 py-2 transition-all duration-300">
+    <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none font-sans">
+      <header className="pointer-events-auto w-full border-b border-zinc-200/50 bg-white/70 backdrop-blur-xl shadow-sm flex items-center justify-between px-4 sm:px-8 py-3 transition-all duration-300">
 
         {/* Logo and Mobile Menu Toggle */}
         <div className="flex items-center gap-2 sm:gap-4">
@@ -151,8 +151,8 @@ export function Navbar() {
                     <h3 className="text-lg font-bold text-rose-600 mb-2">New Arrivals</h3>
                     <p className="text-sm text-rose-600/80 mb-6 leading-relaxed">Discover our latest 18K gold plated pieces, carefully curated for your everyday elegance.</p>
                   </div>
-                  <Link href="/shop">
-                    <Button size="sm" className="w-full bg-rose-500 text-zinc-900 hover:bg-pink-500 shadow-md">
+                  <Link href="/shop" className="block w-full">
+                    <Button size="sm" className="w-full bg-rose-500 text-white hover:bg-pink-500 shadow-md">
                       Shop Collection
                     </Button>
                   </Link>
@@ -242,11 +242,10 @@ export function Navbar() {
             <div className="rounded-2xl bg-zinc-50/80 border border-zinc-100 overflow-hidden">
               <button
                 onClick={() => setMobileShopOpen(!mobileShopOpen)}
-                className="w-full px-4 py-4 flex items-center justify-between text-zinc-900 font-medium text-base"
+                className="w-full px-4 py-4 flex items-center justify-center gap-2 text-zinc-900 font-bold text-xl"
+                style={{ fontFamily: "var(--font-playfair)" }}
               >
-                <div className="flex items-center">
-                  <span className={mobileShopOpen ? "text-rose-600" : ""}>Shop</span>
-                </div>
+                <span className={mobileShopOpen ? "text-rose-600" : ""}>Shop</span>
                 <ChevronDown size={18} className={`text-zinc-400 transition-transform duration-300 ${mobileShopOpen ? "rotate-180" : ""}`} />
               </button>
 
@@ -255,7 +254,7 @@ export function Navbar() {
                   <Link
                     href="/shop"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block px-3 py-2.5 rounded-xl text-sm font-semibold text-rose-600 bg-pink-50"
+                    className="block px-3 py-2.5 rounded-xl text-sm font-semibold text-rose-600 bg-pink-50 text-center"
                   >
                     View All Products
                   </Link>
@@ -264,7 +263,7 @@ export function Navbar() {
                       key={cat.id}
                       href={`/shop?category=${cat.id}`}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="block px-3 py-2.5 rounded-xl text-sm text-zinc-700 hover:bg-white transition-colors"
+                      className="block px-3 py-2.5 rounded-xl text-sm text-zinc-700 hover:bg-white transition-colors text-center"
                     >
                       {cat.name}
                     </Link>
@@ -287,10 +286,11 @@ export function Navbar() {
                       setActiveHash(link.href.substring(link.href.indexOf('#')));
                     }
                   }}
-                  className={`px-4 py-4 rounded-2xl transition-all font-medium text-base flex items-center group/mobile ${isActive
+                  className={`px-4 py-4 rounded-2xl transition-all font-bold text-xl flex items-center justify-center group/mobile ${isActive
                     ? "bg-zinc-50 text-rose-600 border border-zinc-100"
                     : "text-zinc-700 hover:bg-zinc-50"
                     }`}
+                  style={{ fontFamily: "var(--font-playfair)" }}
                 >
                   <span>{link.label}</span>
                 </Link>

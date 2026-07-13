@@ -190,10 +190,15 @@ export default function Home() {
             <p className="mt-4 sm:mt-6 max-w-xl text-base sm:text-lg leading-8 text-zinc-600">
               Lucky Balls brings together curated 18K gold plated pieces, premium pink packaging, and a seamless shopping experience for everyday luxury.
             </p>
-            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
-              <Link href="/shop" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full sm:w-auto gap-2 bg-pink-600 text-white hover:bg-pink-500 shadow-[0_0_20px_rgba(219,39,119,0.5)] transition-all duration-300 rounded-full px-8 hover:-translate-y-1">
-                  Shop Now <ArrowRight size={18} />
+            <div className="mt-6 sm:mt-8 flex flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4 w-full lg:w-auto">
+              <Link href="/shop" className="flex-1 sm:flex-none">
+                <Button size="lg" className="w-full sm:w-auto gap-1 sm:gap-2 bg-pink-600 text-white hover:bg-pink-500 shadow-[0_0_20px_rgba(219,39,119,0.5)] transition-all duration-300 rounded-full px-4 sm:px-8 hover:-translate-y-1 whitespace-nowrap text-sm sm:text-base">
+                  Shop Now <ArrowRight size={16} className="sm:w-[18px] sm:h-[18px]" />
+                </Button>
+              </Link>
+              <Link href="/about" className="flex-1 sm:flex-none">
+                <Button size="lg" className="w-full sm:w-auto gap-1 sm:gap-2 bg-pink-600 text-white hover:bg-pink-500 shadow-[0_0_20px_rgba(219,39,119,0.5)] transition-all duration-300 rounded-full px-4 sm:px-8 hover:-translate-y-1 whitespace-nowrap text-sm sm:text-base">
+                  Our Story
                 </Button>
               </Link>
             </div>
@@ -341,14 +346,31 @@ export default function Home() {
                   <div
                     key={idx}
                     className="relative aspect-[4/5] overflow-hidden group bg-zinc-100 flex items-center justify-center shadow-md border border-zinc-100 hover:border-pink-200 hover:shadow-2xl hover:shadow-pink-500/20 hover:-translate-y-2 hover:scale-[1.02] transition-all duration-500"
+                    onMouseEnter={(e) => {
+                      const videoEl = e.currentTarget.querySelector('.desktop-video') as HTMLVideoElement;
+                      if (videoEl) videoEl.play().catch(() => {});
+                    }}
+                    onMouseLeave={(e) => {
+                      const videoEl = e.currentTarget.querySelector('.desktop-video') as HTMLVideoElement;
+                      if (videoEl) videoEl.pause();
+                    }}
                   >
+                    {/* Mobile Video: Autoplays */}
                     <video
                       src={video.src}
                       autoPlay
                       loop
                       muted
                       playsInline
-                      className="relative z-10 w-full h-full object-cover transition-transform duration-700"
+                      className="sm:hidden relative z-10 w-full h-full object-cover transition-transform duration-700"
+                    />
+                    {/* Desktop Video: Plays on hover */}
+                    <video
+                      src={video.src}
+                      loop
+                      muted
+                      playsInline
+                      className="desktop-video hidden sm:block relative z-10 w-full h-full object-cover transition-transform duration-700"
                     />
                     <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none opacity-60 group-hover:opacity-90 transition-opacity duration-500"></div>
                     <div className="absolute inset-0 z-30 flex items-end justify-center pb-4 sm:pb-8 pointer-events-none opacity-100 translate-y-0 sm:opacity-0 sm:translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">

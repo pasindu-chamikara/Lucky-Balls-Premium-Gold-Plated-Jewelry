@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
-import { Poppins, Cormorant_Garamond } from "next/font/google";
+import { Poppins, Cormorant_Garamond, Playfair_Display } from "next/font/google";
 import "./globals.css";
+
+const playfairDisplay = Playfair_Display({
+  weight: ["400", "500", "600", "700", "800"],
+  subsets: ["latin"],
+  variable: "--font-playfair",
+});
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700", "800"],
@@ -30,7 +36,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${cormorantGaramond.variable} h-full antialiased`}
+      className={`${poppins.variable} ${cormorantGaramond.variable} ${playfairDisplay.variable} h-full antialiased`}
       data-scroll-behavior="smooth"
     >
       <head>
