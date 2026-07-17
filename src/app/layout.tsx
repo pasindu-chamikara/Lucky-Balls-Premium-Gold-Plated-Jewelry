@@ -41,7 +41,7 @@ export default function RootLayout({
     >
       <head>
       </head>
-      <body className="min-h-full flex flex-col bg-gradient-to-br from-pink-200 via-pink-50 to-gold-200 bg-fixed text-zinc-900 animate-bg-gradient font-sans">
+      <body className="min-h-full flex flex-col bg-[#fdf7f3] text-zinc-900 font-sans antialiased selection:bg-[#f2d8d0] selection:text-zinc-900">
         {/* Marketing Pixels */}
         {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
           <script dangerouslySetInnerHTML={{

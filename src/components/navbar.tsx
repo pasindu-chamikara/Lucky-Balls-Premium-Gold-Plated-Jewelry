@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { ShoppingBag, User, LogOut, Package, Menu, X, Store, Info, Star, ChevronDown, HelpCircle } from "lucide-react";
+import { User, LogOut, Menu, X, ChevronDown, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/cart-context";
 import { useAuth } from "@/context/auth-context";
@@ -14,10 +14,11 @@ import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/firebase/config";
 
 const standardLinks = [
-  { href: "/about", label: "About", icon: Info },
-  { href: "/#reviews", label: "Reviews", icon: Star },
-  { href: "/orders", label: "Orders", icon: Package },
-  { href: "/faq", label: "FAQ", icon: HelpCircle },
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/#reviews", label: "Reviews" },
+  { href: "/orders", label: "Orders" },
+  { href: "/faq", label: "FAQ" },
 ];
 
 export function Navbar() {
@@ -65,30 +66,39 @@ export function Navbar() {
       const hash = href.split('#')[1];
       return pathname === '/' && activeHash === `#${hash}`;
     }
+    if (href === '/') {
+      return pathname === '/';
+    }
     return pathname === href || pathname.startsWith(`${href}/`);
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none font-sans">
-      <header className="pointer-events-auto w-full border-b border-zinc-200/50 bg-white/70 backdrop-blur-xl shadow-sm flex items-center justify-between px-4 sm:px-8 py-3 transition-all duration-300">
+    <>
+      <div className="fixed top-0 left-0 right-0 z-50 bg-[var(--surface-2)]/90 backdrop-blur-md border-b border-[var(--border)] pointer-events-auto font-sans transition-all duration-300 shadow-[0_10px_30px_rgba(31,26,23,0.04)]">
+        <header className="w-full max-w-7xl mx-auto flex items-center justify-between px-6 py-4.5">
 
         {/* Logo and Mobile Menu Toggle */}
         <div className="flex items-center gap-2 sm:gap-4">
           <Button
             variant="ghost"
             size="sm"
-            className="md:hidden text-zinc-700 p-0 h-auto hover:bg-transparent hover:text-rose-600 transition-colors"
+            className="md:hidden text-zinc-800 p-0 h-auto hover:bg-transparent transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
           </Button>
 
-          <Link 
-            href="/" 
-            className="flex items-center gap-2 sm:gap-3 text-base sm:text-lg font-bold text-zinc-900 group z-50"
-            onClick={() => setActiveHash("")}
+          <Link
+            href="/"
+            className="flex items-center gap-2 sm:gap-3 group z-50"
+            onClick={() => {
+              setActiveHash("");
+              if (pathname === '/') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
           >
-            <div className="relative h-8 w-8 sm:h-9 sm:w-9 overflow-hidden rounded-full border border-zinc-100 transition-transform duration-300 group-hover:scale-105 shadow-sm shrink-0">
+            <div className="relative h-8 w-8 sm:h-9 sm:w-9 overflow-hidden rounded-full transition-transform duration-300 group-hover:scale-105 shrink-0">
               <Image
                 src="/logo.jpeg"
                 alt="Lucky Balls Logo"
@@ -97,14 +107,14 @@ export function Navbar() {
                 className="object-cover"
               />
             </div>
-            <span className="text-zinc-900 font-extrabold tracking-tight">
-              LUCKY BALLS
+            <span className="text-[var(--foreground)] font-serif italic text-xl sm:text-2xl font-normal">
+              Lucky Balls
             </span>
           </Link>
         </div>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-700 relative">
+        <nav className="hidden md:flex items-center gap-7 text-sm font-normal relative">
 
           {/* Shop Mega Menu Trigger */}
           <div
@@ -114,45 +124,41 @@ export function Navbar() {
           >
             <Link
               href="/shop"
-              className={`relative flex items-center gap-1.5 transition-colors duration-300 group/link ${pathname.startsWith('/shop') ? "text-rose-600" : "hover:text-rose-600 text-zinc-700"
-                }`}
+              className={`relative flex items-center gap-1 transition-colors duration-300 group/link text-[13px] uppercase tracking-[0.2em] ${pathname.startsWith('/shop') ? "text-[var(--foreground)] font-medium" : "text-[var(--accent-deep)]/80 hover:text-[var(--foreground)] font-normal"}`}
             >
               <span>Shop</span>
-              <ChevronDown size={14} className={`text-zinc-400 transition-transform duration-300 ${isMegaMenuOpen ? "rotate-180 text-rose-600" : ""}`} />
-              <span className={`absolute -bottom-1 left-0 h-[2px] bg-rose-500 transition-all duration-300 ${pathname.startsWith('/shop') ? "w-full" : "w-0 group-hover/link:w-full"}`}></span>
+              <ChevronDown size={14} className={`transition-transform duration-300 ${isMegaMenuOpen ? "rotate-180 text-zinc-900" : ""}`} />
             </Link>
 
             {/* Mega Dropdown */}
             <div
-              className={`absolute top-full left-1/2 -translate-x-1/2 pt-4 transition-all duration-300 ${isMegaMenuOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"
-                }`}
+              className={`absolute top-full left-1/2 -translate-x-1/2 pt-6 transition-all duration-300 ${isMegaMenuOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"}`}
             >
-              <div className="w-[600px] bg-white rounded-3xl border border-zinc-200 shadow-2xl overflow-hidden p-6 grid grid-cols-2 gap-8">
+              <div className="w-[600px] bg-white/95 border border-zinc-100 shadow-xl rounded-2xl overflow-hidden p-6 grid grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-900 mb-4 px-2">Shop by Category</h3>
+                  <h3 className="text-[11px] font-semibold uppercase tracking-widest text-zinc-400 mb-4 px-2">Shop by Category</h3>
                   <div className="space-y-1">
-                    <Link href="/shop" className="block px-3 py-2 rounded-lg text-sm text-zinc-700 hover:bg-pink-50 hover:text-rose-600 transition-colors font-medium">
+                    <Link href="/shop" className="block px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-50 transition-colors font-medium rounded-md">
                       All Products
                     </Link>
                     {categories.length === 0 ? (
                       <div className="px-3 py-2 text-xs text-zinc-400 italic">Loading categories...</div>
                     ) : (
                       categories.map(cat => (
-                        <Link key={cat.id} href={`/shop?category=${cat.id}`} className="block px-3 py-2 rounded-lg text-sm text-zinc-700 hover:bg-pink-50 hover:text-rose-600 transition-colors">
+                        <Link key={cat.id} href={`/shop?category=${cat.id}`} className="block px-3 py-2 text-sm text-zinc-600 hover:bg-zinc-50 transition-colors rounded-md">
                           {cat.name}
                         </Link>
                       ))
                     )}
                   </div>
                 </div>
-                <div className="bg-pink-50 rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group/promo">
-                  <div className="absolute -right-6 -top-6 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl group-hover/promo:bg-pink-500/20 transition-colors"></div>
+                <div className="bg-zinc-50 p-6 flex flex-col justify-between rounded-xl relative overflow-hidden group/promo border border-zinc-100">
                   <div className="relative z-10">
-                    <h3 className="text-lg font-bold text-rose-600 mb-2">New Arrivals</h3>
-                    <p className="text-sm text-rose-600/80 mb-6 leading-relaxed">Discover our latest 18K gold plated pieces, carefully curated for your everyday elegance.</p>
+                    <h3 className="text-xl font-serif italic text-zinc-900 mb-2">New Arrivals</h3>
+                    <p className="text-sm text-zinc-500 mb-6 leading-relaxed">Discover our latest pieces, carefully curated for your everyday elegance.</p>
                   </div>
                   <Link href="/shop" className="block w-full">
-                    <Button size="sm" className="w-full bg-rose-500 text-white hover:bg-pink-500 shadow-md">
+                    <Button size="sm" variant="outline" className="w-full border-zinc-300 text-zinc-800 hover:bg-zinc-100 font-medium tracking-wide text-xs">
                       Shop Collection
                     </Button>
                   </Link>
@@ -169,53 +175,42 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => {
+                  if (link.href === '/' && pathname === '/') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
                   if (link.href.includes('#')) {
                     setActiveHash(link.href.substring(link.href.indexOf('#')));
                   }
                 }}
-                className={`relative transition-colors duration-300 group/link py-2 ${isActive ? "text-rose-600" : "hover:text-rose-600 text-zinc-700"
-                  }`}
+                className={`relative transition-colors duration-300 group/link py-2 text-[13px] uppercase tracking-[0.2em] ${isActive ? "text-[var(--foreground)] font-medium" : "text-[var(--accent-deep)]/80 hover:text-[var(--foreground)] font-normal"}`}
               >
                 <span>{link.label}</span>
-                <span className={`absolute -bottom-1 left-0 h-[2px] bg-rose-500 transition-all duration-300 ${isActive ? "w-full" : "w-0 group-hover/link:w-full"}`}></span>
               </Link>
             );
           })}
         </nav>
 
         {/* Right Side Actions */}
-        <div className="flex items-center gap-3">
-          <Link href="/cart">
-            <Button size="icon" variant="ghost" className="text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100 rounded-full relative h-9 w-9 transition-colors">
-              <ShoppingBag size={20} />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white shadow-sm animate-in zoom-in">
-                  {totalItems}
-                </span>
-              )}
-            </Button>
-          </Link>
-
+        <div className="flex items-center gap-6">
           {!loading && (
             user ? (
               <div className="relative group/profile py-2 hidden md:block">
-                <Button size="icon" variant="ghost" className="text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100 rounded-full h-9 w-9 transition-colors">
+                <button className="flex items-center text-zinc-600 hover:text-zinc-900 transition-colors" aria-label="Account">
                   <User size={20} />
-                </Button>
+                </button>
 
                 {/* Profile Dropdown */}
-                <div className="absolute right-0 top-[100%] opacity-0 invisible group-hover/profile:opacity-100 group-hover/profile:visible transition-all duration-300">
-                  <div className="w-48 bg-white rounded-2xl border border-zinc-200 shadow-xl overflow-hidden">
-                    <div className="px-4 py-3 border-b border-zinc-100 bg-zinc-50/50">
-                      <p className="text-xs text-zinc-500 mb-0.5">Signed in as</p>
-                      <p className="text-sm font-semibold text-zinc-900 truncate">{user.email}</p>
+                <div className="absolute right-0 top-full pt-4 opacity-0 invisible group-hover/profile:opacity-100 group-hover/profile:visible transition-all duration-300">
+                  <div className="w-48 bg-white border border-zinc-100 shadow-xl rounded-xl overflow-hidden">
+                    <div className="px-4 py-3 border-b border-zinc-100 bg-zinc-50">
+                      <p className="text-[10px] text-zinc-400 font-medium uppercase tracking-widest mb-1">Signed in as</p>
+                      <p className="text-xs font-medium text-zinc-900 truncate">{user.email}</p>
                     </div>
                     <div className="p-1.5">
                       <button
                         onClick={handleSignOut}
-                        className="w-full flex items-center gap-3 px-3 py-2 text-sm text-rose-600 hover:bg-rose-50 rounded-xl transition-colors font-medium"
+                        className="w-full flex items-center justify-between px-3 py-2 text-xs text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors font-medium rounded-md"
                       >
-                        <LogOut size={16} />
                         <span>Sign Out</span>
                       </button>
                     </div>
@@ -224,56 +219,39 @@ export function Navbar() {
               </div>
             ) : (
               <Link href="/login" className="hidden md:block">
-                <Button size="sm" variant="ghost" className="text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100 rounded-full transition-all duration-300 font-medium px-4 h-9">
-                  Log in
-                </Button>
+                <span className="flex items-center text-zinc-600 hover:text-zinc-900 transition-colors" aria-label="Log in">
+                  <User size={20} />
+                </span>
               </Link>
             )
           )}
+
+          <Link href="/cart" className="flex items-center gap-1 text-zinc-900 hover:text-zinc-600 transition-colors font-medium" aria-label="Cart">
+            <ShoppingCart size={20} />
+            <span className="text-xs">({totalItems})</span>
+          </Link>
         </div>
       </header>
+      </div>
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden fixed top-[72px] left-0 right-0 bottom-0 bg-white/95 backdrop-blur-2xl animate-in slide-in-from-top-2 shadow-2xl overflow-y-auto pb-20 pointer-events-auto z-40 border-t border-zinc-100">
-          <nav className="flex flex-col p-4 gap-2">
+        <div className="md:hidden fixed top-[69px] left-0 right-0 bottom-0 bg-white/95 backdrop-blur-2xl animate-in slide-in-from-top-2 shadow-2xl overflow-y-auto pb-24 pt-4 pointer-events-auto z-40 border-t border-zinc-100">
+          <nav className="flex flex-col px-6 sm:px-8 gap-3">
 
-            {/* Mobile Shop Accordion */}
-            <div className="rounded-2xl bg-zinc-50/80 border border-zinc-100 overflow-hidden">
-              <button
-                onClick={() => setMobileShopOpen(!mobileShopOpen)}
-                className="w-full px-4 py-4 flex items-center justify-center gap-2 text-zinc-900 font-bold text-xl"
-                style={{ fontFamily: "var(--font-playfair)" }}
-              >
-                <span className={mobileShopOpen ? "text-rose-600" : ""}>Shop</span>
-                <ChevronDown size={18} className={`text-zinc-400 transition-transform duration-300 ${mobileShopOpen ? "rotate-180" : ""}`} />
-              </button>
-
-              <div className={`overflow-hidden transition-all duration-300 ${mobileShopOpen ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"}`}>
-                <div className="p-4 pt-0 space-y-1 pl-11">
-                  <Link
-                    href="/shop"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="block px-3 py-2.5 rounded-xl text-sm font-semibold text-rose-600 bg-pink-50 text-center"
-                  >
-                    View All Products
-                  </Link>
-                  {categories.map(cat => (
-                    <Link
-                      key={cat.id}
-                      href={`/shop?category=${cat.id}`}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block px-3 py-2.5 rounded-xl text-sm text-zinc-700 hover:bg-white transition-colors text-center"
-                    >
-                      {cat.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
+            <Link
+              href="/shop"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`px-4 py-3 rounded-xl transition-all font-semibold text-lg flex items-center justify-center group/mobile ${pathname.startsWith('/shop')
+                ? "bg-rose-50 text-rose-600 border border-zinc-100"
+                : "text-zinc-700 hover:bg-zinc-50"
+                }`}
+              style={{ fontFamily: "var(--font-playfair)" }}
+            >
+              <span>Shop</span>
+            </Link>
 
             {standardLinks.map((link) => {
-              const Icon = link.icon;
               const isActive = checkIsActive(link.href);
 
               return (
@@ -282,11 +260,14 @@ export function Navbar() {
                   href={link.href}
                   onClick={() => {
                     setIsMobileMenuOpen(false);
+                    if (link.href === '/' && pathname === '/') {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
                     if (link.href.includes('#')) {
                       setActiveHash(link.href.substring(link.href.indexOf('#')));
                     }
                   }}
-                  className={`px-4 py-4 rounded-2xl transition-all font-bold text-xl flex items-center justify-center group/mobile ${isActive
+                  className={`px-4 py-3 rounded-xl transition-all font-semibold text-lg flex items-center justify-center group/mobile ${isActive
                     ? "bg-zinc-50 text-rose-600 border border-zinc-100"
                     : "text-zinc-700 hover:bg-zinc-50"
                     }`}
@@ -298,7 +279,7 @@ export function Navbar() {
             })}
 
             {user ? (
-              <div className="mt-4 pt-4 border-t border-zinc-200/80 px-4 flex items-center justify-between">
+              <div className="mt-6 pt-6 border-t border-zinc-200/80 px-2 flex items-center justify-between">
                 <div className="flex items-center gap-3 text-sm text-zinc-500 bg-zinc-50 p-3 rounded-xl flex-1 mr-4 border border-zinc-100">
                   <User size={16} className="text-zinc-500" />
                   <span className="truncate">{user.email}</span>
@@ -308,7 +289,7 @@ export function Navbar() {
                 </Button>
               </div>
             ) : (
-              <div className="mt-4 pt-4 border-t border-zinc-200/80 px-4">
+              <div className="mt-6 pt-6 border-t border-zinc-200/80 px-2">
                 <Link
                   href="/login"
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -321,6 +302,6 @@ export function Navbar() {
           </nav>
         </div>
       )}
-    </div>
+    </>
   );
 }

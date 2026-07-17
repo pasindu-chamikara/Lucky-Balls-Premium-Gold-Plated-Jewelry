@@ -26,7 +26,7 @@ export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  
+
   // Edit Category State
   const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
   const [editingCategoryName, setEditingCategoryName] = useState("");
@@ -40,7 +40,7 @@ export default function AdminCategoriesPage() {
   const [newCatName, setNewCatName] = useState("");
   const [newCatImage, setNewCatImage] = useState("");
   const [isUploadingImage, setIsUploadingImage] = useState(false);
-  
+
   // New Subcategory State
   const [newSubcatName, setNewSubcatName] = useState("");
   const [addingSubcatTo, setAddingSubcatTo] = useState<string | null>(null);
@@ -115,7 +115,7 @@ export default function AdminCategoriesPage() {
         image: newCatImage,
         subcategories: []
       };
-      
+
       const docRef = await addDoc(collection(db, "categories"), newCategory);
       setCategories([...categories, { id: docRef.id, ...newCategory }]);
       setNewCatName("");
@@ -140,7 +140,7 @@ export default function AdminCategoriesPage() {
       setEditingCategoryId(null);
       return;
     }
-    
+
     try {
       const slug = editingCategoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
       await updateDoc(doc(db, "categories", id), {
@@ -148,11 +148,11 @@ export default function AdminCategoriesPage() {
         slug,
         image: editingCategoryImage
       });
-      
-      setCategories(categories.map(c => 
+
+      setCategories(categories.map(c =>
         c.id === id ? { ...c, name: editingCategoryName, slug, image: editingCategoryImage } : c
       ));
-      
+
       setEditingCategoryId(null);
     } catch (error) {
       console.error("Error editing category:", error);
@@ -178,11 +178,11 @@ export default function AdminCategoriesPage() {
       await updateDoc(doc(db, "categories", categoryId), {
         subcategories: updatedSubcategories
       });
-      
-      setCategories(categories.map(c => 
+
+      setCategories(categories.map(c =>
         c.id === categoryId ? { ...c, subcategories: updatedSubcategories } : c
       ));
-      
+
       setNewSubcatName("");
       setAddingSubcatTo(null);
     } catch (error) {
@@ -192,7 +192,7 @@ export default function AdminCategoriesPage() {
 
   const handleDeleteSubcategory = async (categoryId: string, subcatId: string) => {
     if (!confirm("Delete this subcategory?")) return;
-    
+
     const category = categories.find(c => c.id === categoryId);
     if (!category) return;
 
@@ -202,8 +202,8 @@ export default function AdminCategoriesPage() {
       await updateDoc(doc(db, "categories", categoryId), {
         subcategories: updatedSubcategories
       });
-      
-      setCategories(categories.map(c => 
+
+      setCategories(categories.map(c =>
         c.id === categoryId ? { ...c, subcategories: updatedSubcategories } : c
       ));
     } catch (error) {
@@ -221,7 +221,7 @@ export default function AdminCategoriesPage() {
     if (!category) return;
 
     const slug = editingSubcatName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-    const updatedSubcategories = category.subcategories.map(s => 
+    const updatedSubcategories = category.subcategories.map(s =>
       s.id === subcatId ? { ...s, name: editingSubcatName, slug } : s
     );
 
@@ -229,11 +229,11 @@ export default function AdminCategoriesPage() {
       await updateDoc(doc(db, "categories", categoryId), {
         subcategories: updatedSubcategories
       });
-      
-      setCategories(categories.map(c => 
+
+      setCategories(categories.map(c =>
         c.id === categoryId ? { ...c, subcategories: updatedSubcategories } : c
       ));
-      
+
       setEditingSubcatId(null);
     } catch (error) {
       console.error("Error editing subcategory:", error);
@@ -243,11 +243,11 @@ export default function AdminCategoriesPage() {
   return (
     <AdminLayout title="Manage Categories">
       <div className="grid gap-8 lg:grid-cols-[1fr_2fr]">
-        
+
         {/* Add New Category Form */}
-        <div className="bg-white rounded-2xl border border-zinc-200/60 p-6 shadow-sm h-fit">
-          <h2 className="text-lg font-semibold text-zinc-900 mb-4">Add Main Category</h2>
-          <form onSubmit={handleAddCategory} className="space-y-4">
+        <div className="bg-white rounded-[1.5rem] border border-zinc-200/60 p-6 md:p-8 shadow-sm h-fit">
+          <h2 className="text-lg font-bold tracking-tight text-zinc-900 mb-6">Add Main Category</h2>
+          <form onSubmit={handleAddCategory} className="space-y-5">
             <div>
               <label htmlFor="catName" className="block text-sm font-medium text-zinc-700 mb-1">
                 Category Name
@@ -267,9 +267,9 @@ export default function AdminCategoriesPage() {
               {isUploadingImage && <p className="text-xs text-rose-600 mt-2">Uploading image...</p>}
               {newCatImage && <img src={newCatImage} alt="Preview" className="mt-2 h-16 w-16 object-cover rounded-lg border border-zinc-200" />}
             </div>
-            <Button 
-              type="submit" 
-              className="w-full"
+            <Button
+              type="submit"
+              className="w-full h-11 rounded-full font-bold uppercase tracking-wider text-[10px]"
               disabled={!newCatName.trim()}
             >
               <Plus size={16} className="mr-2" />
@@ -279,11 +279,11 @@ export default function AdminCategoriesPage() {
         </div>
 
         {/* Categories List */}
-        <div className="bg-white rounded-2xl border border-zinc-200/60 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-[1.5rem] border border-zinc-200/60 shadow-sm overflow-hidden">
           <div className="border-b border-zinc-100 bg-zinc-50/50 px-6 py-5">
-            <h2 className="text-lg font-semibold text-zinc-900">All Categories</h2>
+            <h2 className="text-lg font-bold tracking-tight text-zinc-900">All Categories</h2>
           </div>
-          
+
           {loading ? (
             <div className="p-10 flex justify-center">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-pink-500 border-t-transparent"></div>
@@ -328,9 +328,9 @@ export default function AdminCategoriesPage() {
                     ) : (
                       <div className="flex items-center gap-4">
                         {category.image ? (
-                           <img src={category.image} alt={category.name} className="h-12 w-12 rounded-lg object-cover border border-zinc-200" />
+                          <img src={category.image} alt={category.name} className="h-12 w-12 rounded-lg object-cover border border-zinc-200" />
                         ) : (
-                           <div className="h-12 w-12 rounded-lg bg-zinc-100 flex items-center justify-center text-zinc-400 border border-zinc-200 text-xs">No Img</div>
+                          <div className="h-12 w-12 rounded-lg bg-zinc-100 flex items-center justify-center text-zinc-400 border border-zinc-200 text-xs">No Img</div>
                         )}
                         <div>
                           <h3 className="font-semibold text-zinc-900 text-lg">{category.name}</h3>
@@ -349,7 +349,7 @@ export default function AdminCategoriesPage() {
                         {category.subcategories?.length || 0} Subcategories
                         {expandedId === category.id ? <ChevronUp size={16} className="ml-1" /> : <ChevronDown size={16} className="ml-1" />}
                       </Button>
-                      
+
                       {editingCategoryId !== category.id && (
                         <Button
                           variant="ghost"
@@ -396,10 +396,10 @@ export default function AdminCategoriesPage() {
                                   <span className="text-xs text-zinc-400 ml-2">/{sub.slug}</span>
                                 </div>
                               )}
-                              
+
                               <div className="flex items-center gap-2">
                                 {editingSubcatId !== sub.id && (
-                                  <button 
+                                  <button
                                     onClick={() => {
                                       setEditingSubcatId(sub.id);
                                       setEditingSubcatName(sub.name);
@@ -435,9 +435,9 @@ export default function AdminCategoriesPage() {
                           <Button size="sm" variant="ghost" onClick={() => { setAddingSubcatTo(null); setNewSubcatName(""); }}>Cancel</Button>
                         </div>
                       ) : (
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={() => setAddingSubcatTo(category.id)}
                           className="mt-3 text-xs border-dashed text-zinc-500"
                         >

@@ -57,7 +57,7 @@ export default function AdminFeedbacksPage() {
           <MessageSquare size={18} className="text-rose-600" />
           <h2 className="font-semibold text-zinc-900">All Feedbacks ({feedbacks.length})</h2>
         </div>
-        
+
         {loading ? (
           <div className="flex items-center justify-center p-12">
             <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
@@ -91,9 +91,9 @@ export default function AdminFeedbacksPage() {
                           <Calendar size={14} />
                           {fb.createdAt ? new Date(fb.createdAt.toDate()).toLocaleDateString() : 'Unknown Date'}
                         </div>
-                        <Button 
-                          variant="danger-ghost" 
-                          size="sm" 
+                        <Button
+                          variant="danger-ghost"
+                          size="sm"
                           onClick={() => handleDeleteFeedback(fb.id)}
                           className="h-8 w-8 p-0"
                           title="Delete Feedback"
@@ -102,17 +102,17 @@ export default function AdminFeedbacksPage() {
                         </Button>
                       </div>
                     </div>
-                    
+
                     <div className="flex gap-0.5 mb-3">
                       {[1, 2, 3, 4, 5].map((star) => (
-                        <Star 
-                          key={star} 
-                          size={18} 
-                          className={star <= fb.rating ? "fill-yellow-400 text-yellow-400" : "text-zinc-200"} 
+                        <Star
+                          key={star}
+                          size={18}
+                          className={star <= fb.rating ? "fill-yellow-400 text-yellow-400" : "text-zinc-200"}
                         />
                       ))}
                     </div>
-                    
+
                     {fb.comment ? (
                       <div className="bg-zinc-50 border border-zinc-100 rounded-xl p-4 text-sm text-zinc-700 italic">
                         "{fb.comment}"

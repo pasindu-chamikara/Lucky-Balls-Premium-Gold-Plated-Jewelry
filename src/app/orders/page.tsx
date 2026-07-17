@@ -8,7 +8,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Loader2, Package, CheckCircle2, ShoppingBag, Clock, X, Star } from "lucide-react";
+import { Loader2, X, Star } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -128,10 +128,10 @@ export default function OrdersPage() {
 
   if (authLoading || (!user && !authLoading)) {
     return (
-      <div className="flex min-h-screen flex-col bg-pink-50">
+      <div className="flex min-h-screen flex-col bg-[#FCFBF9]">
         <Navbar />
         <main className="flex flex-1 items-center justify-center pt-28 pb-12">
-          <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
+          <Loader2 className="h-8 w-8 animate-spin text-zinc-900" />
         </main>
         <Footer />
       </div>
@@ -152,44 +152,30 @@ export default function OrdersPage() {
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status?.toLowerCase()) {
-      case "pending": return <Clock size={14} className="mr-1.5" />;
-      case "confirmed": return <CheckCircle2 size={14} className="mr-1.5" />;
-      case "processing": return <Package size={14} className="mr-1.5" />;
-      case "packed": return <Package size={14} className="mr-1.5" />;
-      case "dispatched": return <Package size={14} className="mr-1.5" />;
-      case "delivered": return <CheckCircle2 size={14} className="mr-1.5" />;
-      case "completed": return <CheckCircle2 size={14} className="mr-1.5" />;
-      case "cancelled": return <X size={14} className="mr-1.5" />;
-      default: return null;
-    }
-  };
+
 
   return (
-    <div className="flex min-h-screen flex-col text-zinc-900">
+    <div className="flex min-h-screen flex-col text-zinc-900 bg-[#FCFBF9]">
       <Navbar />
       <main className="mx-auto w-full max-w-5xl flex-1 px-6 pt-28 pb-12 lg:px-8">
         <div className="mb-10 flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-bold tracking-tight text-zinc-900 mb-2">My Orders</h1>
-            <p className="text-zinc-700">Track the status of your recent purchases</p>
+            <h1 className="text-4xl font-serif italic tracking-tight text-zinc-900 mb-2">My Orders</h1>
+            <p className="text-xs font-bold uppercase tracking-widest text-zinc-500">Track the status of your recent purchases</p>
           </div>
         </div>
         
         {loadingOrders ? (
-          <div className="flex h-64 items-center justify-center rounded-2xl border border-zinc-200 bg-white/50 backdrop-blur-sm">
-            <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
+          <div className="flex h-64 items-center justify-center rounded-none border border-zinc-200 bg-white backdrop-blur-sm">
+            <Loader2 className="h-8 w-8 animate-spin text-zinc-900" />
           </div>
         ) : orders.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-zinc-200 bg-white/50 p-12 text-center backdrop-blur-sm">
-            <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-white border border-zinc-200">
-              <ShoppingBag className="h-10 w-10 text-zinc-700" />
-            </div>
-            <h2 className="mb-2 text-2xl font-bold text-zinc-900">No orders yet</h2>
-            <p className="mb-8 text-zinc-700 max-w-sm">When you place an order, you'll be able to track its status here.</p>
+          <div className="flex flex-col items-center justify-center rounded-none border border-zinc-200 bg-white p-12 text-center backdrop-blur-sm">
+
+            <h2 className="mb-2 text-2xl font-serif italic text-zinc-900">No orders yet</h2>
+            <p className="mb-8 text-zinc-500 max-w-sm text-sm">When you place an order, you'll be able to track its status here.</p>
             <Link href="/">
-              <Button className="bg-pink-600 text-white hover:bg-pink-500 shadow-[0_0_15px_rgba(219,39,119,0.3)]">
+              <Button className="bg-[var(--accent)] text-white hover:bg-[var(--accent-deep)] border-none rounded-none font-bold uppercase tracking-widest text-xs">
                 Start Shopping
               </Button>
             </Link>
@@ -199,23 +185,23 @@ export default function OrdersPage() {
             {orders.map((order) => (
               <div 
                 key={order.id} 
-                className="overflow-hidden rounded-2xl border border-zinc-200 bg-white/50 shadow-md backdrop-blur-sm transition-all hover:border-pink-500/30"
+                className="overflow-hidden rounded-none border border-zinc-200 bg-white shadow-md backdrop-blur-sm transition-all hover:border-zinc-900/50"
               >
-                <div className="border-b border-zinc-200 bg-white/50 px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="border-b border-zinc-200 bg-[#FCFBF9] px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex flex-wrap items-center gap-x-8 gap-y-2 text-sm">
                     <div>
-                      <p className="text-zinc-700 mb-0.5">Order ID</p>
-                      <p className="font-mono text-zinc-700">#{order.id}</p>
+                      <p className="text-zinc-500 mb-0.5 text-xs font-bold uppercase tracking-widest">Order ID</p>
+                      <p className="font-mono text-zinc-600">#{order.id}</p>
                     </div>
                     <div>
-                      <p className="text-zinc-700 mb-0.5">Date</p>
-                      <p className="text-zinc-700">
+                      <p className="text-zinc-500 mb-0.5 text-xs font-bold uppercase tracking-widest">Date</p>
+                      <p className="text-zinc-600">
                         {order.createdAt ? new Date(order.createdAt.toMillis()).toLocaleDateString() : 'Just now'}
                       </p>
                     </div>
                     <div>
-                      <p className="text-zinc-700 mb-0.5">Total Amount</p>
-                      <p className="font-bold text-rose-600">Rs. {order.totalPrice?.toFixed(2)}</p>
+                      <p className="text-zinc-500 mb-0.5 text-xs font-bold uppercase tracking-widest">Total Amount</p>
+                      <p className="font-bold text-zinc-900">Rs. {order.totalPrice?.toFixed(2)}</p>
                     </div>
                   </div>
                   
@@ -225,7 +211,7 @@ export default function OrdersPage() {
                         variant="outline" 
                         size="sm"
                         onClick={() => handleCancelOrder(order.id)}
-                        className="text-red-500 hover:text-red-600 hover:bg-red-50 border-red-200"
+                        className="text-red-500 hover:text-red-600 hover:bg-red-500/10 border-red-500/30 rounded-none text-xs uppercase tracking-widest font-bold"
                       >
                         Cancel Order
                       </Button>
@@ -235,38 +221,38 @@ export default function OrdersPage() {
                         variant="outline" 
                         size="sm"
                         onClick={() => setFeedbackOrderId(order.id)}
-                        className="text-rose-600 hover:text-rose-600 hover:bg-pink-50 border-pink-200"
+                        className="text-[var(--accent-deep)] hover:text-white hover:bg-[var(--accent-deep)] border-[var(--accent)]/30 rounded-none text-xs uppercase tracking-widest font-bold"
                       >
                         Leave Feedback
                       </Button>
                     )}
-                    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold capitalize border ${getStatusColor(order.status)}`}>
-                      {getStatusIcon(order.status)}
+                    <span className={`inline-flex items-center rounded-none px-3 py-1 text-xs font-semibold capitalize border ${getStatusColor(order.status)}`}>
+
                       {order.status || 'pending'}
                     </span>
                   </div>
                 </div>
                 
                 <div className="px-6 py-6">
-                  <h4 className="mb-4 text-sm font-semibold text-zinc-700 uppercase tracking-wider">Items in your order</h4>
+                  <h4 className="mb-4 text-xs font-bold text-zinc-500 uppercase tracking-widest">Items in your order</h4>
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {order.items?.map((item: any, index: number) => (
-                      <div key={index} className="flex gap-4 rounded-xl border border-zinc-200/50 bg-zinc-50/40 p-3">
-                        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-zinc-200 bg-white">
+                      <div key={index} className="flex gap-4 rounded-none border border-zinc-200 bg-[#FCFBF9] p-3">
+                        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-none border border-zinc-200 bg-white">
                           {item.customizedImage ? (
                             <img src={item.customizedImage} alt={item.name} className="h-full w-full object-cover" />
                           ) : item.image || item.imageUrl ? (
                             <Image src={item.image || item.imageUrl} alt={item.name} fill sizes="80px" className="object-cover" />
                           ) : (
                             <div className="flex h-full w-full items-center justify-center">
-                              <Package className="h-6 w-6 text-zinc-600" />
+                              <Package className="h-6 w-6 text-zinc-500" />
                             </div>
                           )}
                         </div>
                         <div className="flex flex-col justify-center overflow-hidden py-1">
                           <p className="truncate font-medium text-zinc-900">{item.name}</p>
-                          <p className="mt-1 text-sm text-zinc-700">Qty: {item.quantity}</p>
-                          <p className="mt-auto font-medium text-rose-600">
+                          <p className="mt-1 text-sm text-zinc-500">Qty: {item.quantity}</p>
+                          <p className="mt-auto font-medium text-zinc-900">
                             Rs. {(item.price * (item.quantity || 1)).toFixed(2)}
                           </p>
                         </div>
@@ -283,18 +269,18 @@ export default function OrdersPage() {
 
       {/* Feedback Modal */}
       {feedbackOrderId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm" onClick={() => setFeedbackOrderId(null)}>
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm" onClick={() => setFeedbackOrderId(null)}>
+          <div className="w-full max-w-md rounded-none border border-zinc-200 bg-white p-6 shadow-xl" onClick={e => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-xl font-bold text-zinc-900">Leave Feedback</h3>
-              <Button variant="ghost" size="sm" onClick={() => setFeedbackOrderId(null)} className="h-8 w-8 rounded-full p-0 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900">
+              <h3 className="text-xl font-serif italic text-zinc-900">Leave Feedback</h3>
+              <Button variant="ghost" size="sm" onClick={() => setFeedbackOrderId(null)} className="h-8 w-8 rounded-none p-0 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900">
                 <X size={18} />
               </Button>
             </div>
             
             <div className="space-y-6">
               <div>
-                <label className="mb-2 block text-sm font-medium text-zinc-700">Rate your experience</label>
+                <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-zinc-500">Rate your experience</label>
                 <div className="flex gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -305,7 +291,7 @@ export default function OrdersPage() {
                     >
                       <Star 
                         size={32} 
-                        className={star <= rating ? "fill-yellow-400 text-yellow-400" : "text-zinc-300"} 
+                        className={star <= rating ? "fill-[var(--accent)] text-[var(--accent)]" : "text-zinc-300"} 
                       />
                     </button>
                   ))}
@@ -313,23 +299,23 @@ export default function OrdersPage() {
               </div>
               
               <div>
-                <label htmlFor="comment" className="mb-2 block text-sm font-medium text-zinc-700">Comments (Optional)</label>
+                <label htmlFor="comment" className="mb-2 block text-xs font-bold uppercase tracking-widest text-zinc-500">Comments (Optional)</label>
                 <textarea
                   id="comment"
                   rows={4}
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   placeholder="Tell us what you loved about your order..."
-                  className="w-full resize-none rounded-xl border border-zinc-200 bg-white p-3 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500"
+                  className="w-full resize-none rounded-none border border-zinc-200 bg-[#FCFBF9] p-3 text-sm text-zinc-900 focus:border-zinc-900 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 ></textarea>
               </div>
               
               <div className="flex justify-end gap-3 pt-2">
-                <Button variant="outline" onClick={() => setFeedbackOrderId(null)}>Cancel</Button>
+                <Button variant="outline" onClick={() => setFeedbackOrderId(null)} className="rounded-none border-zinc-300 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 text-xs font-bold uppercase tracking-widest">Cancel</Button>
                 <Button 
                   onClick={handleSubmitFeedback} 
                   disabled={isSubmittingFeedback}
-                  className="bg-pink-600 text-white hover:bg-pink-700 shadow-md"
+                  className="bg-[var(--accent)] text-white hover:bg-[var(--accent-deep)] border-none rounded-none text-xs font-bold uppercase tracking-widest"
                 >
                   {isSubmittingFeedback ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...</>

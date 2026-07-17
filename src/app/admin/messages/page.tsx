@@ -61,9 +61,9 @@ export default function AdminMessagesPage() {
   };
 
   const filteredMessages = messages.filter(msg => {
-    const matchesSearch = msg.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          msg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          msg.message.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = msg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      msg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      msg.message.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filter === "all" ? true : msg.status === filter;
     return matchesSearch && matchesFilter;
   });
@@ -100,7 +100,7 @@ export default function AdminMessagesPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-[1.5rem] border border-zinc-200/60 shadow-sm overflow-hidden">
           {loading ? (
             <div className="p-12 text-center text-zinc-500">Loading messages...</div>
           ) : filteredMessages.length === 0 ? (
@@ -123,19 +123,19 @@ export default function AdminMessagesPage() {
                         )}
                       </div>
                       <p className="text-sm text-zinc-500 font-medium">{msg.email}</p>
-                      
+
                       <div className="mt-4 p-4 bg-zinc-50 rounded-xl border border-zinc-100 text-zinc-700 whitespace-pre-wrap">
                         {msg.message}
                       </div>
-                      
+
                       <div className="text-xs text-zinc-400 mt-2">
                         Received on: {msg.createdAt?.toDate().toLocaleDateString()} at {msg.createdAt?.toDate().toLocaleTimeString()}
                       </div>
                     </div>
-                    
+
                     <div className="flex items-start gap-2">
                       <a href={`mailto:${msg.email}?subject=Re: Your message to Lucky Balls`} target="_blank" rel="noopener noreferrer">
-                        <Button 
+                        <Button
                           size="sm"
                           variant="outline"
                           className="gap-2 rounded-full border-zinc-200 bg-white hover:bg-zinc-50"
@@ -144,9 +144,9 @@ export default function AdminMessagesPage() {
                           Reply via Email
                         </Button>
                       </a>
-                      
+
                       {msg.status === 'unread' && (
-                        <Button 
+                        <Button
                           onClick={() => markAsRead(msg.id)}
                           size="sm"
                           variant="outline"
@@ -156,7 +156,7 @@ export default function AdminMessagesPage() {
                           Mark as Read
                         </Button>
                       )}
-                      <Button 
+                      <Button
                         onClick={() => deleteMessage(msg.id)}
                         size="icon"
                         variant="ghost"

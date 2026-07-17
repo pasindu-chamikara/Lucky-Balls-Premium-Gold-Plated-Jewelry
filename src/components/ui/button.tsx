@@ -14,17 +14,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles =
       "inline-flex items-center justify-center rounded-full font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
     const variants = {
-      primary: "bg-zinc-900 text-white hover:bg-zinc-800 shadow-sm",
-      secondary: "border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 shadow-sm",
-      ghost: "bg-transparent text-zinc-700 hover:bg-zinc-100",
-      default: "bg-zinc-900 text-zinc-100 hover:bg-zinc-800",
-      outline: "border border-zinc-200 bg-white hover:bg-zinc-100 text-zinc-900",
+      primary: "bg-[#E5C98F] text-zinc-900 hover:bg-[var(--accent-deep)] shadow-sm",
+      secondary: "border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--surface-2)] shadow-sm",
+      ghost: "bg-transparent text-[var(--foreground)] hover:bg-[var(--surface-2)]",
+      default: "bg-[#E5C98F] text-zinc-900 hover:bg-[var(--accent-deep)]",
+      outline: "border border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] text-[var(--foreground)]",
       danger: "bg-red-500 text-zinc-100 hover:bg-red-600",
-      rose: "bg-rose-500 text-white hover:bg-rose-600 border border-rose-500/50",
+      rose: "bg-[var(--accent)] text-[var(--foreground)] hover:bg-[var(--accent-deep)] border border-[var(--accent)]",
       "danger-outline": "border border-red-200 bg-white hover:bg-red-50 text-red-600",
       "danger-ghost": "bg-transparent hover:bg-red-50 text-red-600",
-      "rose-outline": "border border-rose-200 bg-white hover:bg-rose-50 text-rose-600",
-      "rose-ghost": "bg-transparent hover:bg-rose-50 text-rose-600",
+      "rose-outline": "border border-[var(--accent)] bg-[var(--surface)] hover:bg-[var(--surface-2)] text-[var(--accent-deep)]",
+      "rose-ghost": "bg-transparent hover:bg-[var(--surface-2)] text-[var(--accent-deep)]",
       custom: "",
     };
     const sizes = {

@@ -16,7 +16,7 @@ export default function AdminBookingsPage() {
   const [activeSearchQuery, setActiveSearchQuery] = useState("");
 
   const ORDER_STATUSES = ['all', 'pending', 'confirmed', 'processing', 'packed', 'dispatched', 'delivered', 'completed', 'cancelled'];
-  
+
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
       case "pending": return "bg-yellow-500/20 text-yellow-600 border-yellow-500/30";
@@ -33,8 +33,8 @@ export default function AdminBookingsPage() {
 
   const filteredOrders = orders.filter(order => {
     const matchesFilter = filter === "all" || order.status === filter;
-    const matchesSearch = activeSearchQuery === "" || 
-      order.id.toLowerCase().includes(activeSearchQuery.toLowerCase()) || 
+    const matchesSearch = activeSearchQuery === "" ||
+      order.id.toLowerCase().includes(activeSearchQuery.toLowerCase()) ||
       order.customerInfo?.fullName?.toLowerCase().includes(activeSearchQuery.toLowerCase()) ||
       order.customerInfo?.email?.toLowerCase().includes(activeSearchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
@@ -44,14 +44,14 @@ export default function AdminBookingsPage() {
     const fetchOrders = async () => {
       try {
         const ordersSnap = await getDocs(query(collection(db, "orders"), orderBy("createdAt", "desc")));
-        
+
         const ordersData = ordersSnap.docs.map(document => {
           return {
             id: document.id,
             ...document.data()
           };
         });
-        
+
         setOrders(ordersData);
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -68,7 +68,7 @@ export default function AdminBookingsPage() {
         status: newStatus
       });
       // Update local state
-      setOrders(orders.map(order => 
+      setOrders(orders.map(order =>
         order.id === orderId ? { ...order, status: newStatus } : order
       ));
     } catch (error) {
@@ -80,35 +80,35 @@ export default function AdminBookingsPage() {
   const renderNextAction = (order: any) => {
     if (!order.status || order.status === 'pending') {
       return (
-        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'confirmed')} size="sm" className="bg-blue-500 hover:bg-blue-600 text-white h-8 text-xs flex items-center gap-1">
+        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'confirmed')} size="sm" className="bg-blue-500 hover:bg-blue-600 text-zinc-900 h-8 text-xs flex items-center gap-1">
           <CheckCircle size={14} /> Confirm
         </Button>
       );
     }
     if (order.status === 'confirmed') {
       return (
-        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'processing')} size="sm" className="bg-indigo-500 hover:bg-indigo-600 text-white h-8 text-xs flex items-center gap-1">
+        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'processing')} size="sm" className="bg-indigo-500 hover:bg-indigo-600 text-zinc-900 h-8 text-xs flex items-center gap-1">
           <Settings size={14} /> Process
         </Button>
       );
     }
     if (order.status === 'processing') {
       return (
-        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'packed')} size="sm" className="bg-purple-500 hover:bg-purple-600 text-white h-8 text-xs flex items-center gap-1">
+        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'packed')} size="sm" className="bg-purple-500 hover:bg-purple-600 text-zinc-900 h-8 text-xs flex items-center gap-1">
           <Box size={14} /> Pack
         </Button>
       );
     }
     if (order.status === 'packed') {
       return (
-        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'dispatched')} size="sm" className="bg-orange-500 hover:bg-orange-600 text-white h-8 text-xs flex items-center gap-1">
+        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'dispatched')} size="sm" className="bg-orange-500 hover:bg-orange-600 text-zinc-900 h-8 text-xs flex items-center gap-1">
           <Truck size={14} /> Dispatch
         </Button>
       );
     }
     if (order.status === 'dispatched') {
       return (
-        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'delivered')} size="sm" className="bg-emerald-500 hover:bg-emerald-600 text-white h-8 text-xs flex items-center gap-1">
+        <Button variant="custom" onClick={() => handleUpdateOrderStatus(order.id, 'delivered')} size="sm" className="bg-emerald-500 hover:bg-emerald-600 text-zinc-900 h-8 text-xs flex items-center gap-1">
           <Package size={14} /> Deliver
         </Button>
       );
@@ -119,13 +119,13 @@ export default function AdminBookingsPage() {
   const renderCancelAction = (order: any) => {
     if (order.status === 'cancelled' || order.status === 'delivered' || order.status === 'completed') return null;
     return (
-      <Button 
+      <Button
         onClick={() => {
           if (confirm('Are you sure you want to cancel this order?')) {
             handleUpdateOrderStatus(order.id, 'cancelled');
           }
         }}
-        size="sm" 
+        size="sm"
         variant="rose-outline"
         className="h-8 text-xs flex items-center gap-1"
       >
@@ -137,22 +137,22 @@ export default function AdminBookingsPage() {
   return (
     <AdminLayout title="Orders">
       {/* All Orders Section */}
-      <div className="rounded-2xl border border-zinc-200/60 bg-white shadow-sm overflow-hidden">
-        <div className="border-b border-zinc-100 bg-zinc-50/50 px-6 py-5 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
-          <h2 className="text-lg font-semibold text-zinc-900 flex items-center gap-2">
+      <div className="rounded-[1.5rem] border border-zinc-200/60 bg-white shadow-sm overflow-hidden">
+        <div className="border-b border-zinc-100 bg-zinc-50/50 px-5 sm:px-8 py-5 sm:py-6 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+          <h2 className="text-lg font-bold tracking-tight text-zinc-900 flex items-center gap-2">
             All Bookings
           </h2>
           <div className="flex flex-col lg:flex-row lg:items-center gap-4">
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <div className="relative flex-1 sm:flex-none">
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={16} />
-                <input 
-                  type="text" 
-                  placeholder="Search by ID, name or email..." 
+                <input
+                  type="text"
+                  placeholder="Search by ID, name or email..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && setActiveSearchQuery(searchQuery)}
-                  className="pl-9 pr-4 py-1.5 text-sm text-zinc-900 bg-white border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent w-full sm:w-64"
+                  className="pl-9 pr-4 py-2 text-sm text-zinc-900 bg-white border border-zinc-200/80 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-transparent w-full sm:w-64 transition-shadow hover:shadow-md"
                 />
               </div>
               <Button variant="default" size="sm" onClick={() => setActiveSearchQuery(searchQuery)} className="shrink-0">
@@ -160,24 +160,24 @@ export default function AdminBookingsPage() {
               </Button>
             </div>
             <div className="flex gap-2 flex-wrap">
-            {ORDER_STATUSES.map((status) => (
-              <Button
-                key={status}
-                variant={filter === status ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setFilter(status)}
-                className={`capitalize ${filter === status ? 'bg-pink-600 hover:bg-pink-700 text-white' : 'text-zinc-600'}`}
-              >
-                {status}
-              </Button>
-            ))}
+              {ORDER_STATUSES.map((status) => (
+                <Button
+                  key={status}
+                  variant={filter === status ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setFilter(status)}
+                  className={`capitalize rounded-full px-4 transition-all ${filter === status ? 'bg-zinc-900 text-white shadow-sm' : 'text-zinc-600 bg-white border border-zinc-200 hover:bg-zinc-50'}`}
+                >
+                  {status}
+                </Button>
+              ))}
             </div>
           </div>
         </div>
-        
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-zinc-600">
-            <thead className="bg-white text-zinc-500">
+
+        <div className="">
+          <table className="w-full text-left text-sm text-zinc-600 block lg:table">
+            <thead className="bg-white text-zinc-500 hidden lg:table-header-group border-b border-zinc-100">
               <tr>
                 <th className="px-6 py-4 font-medium">Order ID</th>
                 <th className="px-6 py-4 font-medium">Customer</th>
@@ -187,44 +187,59 @@ export default function AdminBookingsPage() {
                 <th className="px-6 py-4 font-medium text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100 bg-white">
+            <tbody className="divide-y divide-zinc-100 bg-white block lg:table-row-group">
               {loading ? (
-                <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-zinc-500">
+                <tr className="block lg:table-row">
+                  <td colSpan={6} className="px-6 py-12 text-center text-zinc-500 block lg:table-cell">
                     Loading bookings...
                   </td>
                 </tr>
               ) : filteredOrders.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-zinc-500">
+                <tr className="block lg:table-row">
+                  <td colSpan={6} className="px-6 py-12 text-center text-zinc-500 block lg:table-cell">
                     No bookings found for the selected filter.
                   </td>
                 </tr>
               ) : (
                 filteredOrders.map((order) => (
-                  <tr key={order.id} className="hover:bg-zinc-50/50">
-                    <td className="px-6 py-4 font-mono text-xs">{order.id}</td>
-                    <td className="px-6 py-4">{order.customerInfo?.fullName || 'Unknown'}</td>
-                    <td className="px-6 py-4">
-                      {order.createdAt ? new Date(order.createdAt.toDate()).toLocaleDateString() : 'Just now'}
+                  <tr key={order.id} className="hover:bg-zinc-50/50 block lg:table-row p-4 lg:p-0 mb-4 lg:mb-0 border border-zinc-100 lg:border-none rounded-xl lg:rounded-none bg-zinc-50/30 lg:bg-transparent m-4 lg:m-0">
+                    <td className="px-2 lg:px-6 py-2 lg:py-4 flex justify-between items-center lg:table-cell">
+                      <span className="lg:hidden font-medium text-zinc-400 uppercase text-[10px] tracking-wider">Order ID</span>
+                      <span className="font-mono text-xs">{order.id}</span>
                     </td>
-                    <td className="px-6 py-4 font-medium text-zinc-900">Rs. {order.totalPrice?.toFixed(2) || '0.00'}</td>
-                    <td className="px-6 py-4">
+                    <td className="px-2 lg:px-6 py-2 lg:py-4 flex justify-between items-center lg:table-cell">
+                      <span className="lg:hidden font-medium text-zinc-400 uppercase text-[10px] tracking-wider">Customer</span>
+                      <span className="font-medium text-zinc-900">{order.customerInfo?.fullName || 'Unknown'}</span>
+                    </td>
+                    <td className="px-2 lg:px-6 py-2 lg:py-4 flex justify-between items-center lg:table-cell">
+                      <span className="lg:hidden font-medium text-zinc-400 uppercase text-[10px] tracking-wider">Date</span>
+                      <span>{order.createdAt ? new Date(order.createdAt.toDate()).toLocaleDateString() : 'Just now'}</span>
+                    </td>
+                    <td className="px-2 lg:px-6 py-2 lg:py-4 flex justify-between items-center lg:table-cell">
+                      <span className="lg:hidden font-medium text-zinc-400 uppercase text-[10px] tracking-wider">Amount</span>
+                      <span className="font-medium text-zinc-900">Rs. {order.totalPrice?.toFixed(2) || '0.00'}</span>
+                    </td>
+                    <td className="px-2 lg:px-6 py-2 lg:py-4 flex justify-between items-center lg:table-cell">
+                      <span className="lg:hidden font-medium text-zinc-400 uppercase text-[10px] tracking-wider">Status</span>
                       <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold capitalize border ${getStatusColor(order.status)}`}>
                         {order.status || 'pending'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right flex justify-end gap-2">
-                      {renderCancelAction(order)}
-                      {renderNextAction(order)}
-                      <Button 
-                        onClick={() => setSelectedOrder(order)}
-                        size="sm" 
-                        variant="ghost"
-                        className="text-zinc-500 hover:text-rose-600 hover:bg-pink-50 h-8 text-xs flex items-center gap-1"
-                      >
-                        <Eye size={14} /> View
-                      </Button>
+                    <td className="px-2 lg:px-6 py-4 lg:py-4 block lg:table-cell border-t border-zinc-200/60 lg:border-none mt-2 lg:mt-0">
+                      <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto lg:justify-end">
+                        <div className="flex-1 min-w-[100px] flex gap-2">
+                          {renderCancelAction(order)}
+                          {renderNextAction(order)}
+                        </div>
+                        <Button
+                          onClick={() => setSelectedOrder(order)}
+                          size="sm"
+                          variant="ghost"
+                          className="text-zinc-500 hover:text-rose-600 hover:bg-pink-50 h-8 text-xs flex items-center gap-1 px-4 lg:flex-none border border-zinc-200 lg:border-transparent bg-white lg:bg-transparent shadow-sm lg:shadow-none"
+                        >
+                          <Eye size={14} /> View
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -236,15 +251,15 @@ export default function AdminBookingsPage() {
 
       {/* Booking Details Modal */}
       {selectedOrder && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" onClick={() => setSelectedOrder(null)}>
-          <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-xl" onClick={e => e.stopPropagation()}>
-            <div className="p-6 border-b border-zinc-100 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-zinc-900">Booking Details <span className="text-zinc-400 font-normal text-sm ml-2">#{selectedOrder.id}</span></h3>
-              <Button variant="ghost" size="sm" onClick={() => setSelectedOrder(null)} className="h-8 w-8 p-0 rounded-full text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/40 backdrop-blur-sm p-4 animate-in fade-in duration-200" onClick={() => setSelectedOrder(null)}>
+          <div className="bg-white rounded-[2rem] w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+            <div className="p-6 md:p-8 border-b border-zinc-100 flex items-center justify-between">
+              <h3 className="text-xl font-bold tracking-tight text-zinc-900">Booking Details <span className="text-zinc-400 font-medium text-sm ml-2 font-mono">#{selectedOrder.id}</span></h3>
+              <Button variant="ghost" size="sm" onClick={() => setSelectedOrder(null)} className="h-8 w-8 p-0 rounded-full text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition-colors">
                 <X size={18} />
               </Button>
             </div>
-            
+
             <div className="p-6 overflow-y-auto space-y-8">
               {/* Customer Info */}
               <div>
@@ -265,8 +280,8 @@ export default function AdminBookingsPage() {
                   <div>
                     <p className="text-zinc-500 mb-1">Address</p>
                     <p className="font-medium text-zinc-900">
-                      {selectedOrder.customerInfo?.address ? 
-                        `${selectedOrder.customerInfo.address}, ${selectedOrder.customerInfo.city} ${selectedOrder.customerInfo.postalCode}` 
+                      {selectedOrder.customerInfo?.address ?
+                        `${selectedOrder.customerInfo.address}, ${selectedOrder.customerInfo.city} ${selectedOrder.customerInfo.postalCode}`
                         : 'N/A'}
                     </p>
                   </div>
@@ -288,7 +303,7 @@ export default function AdminBookingsPage() {
                           <Box size={24} className="text-zinc-300" />
                         </div>
                       )}
-                      
+
                       <div className="flex-1 py-1">
                         <h5 className="font-medium text-zinc-900">{item.name}</h5>
                         <p className="text-sm text-zinc-500 mt-1">Qty: {item.quantity} × Rs. {item.price?.toFixed(2) || '0.00'}</p>
@@ -303,7 +318,7 @@ export default function AdminBookingsPage() {
                       </div>
                     </div>
                   ))}
-                  
+
                   {(!selectedOrder.items || selectedOrder.items.length === 0) && (
                     <p className="text-zinc-500 text-sm italic">No items found for this order.</p>
                   )}
@@ -316,20 +331,20 @@ export default function AdminBookingsPage() {
                 <span className="text-2xl font-bold text-rose-600">Rs. {selectedOrder.totalPrice?.toFixed(2) || '0.00'}</span>
               </div>
             </div>
-            
+
             <div className="p-6 border-t border-zinc-100 bg-zinc-50/50 rounded-b-2xl">
               <h4 className="text-sm font-semibold text-zinc-900 mb-4">Update Order Status</h4>
               <div className="flex flex-wrap gap-2">
                 {ORDER_STATUSES.filter(s => s !== 'all').map((status) => (
-                  <Button 
+                  <Button
                     key={status}
                     onClick={() => {
                       handleUpdateOrderStatus(selectedOrder.id, status);
-                      setSelectedOrder({...selectedOrder, status});
+                      setSelectedOrder({ ...selectedOrder, status });
                     }}
                     variant={selectedOrder.status === status ? "default" : "outline"}
                     size="sm"
-                    className={`capitalize ${selectedOrder.status === status ? 'bg-zinc-900 text-white hover:bg-zinc-800' : 'text-zinc-600 hover:bg-zinc-100'}`}
+                    className={`capitalize ${selectedOrder.status === status ? 'bg-zinc-900 text-zinc-900 hover:bg-zinc-800' : 'text-zinc-600 hover:bg-zinc-100'}`}
                   >
                     {status}
                   </Button>

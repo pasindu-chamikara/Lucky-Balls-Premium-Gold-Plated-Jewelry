@@ -7,7 +7,7 @@ import { auth } from "@/firebase/auth";
 import { doc, getDoc, collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebase/firestore";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, LogOut, Tags, Package, ClipboardList, MessageSquare, Users, Mail, Bell, X } from "lucide-react";
+import { LogOut, Bell, X } from "lucide-react";
 import Link from "next/link";
 
 type AdminLayoutProps = {
@@ -16,18 +16,18 @@ type AdminLayoutProps = {
 };
 
 const navigation = [
-  { name: "Overview", href: "/admin/dashboard", icon: LayoutDashboard },
-  { name: "Orders", href: "/admin/bookings", icon: ClipboardList },
-  { name: "Categories", href: "/admin/categories", icon: Tags },
-  { name: "Products", href: "/admin/products", icon: Package },
-  { name: "Customers", href: "/admin/customers", icon: Users },
-  { name: "Messages", href: "/admin/messages", icon: Mail },
-  { name: "Feedback", href: "/admin/feedbacks", icon: MessageSquare },
+  { name: "Overview", href: "/admin/dashboard" },
+  { name: "Orders", href: "/admin/bookings" },
+  { name: "Categories", href: "/admin/categories" },
+  { name: "Products", href: "/admin/products" },
+  { name: "Customers", href: "/admin/customers" },
+  { name: "Messages", href: "/admin/messages" },
+  { name: "Feedback", href: "/admin/feedbacks" },
 ];
 
 export function AdminLayout({ children, title }: AdminLayoutProps) {
   const [loading, setLoading] = useState(true);
-  const [notifications, setNotifications] = useState<{id: string, title: string, message: string, href: string}[]>([]);
+  const [notifications, setNotifications] = useState<{ id: string, title: string, message: string, href: string }[]>([]);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -41,7 +41,7 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
           const adminDocSnap = await getDoc(adminDocRef);
 
           if (adminDocSnap.exists()) {
-            setLoading(false); 
+            setLoading(false);
           } else {
             console.warn("User is not an admin, signing out...");
             await signOut(auth);
@@ -128,44 +128,42 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
   }
 
   return (
-    <div className="flex min-h-screen bg-zinc-50 font-sans">
+    <div className="flex min-h-screen bg-[#FCFBF9] font-sans">
       {/* Sidebar (Desktop) */}
-      <aside className="w-64 border-r border-zinc-200/60 bg-white hidden md:flex flex-col z-20">
+      <aside className="hidden w-64 flex-col bg-zinc-950 text-zinc-400 md:flex z-20 shadow-2xl">
         <div className="p-6">
-          <Link href="/" className="text-xl font-bold text-zinc-900">
+          <Link href="/" className="text-2xl font-serif italic text-white tracking-tight">
             Lucky Balls
           </Link>
-          <p className="text-xs font-medium text-zinc-400 mt-1 uppercase tracking-widest">Admin Workspace</p>
+          <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.24em] text-zinc-500">Admin Workspace</p>
         </div>
-        
-        <nav className="flex-1 px-4 space-y-1 mt-4">
+
+        <nav className="mt-6 flex-1 space-y-1.5 px-4">
           {navigation.map((item) => {
             const isActive = pathname === item.href;
-            const Icon = item.icon;
             return (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm font-medium ${
-                  isActive 
-                    ? "bg-white shadow-sm border border-zinc-200/60 text-zinc-900" 
-                    : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900"
-                }`}
+                className={`flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium transition-all ${isActive
+                    ? "bg-zinc-900 text-white shadow-sm ring-1 ring-zinc-800"
+                    : "text-zinc-400 hover:bg-zinc-900/50 hover:text-zinc-200"
+                  }`}
               >
-                <Icon size={18} />
+                <span className={`h-1.5 w-1.5 rounded-full ${isActive ? "bg-white" : "bg-zinc-700"}`} />
                 {item.name}
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 border-t border-zinc-100">
-          <Button 
+        <div className="border-t border-zinc-900 p-4">
+          <Button
             onClick={handleSignOut}
             variant="ghost"
-            className="w-full justify-start gap-2 text-zinc-600 hover:text-rose-600 hover:bg-rose-50"
+            className="w-full justify-start gap-2 rounded-xl font-medium text-zinc-400 hover:bg-zinc-900/80 hover:text-white"
           >
-            <LogOut size={18} />
+            <LogOut size={16} />
             Sign Out
           </Button>
         </div>
@@ -174,45 +172,43 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div className="md:hidden fixed inset-0 z-50 flex">
-          <div className="fixed inset-0 bg-zinc-900/50 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
-          <aside className="relative w-64 max-w-[80vw] bg-white h-full flex flex-col shadow-2xl animate-in slide-in-from-left duration-300">
-            <div className="p-4 flex items-center justify-between border-b border-zinc-100">
+          <div className="fixed inset-0 bg-zinc-900/40 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
+          <aside className="relative w-72 max-w-[85vw] bg-zinc-950 h-full flex flex-col shadow-2xl animate-in slide-in-from-left duration-300">
+            <div className="p-6 flex items-center justify-between border-b border-zinc-900">
               <div>
-                <p className="text-lg font-bold text-zinc-900">Lucky Balls</p>
-                <p className="text-[10px] font-medium text-zinc-400 uppercase tracking-widest">Admin Workspace</p>
+                <p className="text-2xl font-serif italic text-white tracking-tight">Lucky Balls</p>
+                <p className="mt-1 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Admin Workspace</p>
               </div>
-              <Button variant="ghost" size="sm" onClick={() => setIsMobileMenuOpen(false)} className="h-8 w-8 p-0 rounded-full">
+              <Button variant="ghost" size="sm" onClick={() => setIsMobileMenuOpen(false)} className="h-8 w-8 p-0 rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800">
                 <X size={18} />
               </Button>
             </div>
-            
-            <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+
+            <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
               {navigation.map((item) => {
                 const isActive = pathname === item.href;
-                const Icon = item.icon;
                 return (
                   <Link
                     key={item.name}
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-colors text-sm font-semibold ${
-                      isActive 
-                        ? "bg-white shadow-sm border border-zinc-200/60 text-zinc-900" 
-                        : "text-zinc-600 hover:bg-zinc-50"
-                    }`}
+                    className={`flex items-center gap-3 rounded-xl px-4 py-3.5 text-sm font-medium transition-colors ${isActive
+                        ? "bg-zinc-900 text-white shadow-sm ring-1 ring-zinc-800"
+                        : "text-zinc-400 hover:bg-zinc-900/50 hover:text-zinc-200"
+                      }`}
                   >
-                    <Icon size={18} className={isActive ? "text-zinc-900" : "text-zinc-400"} />
+                    <span className={`h-1.5 w-1.5 rounded-full ${isActive ? "bg-white" : "bg-zinc-700"}`} />
                     {item.name}
                   </Link>
                 );
               })}
             </nav>
 
-            <div className="p-4 border-t border-zinc-100 bg-zinc-50">
-              <Button 
+            <div className="p-4 border-t border-zinc-900 bg-zinc-950">
+              <Button
                 onClick={handleSignOut}
                 variant="outline"
-                className="w-full justify-center gap-2 text-zinc-600 border-zinc-200 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-600 bg-white"
+                className="w-full justify-center gap-2 text-zinc-400 border-zinc-800 hover:bg-zinc-900 hover:text-white bg-zinc-950 rounded-xl"
               >
                 <LogOut size={16} />
                 Sign Out
@@ -225,23 +221,26 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
       {/* Main Content */}
       <main className="flex-1 overflow-auto w-full">
         {/* Mobile Header (minimal) */}
-        <div className="md:hidden sticky top-0 z-40 flex items-center justify-between p-4 border-b bg-white/90 backdrop-blur-md shadow-sm">
+        <div className="md:hidden sticky top-0 z-40 flex items-center justify-between border-b border-zinc-200 bg-white p-4 shadow-sm">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" className="p-0 h-auto text-zinc-700" onClick={() => setIsMobileMenuOpen(true)}>
+            <Button variant="ghost" size="sm" className="p-0 h-auto text-zinc-700 hover:bg-transparent" onClick={() => setIsMobileMenuOpen(true)}>
               <div className="space-y-1.5">
                 <span className="block w-5 h-0.5 bg-current rounded-full"></span>
                 <span className="block w-4 h-0.5 bg-current rounded-full"></span>
                 <span className="block w-5 h-0.5 bg-current rounded-full"></span>
               </div>
             </Button>
-            <p className="font-bold text-zinc-900 text-sm">Admin Workspace</p>
+            <p className="font-bold font-serif italic text-zinc-900 text-lg">Lucky Balls</p>
           </div>
-          <Button variant="ghost" size="sm" onClick={handleSignOut} className="h-8 w-8 p-0 rounded-full text-zinc-500 hover:text-rose-600"><LogOut size={16} /></Button>
+          <Button variant="ghost" size="sm" onClick={handleSignOut} className="h-8 w-8 p-0 rounded-full text-zinc-500 hover:text-rose-600 hover:bg-rose-50"><LogOut size={16} /></Button>
         </div>
 
-        <div className="mx-auto w-full px-4 py-6 md:px-6 md:py-10 lg:px-8">
-          <div className="mb-6 md:mb-10">
-            <h1 className="text-2xl md:text-3xl font-bold text-zinc-900 tracking-tight">{title}</h1>
+        <div className="mx-auto w-full px-4 py-6 md:px-8 md:py-10 max-w-7xl">
+          <div className="mb-6 rounded-2xl bg-white p-5 md:p-8 shadow-sm border border-zinc-200/60 md:mb-8 flex items-center justify-between">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400">Admin Workspace</p>
+              <h1 className="mt-1 text-2xl font-serif italic text-zinc-900 md:text-3xl tracking-tight">{title}</h1>
+            </div>
           </div>
           {children}
         </div>
@@ -250,19 +249,19 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
       {/* Notifications Toast Container */}
       <div className="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2 pointer-events-none">
         {notifications.map(note => (
-          <div key={note.id} className="bg-white border border-zinc-200 shadow-xl rounded-xl p-4 w-72 md:w-80 flex gap-3 animate-in slide-in-from-bottom-5 fade-in duration-300 pointer-events-auto">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pink-100 text-rose-600 flex-shrink-0">
-              <Bell size={20} />
+          <div key={note.id} className="pointer-events-auto flex w-72 gap-3 rounded-[1.2rem] border border-zinc-200/80 bg-white/95 p-4 shadow-lg backdrop-blur md:w-80 animate-in slide-in-from-bottom-5 fade-in duration-300">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 text-zinc-700 flex-shrink-0">
+              <Bell size={16} />
             </div>
             <div className="flex-1">
-              <h4 className="text-sm font-semibold text-zinc-900">{note.title}</h4>
+              <h4 className="text-sm font-medium text-zinc-900">{note.title}</h4>
               <p className="text-xs text-zinc-500 mt-1">{note.message}</p>
-              <Link href={note.href} className="text-xs font-medium text-rose-600 hover:text-rose-600 mt-2 inline-block">
+              <Link href={note.href} className="text-xs font-medium text-zinc-800 hover:text-zinc-600 mt-2 inline-block">
                 View Details &rarr;
               </Link>
             </div>
             <button onClick={() => setNotifications(prev => prev.filter(n => n.id !== note.id))} className="text-zinc-400 hover:text-zinc-600 self-start">
-              <X size={16} />
+              <X size={14} />
             </button>
           </div>
         ))}

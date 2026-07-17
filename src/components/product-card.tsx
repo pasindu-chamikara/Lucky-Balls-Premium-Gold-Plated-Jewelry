@@ -35,72 +35,78 @@ export function ProductCard({ id, name, price, description, badge, image, isOutO
   };
 
   return (
-    <article className="flex flex-col h-full overflow-hidden rounded-2xl sm:rounded-3xl border border-zinc-200 bg-white/60 shadow-lg shadow-pink-500/5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(219,39,119,0.2)] hover:border-pink-500/40 group">
+    <article className="group flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[var(--surface)] shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-[var(--accent)]">
       {id ? (
-        <Link href={`/product/${id}`} className="relative h-40 sm:h-56 w-full bg-white/30 flex items-center justify-center overflow-hidden cursor-pointer block">
-          <Image src={image} alt={name} fill priority={priority} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className={`object-cover group-hover:scale-105 transition-transform duration-700 ${isOutOfStock ? "grayscale" : ""}`} />
+        <Link href={`/product/${id}`} className="relative block aspect-[4/3] w-full overflow-hidden bg-[var(--surface-2)]/30">
+          <Image src={image} alt={name} fill priority={priority} quality={90} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" className={`object-cover transition-transform duration-700 group-hover:scale-105 ${isOutOfStock ? "grayscale opacity-70" : ""}`} />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           {badge && !isOutOfStock && (
-            <span className="absolute left-4 top-4 z-20 rounded-full bg-rose-500 text-white px-3 py-1 text-xs font-semibold shadow-md">
+            <span className="absolute left-4 top-4 z-20 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--foreground)] shadow-sm backdrop-blur">
               {badge}
             </span>
           )}
           {isOutOfStock && (
-            <span className="absolute left-4 top-4 z-20 rounded-full bg-zinc-800 text-white px-3 py-1 text-xs font-semibold shadow-md">
+            <span className="absolute left-4 top-4 z-20 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-zinc-500 shadow-sm backdrop-blur">
               Out of Stock
             </span>
           )}
         </Link>
       ) : (
         <div
-          className="relative h-40 sm:h-56 w-full bg-white/30 flex items-center justify-center overflow-hidden cursor-pointer"
+          className="relative aspect-[4/3] w-full overflow-hidden bg-[var(--surface-2)]/30 cursor-pointer"
           onClick={onImageClick}
         >
-          <Image src={image} alt={name} fill priority={priority} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className={`object-cover group-hover:scale-105 transition-transform duration-700 ${isOutOfStock ? "grayscale" : ""}`} />
+          <Image src={image} alt={name} fill priority={priority} quality={90} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" className={`object-cover transition-transform duration-700 group-hover:scale-105 ${isOutOfStock ? "grayscale opacity-70" : ""}`} />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           {badge && !isOutOfStock && (
-            <span className="absolute left-4 top-4 z-20 rounded-full bg-rose-500 text-white px-3 py-1 text-xs font-semibold shadow-md">
+            <span className="absolute left-4 top-4 z-20 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--foreground)] shadow-sm backdrop-blur">
               {badge}
             </span>
           )}
           {isOutOfStock && (
-            <span className="absolute left-4 top-4 z-20 rounded-full bg-zinc-800 text-white px-3 py-1 text-xs font-semibold shadow-md">
+            <span className="absolute left-4 top-4 z-20 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-zinc-500 shadow-sm backdrop-blur">
               Out of Stock
             </span>
           )}
         </div>
       )}
-      <div className="flex flex-col flex-1 p-3 sm:p-6 relative z-20">
-        <div className="mb-2 sm:mb-4">
+      <div className="relative z-20 flex flex-1 flex-col p-3 sm:p-5">
+        <div className="flex flex-col gap-1 mb-3 sm:mb-4">
           {id ? (
-            <Link href={`/product/${id}`} className="hover:underline hover:decoration-rose-500 hover:underline-offset-4">
-              <h3 className={`text-base sm:text-xl font-semibold transition-colors line-clamp-2 ${isOutOfStock ? "text-zinc-500" : "text-zinc-900 group-hover:text-rose-600"}`}>{name}</h3>
+            <Link href={`/product/${id}`} className="transition-colors">
+              <h3 className={`text-sm sm:text-lg font-serif italic font-semibold leading-tight transition-colors line-clamp-2 ${isOutOfStock ? "text-zinc-400" : "text-[var(--foreground)] group-hover:text-[var(--accent-deep)]"}`}>{name}</h3>
             </Link>
           ) : (
-            <h3 className={`text-base sm:text-xl font-semibold transition-colors line-clamp-2 ${isOutOfStock ? "text-zinc-500" : "text-zinc-900 group-hover:text-rose-600"}`}>{name}</h3>
+            <h3 className={`text-sm sm:text-lg font-serif italic font-semibold leading-tight transition-colors line-clamp-2 ${isOutOfStock ? "text-zinc-400" : "text-[var(--foreground)] group-hover:text-[var(--accent-deep)]"}`}>{name}</h3>
           )}
+          <p className={`text-xs sm:text-sm font-bold tracking-wide mt-1 ${isOutOfStock ? "text-zinc-400" : "text-[var(--accent-deep)]"}`}>{price}</p>
         </div>
-        <div className="mt-auto space-y-3 sm:space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
-            <p className={`text-base sm:text-xl font-bold leading-none ${isOutOfStock ? "text-zinc-400" : "text-rose-600"}`}>{price}</p>
 
-            {!isOutOfStock && (
-              <div className="flex items-center border border-zinc-200 rounded-lg bg-white h-9 shrink-0 shadow-sm">
+        <div className="mt-auto space-y-3 sm:space-y-4 pt-2">
+          {!isOutOfStock && (
+            <div className="flex items-center justify-between rounded-full border border-[var(--border)] bg-[var(--surface-2)]/40 px-2 sm:px-3 py-1.5 sm:py-2">
+              <span className="px-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-zinc-500 hidden sm:inline">Quantity</span>
+              <span className="px-1 text-[9px] font-bold uppercase tracking-widest text-zinc-500 sm:hidden">Qty</span>
+              <div className="flex items-center gap-1 sm:gap-2">
                 <button
                   onClick={handleDecrease}
-                  className="px-2 sm:px-3 h-full text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 transition-colors disabled:opacity-50 rounded-l-lg flex items-center justify-center"
+                  className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-white/60 text-[var(--foreground)] transition-colors hover:bg-white hover:text-[var(--accent-deep)] disabled:opacity-50"
                   disabled={quantity <= 1}
                 >
-                  <Minus size={14} />
+                  <Minus size={12} className="sm:hidden" />
+                  <Minus size={14} className="hidden sm:block" />
                 </button>
-                <span className="w-6 sm:w-8 text-center text-xs sm:text-sm font-medium text-zinc-900">{quantity}</span>
+                <span className="flex min-w-5 sm:min-w-6 items-center justify-center text-xs sm:text-sm font-bold text-[var(--foreground)]">{quantity}</span>
                 <button
                   onClick={handleIncrease}
-                  className="px-2 sm:px-3 h-full text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 transition-colors rounded-r-lg flex items-center justify-center"
+                  className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-white/60 text-[var(--foreground)] transition-colors hover:bg-white hover:text-[var(--accent-deep)]"
                 >
-                  <Plus size={14} />
+                  <Plus size={12} className="sm:hidden" />
+                  <Plus size={14} className="hidden sm:block" />
                 </button>
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           <Button
             onClick={(e) => {
@@ -109,12 +115,9 @@ export function ProductCard({ id, name, price, description, badge, image, isOutO
               if (!isOutOfStock) onShopClick?.(quantity);
             }}
             disabled={isOutOfStock}
-            variant={isOutOfStock ? "ghost" : "rose"}
-            size="sm"
-            className={`w-full gap-1 sm:gap-2 transition-all h-9 sm:h-11 text-xs sm:text-sm font-bold shadow-sm ${isOutOfStock ? "bg-zinc-100 text-zinc-400 cursor-not-allowed" : "hover:shadow-md"}`}
+            className={`h-10 sm:h-12 w-full rounded-full text-[10px] sm:text-xs font-bold tracking-widest transition-all uppercase ${isOutOfStock ? "cursor-not-allowed border-none bg-zinc-200 text-zinc-500" : "bg-[#E5C98F] text-zinc-900 hover:bg-[#BD9142] shadow-sm"}`}
           >
             {isOutOfStock ? "Out of Stock" : "Add to cart"}
-            {!isOutOfStock && <ArrowRight size={16} className="sm:w-[18px] sm:h-[18px]" />}
           </Button>
         </div>
       </div>

@@ -119,7 +119,7 @@ function ShopContent() {
   });
 
   return (
-    <div className="min-h-screen text-zinc-900 font-sans selection:bg-pink-500/30 flex flex-col">
+    <div className="min-h-screen text-zinc-900 bg-[#FCFBF9] font-sans selection:bg-[var(--accent)]/30 flex flex-col">
       <Navbar />
       
       <main className="flex-1 mx-auto max-w-7xl px-6 pt-28 pb-16 lg:px-8 w-full">
@@ -137,21 +137,21 @@ function ShopContent() {
             </div>
             <input
               type="text"
-              className="block w-full pl-11 pr-4 py-3 border border-pink-500/20 rounded-full leading-5 bg-white/80 backdrop-blur-sm placeholder-zinc-500 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 sm:text-sm shadow-[0_4px_15px_rgba(219,39,119,0.05)] transition-all"
+              className="block w-full pl-11 pr-4 py-3 border border-zinc-200 rounded-full leading-5 bg-white/80 backdrop-blur-sm placeholder-zinc-500 focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] sm:text-sm shadow-sm transition-all"
               placeholder="Search for jewellery..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 max-w-3xl mx-auto">
-            <div className="flex items-center gap-2 text-sm text-zinc-600 bg-white/50 border border-zinc-200 rounded-lg px-3 py-2 backdrop-blur-sm shadow-sm">
+          <div className="flex flex-nowrap sm:flex-wrap items-center justify-start sm:justify-center gap-2 sm:gap-4 w-full max-w-3xl mx-auto overflow-x-auto pb-4 px-2 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <div className="flex shrink-0 items-center gap-2 text-sm text-zinc-600 bg-white/50 border border-zinc-200 rounded-lg px-3 py-2 backdrop-blur-sm shadow-sm snap-start">
               <Filter size={16} /> Filters:
             </div>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="bg-white border border-pink-500/20 text-zinc-700 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block px-3 py-2 shadow-sm transition-all hover:border-pink-300"
+              className="bg-white shrink-0 border border-zinc-200 text-zinc-700 text-sm rounded-lg focus:ring-[var(--accent)] focus:border-[var(--accent)] block px-3 py-2 shadow-sm transition-all hover:border-[var(--accent)] snap-start"
             >
               <option value="all">All Categories</option>
               {categories.map(c => (
@@ -162,7 +162,7 @@ function ShopContent() {
             <select
               value={selectedAudience}
               onChange={(e) => setSelectedAudience(e.target.value)}
-              className="bg-white border border-pink-500/20 text-zinc-700 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block px-3 py-2 shadow-sm transition-all hover:border-pink-300"
+              className="bg-white shrink-0 border border-zinc-200 text-zinc-700 text-sm rounded-lg focus:ring-[var(--accent)] focus:border-[var(--accent)] block px-3 py-2 shadow-sm transition-all hover:border-[var(--accent)] snap-start"
             >
               <option value="all">All Audiences</option>
               <option value="womens">Women's</option>
@@ -173,7 +173,7 @@ function ShopContent() {
             <select
               value={selectedPrice}
               onChange={(e) => setSelectedPrice(e.target.value)}
-              className="bg-white border border-pink-500/20 text-zinc-700 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block px-3 py-2 shadow-sm transition-all hover:border-pink-300"
+              className="bg-white shrink-0 border border-zinc-200 text-zinc-700 text-sm rounded-lg focus:ring-[var(--accent)] focus:border-[var(--accent)] block px-3 py-2 shadow-sm transition-all hover:border-[var(--accent)] snap-start"
             >
               <option value="all">Any Price</option>
               <option value="500-1000">Rs. 500 - Rs. 1000</option>
@@ -184,10 +184,10 @@ function ShopContent() {
           </div>
         </div>
 
-        <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {loading ? (
             <div className="col-span-full flex justify-center py-20">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-pink-500 border-t-transparent"></div>
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-900 border-t-transparent"></div>
             </div>
           ) : filteredProducts.length === 0 ? (
             <div className="col-span-full text-center py-20 text-zinc-600">
@@ -223,7 +223,7 @@ function ShopContent() {
 
 export default function ShopPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-zinc-50"><p>Loading shop...</p></div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#FCFBF9]"><p>Loading shop...</p></div>}>
       <ShopContent />
     </Suspense>
   );

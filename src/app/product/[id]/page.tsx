@@ -72,7 +72,7 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-zinc-50 font-sans flex flex-col">
+      <div className="min-h-screen bg-[#FCFBF9] font-sans flex flex-col">
         <Navbar />
         <main className="flex-1 flex items-center justify-center py-20">
           <div className="flex flex-col items-center gap-4">
@@ -87,13 +87,13 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-zinc-50 font-sans flex flex-col">
+      <div className="min-h-screen bg-[#FCFBF9] font-sans flex flex-col">
         <Navbar />
         <main className="flex-1 flex items-center justify-center py-20">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-zinc-900 mb-4">Product Not Found</h2>
             <p className="text-zinc-600 mb-8">The product you're looking for doesn't exist or has been removed.</p>
-            <Button onClick={() => router.push("/shop")} className="bg-pink-600 hover:bg-pink-700 text-white">
+            <Button onClick={() => router.push("/shop")} className="bg-[#E5C98F] hover:bg-[#BD9142] text-zinc-900">
               Back to Shop
             </Button>
           </div>
@@ -106,34 +106,34 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
   const isOutOfStock = product.isOutOfStock || (product.stockQuantity !== undefined && product.stockQuantity <= 0);
 
   return (
-    <div className="min-h-screen bg-zinc-50 font-sans flex flex-col">
+    <div className="min-h-screen bg-[#FCFBF9] font-sans flex flex-col">
       <Navbar />
       
       <main className="flex-1 mx-auto max-w-7xl px-6 py-8 lg:px-8 lg:py-12 w-full">
         <button 
           onClick={() => router.back()}
-          className="flex items-center gap-2 text-zinc-500 hover:text-pink-600 mb-6 transition-colors text-sm font-medium"
+          className="flex items-center gap-2 text-zinc-500 hover:text-[#BD9142] mb-6 transition-colors text-sm font-medium"
         >
           <ArrowLeft size={16} /> Back
         </button>
 
         <div className="grid grid-cols-1 md:grid-cols-[0.8fr_1.2fr] lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-12 mb-12">
-          <div className="relative aspect-square md:aspect-auto md:h-[320px] lg:h-[450px] rounded-3xl overflow-hidden bg-white shadow-xl shadow-pink-500/5 border border-zinc-200/60 max-w-[260px] sm:max-w-sm md:max-w-md mx-auto md:mx-0 w-full">
+          <div className="relative aspect-square md:aspect-auto md:h-[320px] lg:h-[450px] rounded-3xl overflow-hidden shadow-xl shadow-pink-500/5 border border-zinc-200/60 max-w-[260px] sm:max-w-sm md:max-w-md mx-auto md:mx-0 w-full">
             <Image
               src={product.image || "/images/gift-basket.svg"}
               alt={product.name}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className={`object-cover ${isOutOfStock ? "grayscale" : ""}`}
+              className={`object-contain scale-[0.85] ${isOutOfStock ? "grayscale" : ""}`}
               priority
             />
             {product.isFeaturedThisWeek && !isOutOfStock && (
-              <span className="absolute top-6 left-6 z-10 rounded-full bg-rose-500 text-white px-4 py-1.5 text-sm font-bold shadow-md">
+              <span className="absolute top-6 left-6 z-10 rounded-full bg-rose-500 text-zinc-900 px-4 py-1.5 text-sm font-bold shadow-md">
                 Featured
               </span>
             )}
             {isOutOfStock && (
-              <span className="absolute top-6 left-6 z-10 rounded-full bg-zinc-800 text-white px-4 py-1.5 text-sm font-bold shadow-md">
+              <span className="absolute top-6 left-6 z-10 rounded-full bg-zinc-800 text-zinc-900 px-4 py-1.5 text-sm font-bold shadow-md">
                 Out of Stock
               </span>
             )}

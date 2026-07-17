@@ -101,7 +101,7 @@ export default function AdminCustomersPage() {
               placeholder="Search customers..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 pr-4 py-1.5 text-sm text-zinc-900 bg-white border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent w-full sm:w-64"
+              className="pl-9 pr-4 py-1.5 text-sm text-zinc-900 bg-white border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:border-transparent w-full sm:w-64"
             />
           </div>
         </div>
@@ -135,7 +135,7 @@ export default function AdminCustomersPage() {
                   <tr key={customer.id} className="hover:bg-zinc-50/50">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-pink-100 text-rose-600 font-bold text-sm">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-zinc-900 font-medium text-sm">
                           {customer.fullName.charAt(0)}
                         </div>
                         <div>
@@ -160,7 +160,7 @@ export default function AdminCustomersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <p className="font-semibold text-rose-600">Rs. {customer.totalSpent.toFixed(2)}</p>
+                      <p className="font-semibold text-zinc-900">Rs. {customer.totalSpent.toFixed(2)}</p>
                       {customer.lastOrderDate && (
                         <p className="text-xs text-zinc-400 mt-0.5">
                           Last active: {new Date(customer.lastOrderDate.toDate()).toLocaleDateString()}

@@ -36,7 +36,7 @@ export default function CartPage() {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col text-zinc-900">
+    <div className="flex min-h-screen flex-col text-zinc-900 bg-[#FCFBF9]">
       <Navbar />
       <main className="flex-1 px-6 pt-28 pb-12 lg:px-8">
         <div className="mx-auto max-w-4xl">
@@ -52,7 +52,7 @@ export default function CartPage() {
                 Looks like you haven't added anything to your cart yet.
               </p>
               <Link href="/#shop">
-                <Button className="bg-pink-600 text-white hover:bg-pink-500 shadow-[0_0_10px_rgba(219,39,119,0.4)] transition-all">
+                <Button className="bg-[#E5C98F] text-zinc-900 hover:bg-[#BD9142] shadow-[0_0_10px_rgba(219,39,119,0.4)] transition-all">
                   Continue Shopping
                 </Button>
               </Link>
@@ -114,7 +114,7 @@ export default function CartPage() {
                   <span className="text-rose-600">Rs. {(totalPrice + (shippingFee || 0)).toFixed(2)}</span>
                 </div>
                 <Link href={user ? "/checkout" : "/login?redirect=/checkout"} className="block mt-6">
-                  <Button className="w-full bg-pink-600 text-white hover:bg-pink-500 shadow-[0_0_15px_rgba(219,39,119,0.3)] transition-all py-6 text-lg">
+                  <Button className="w-full bg-[#E5C98F] text-zinc-900 hover:bg-[#BD9142] shadow-[0_0_15px_rgba(219,39,119,0.3)] transition-all py-6 text-lg">
                     Proceed to Checkout
                   </Button>
                 </Link>

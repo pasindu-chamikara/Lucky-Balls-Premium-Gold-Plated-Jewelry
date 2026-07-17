@@ -46,7 +46,7 @@ export default function AdminProductsPage() {
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [newProduct, setNewProduct] = useState<Partial<Product>>({
-    name: "", price: "" as any, description: "", categoryId: "", subcategoryId: "", 
+    name: "", price: "" as any, description: "", categoryId: "", subcategoryId: "",
     isFeaturedThisWeek: false, isPinnedForHome: false, isCustomizable: false, customizationOptions: [], image: "", images: [], targetGender: "both", isOutOfStock: false, stockQuantity: 0
   });
 
@@ -57,10 +57,10 @@ export default function AdminProductsPage() {
         getDocs(collection(db, "categories")),
         getDocs(collection(db, "products"))
       ]);
-      
+
       const cats = catSnap.docs.map(d => ({ id: d.id, ...d.data() } as Category));
       const prods = prodSnap.docs.map(d => ({ id: d.id, ...d.data() } as Product));
-      
+
       setCategories(cats);
       setProducts(prods);
     } catch (error) {
@@ -115,9 +115,9 @@ export default function AdminProductsPage() {
         }));
       } else {
         const docRef = await addDoc(collection(db, "products"), productToSave);
-        setProducts([...products.map(p => productToSave.isFeaturedThisWeek ? {...p, isFeaturedThisWeek: false} : p), { id: docRef.id, ...productToSave } as Product]);
+        setProducts([...products.map(p => productToSave.isFeaturedThisWeek ? { ...p, isFeaturedThisWeek: false } : p), { id: docRef.id, ...productToSave } as Product]);
       }
-      
+
       setIsAdding(false);
       setEditingProductId(null);
       setNewProduct({ name: "", price: "" as any, description: "", categoryId: "", subcategoryId: "", isFeaturedThisWeek: false, isPinnedForHome: false, isCustomizable: false, customizationOptions: [], image: "", images: [], targetGender: "both", isOutOfStock: false });
@@ -127,7 +127,7 @@ export default function AdminProductsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if(!confirm("Delete this product?")) return;
+    if (!confirm("Delete this product?")) return;
     try {
       await deleteDoc(doc(db, "products", id));
       setProducts(products.filter(p => p.id !== id));
@@ -139,7 +139,7 @@ export default function AdminProductsPage() {
   const handleToggleFeatured = async (id: string, currentStatus: boolean) => {
     try {
       const newStatus = !currentStatus;
-      
+
       if (newStatus) {
         const batch = writeBatch(db);
         const featuredQuery = query(collection(db, "products"), where("isFeaturedThisWeek", "==", true));
@@ -151,7 +151,7 @@ export default function AdminProductsPage() {
         });
         batch.update(doc(db, "products", id), { isFeaturedThisWeek: true });
         await batch.commit();
-        
+
         setProducts(products.map(p => ({
           ...p,
           isFeaturedThisWeek: p.id === id ? true : false
@@ -168,7 +168,7 @@ export default function AdminProductsPage() {
   const handleTogglePinned = async (id: string, currentStatus: boolean) => {
     try {
       const newStatus = !currentStatus;
-      
+
       if (newStatus) {
         const currentlyPinned = products.filter(p => p.isPinnedForHome);
         if (currentlyPinned.length >= 4) {
@@ -176,7 +176,7 @@ export default function AdminProductsPage() {
           return;
         }
       }
-      
+
       await updateDoc(doc(db, "products", id), { isPinnedForHome: newStatus });
       setProducts(products.map(p => p.id === id ? { ...p, isPinnedForHome: newStatus } : p));
     } catch (error) {
@@ -199,7 +199,7 @@ export default function AdminProductsPage() {
       ...prev,
       customizationOptions: [
         ...(prev.customizationOptions || []),
-        { id: Math.random().toString(36).slice(2,9), type: "text", label: "", choices: [] }
+        { id: Math.random().toString(36).slice(2, 9), type: "text", label: "", choices: [] }
       ]
     }));
   };
@@ -233,9 +233,9 @@ export default function AdminProductsPage() {
         const uploadTask = await uploadBytesResumable(fileRef, file);
         return getDownloadURL(uploadTask.ref);
       });
-      
+
       const downloadUrls = await Promise.all(uploadPromises);
-      
+
       setNewProduct(prev => {
         const currentImages = prev.images || [];
         const newImages = [...currentImages, ...downloadUrls];
@@ -257,12 +257,12 @@ export default function AdminProductsPage() {
     setNewProduct(prev => {
       const currentImages = prev.images || [];
       const newImages = currentImages.filter((_, idx) => idx !== indexToRemove);
-      
+
       let newPrimary = prev.image;
       if (prev.image === currentImages[indexToRemove]) {
         newPrimary = newImages.length > 0 ? newImages[0] : "";
       }
-      
+
       return {
         ...prev,
         image: newPrimary,
@@ -274,14 +274,14 @@ export default function AdminProductsPage() {
   return (
     <AdminLayout title="Manage Products">
       {isAdding ? (
-        <div className="bg-white rounded-2xl border border-zinc-200/60 p-6 shadow-sm max-w-2xl">
-          <h2 className="text-xl font-bold mb-6">{editingProductId ? "Edit Product" : "Add New Product"}</h2>
-          <form onSubmit={handleAddProduct} className="space-y-4">
+        <div className="bg-white rounded-[1.5rem] border border-zinc-200/60 p-6 md:p-8 shadow-sm max-w-3xl">
+          <h2 className="text-xl font-bold tracking-tight text-zinc-900 mb-6">{editingProductId ? "Edit Product" : "Add New Product"}</h2>
+          <form onSubmit={handleAddProduct} className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-zinc-700 mb-1">Name</label>
-              <input required type="text" value={newProduct.name} onChange={e => setNewProduct({...newProduct, name: e.target.value})} className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none" />
+              <input required type="text" value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none" />
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-zinc-700 mb-1">Product Images</label>
               <div className="flex flex-col gap-4">
@@ -297,15 +297,15 @@ export default function AdminProductsPage() {
                     {newProduct.images.map((img, idx) => (
                       <div key={idx} className={`relative h-24 w-24 rounded-lg overflow-hidden border-2 ${newProduct.image === img ? 'border-pink-500' : 'border-zinc-200'}`}>
                         <img src={img} alt={`Preview ${idx}`} className="w-full h-full object-cover" />
-                        <button 
-                          type="button" 
+                        <button
+                          type="button"
                           onClick={() => removeImage(idx)}
-                          className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1 hover:bg-black/70 transition-colors"
+                          className="absolute top-1 right-1 bg-black/50 text-zinc-900 rounded-full p-1 hover:bg-black/70 transition-colors"
                         >
                           <X size={12} />
                         </button>
                         {newProduct.image === img && (
-                          <div className="absolute bottom-0 left-0 right-0 bg-pink-500 text-white text-[10px] text-center font-bold py-0.5">
+                          <div className="absolute bottom-0 left-0 right-0 bg-pink-500 text-zinc-900 text-[10px] text-center font-bold py-0.5">
                             PRIMARY
                           </div>
                         )}
@@ -322,45 +322,45 @@ export default function AdminProductsPage() {
 
             <div>
               <label className="block text-sm font-medium text-zinc-700 mb-1">Price (Rs.)</label>
-              <input 
-                required 
-                type="number" 
-                min="0" 
-                step="0.01" 
-                value={(newProduct.price as any) === "" ? "" : (newProduct.price === undefined || isNaN(newProduct.price as any) ? "" : newProduct.price)} 
+              <input
+                required
+                type="number"
+                min="0"
+                step="0.01"
+                value={(newProduct.price as any) === "" ? "" : (newProduct.price === undefined || isNaN(newProduct.price as any) ? "" : newProduct.price)}
                 onChange={e => {
                   if (e.target.value === "") {
-                    setNewProduct({...newProduct, price: "" as any});
+                    setNewProduct({ ...newProduct, price: "" as any });
                   } else {
                     const val = parseFloat(e.target.value);
-                    setNewProduct({...newProduct, price: isNaN(val) ? 0 : val});
+                    setNewProduct({ ...newProduct, price: isNaN(val) ? 0 : val });
                   }
-                }} 
-                className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none" 
+                }}
+                className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none"
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-zinc-700 mb-1">Stock Quantity</label>
-              <input 
-                type="number" 
+              <input
+                type="number"
                 min="0"
                 value={newProduct.stockQuantity ?? 0}
                 onChange={e => {
                   const qty = parseInt(e.target.value) || 0;
                   setNewProduct({
-                    ...newProduct, 
+                    ...newProduct,
                     stockQuantity: qty,
                     isOutOfStock: qty <= 0 ? true : newProduct.isOutOfStock
                   });
                 }}
-                className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none" 
+                className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none"
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-zinc-700 mb-1">Category</label>
-              <select required value={newProduct.categoryId} onChange={e => setNewProduct({...newProduct, categoryId: e.target.value, subcategoryId: ""})} className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none">
+              <select required value={newProduct.categoryId} onChange={e => setNewProduct({ ...newProduct, categoryId: e.target.value, subcategoryId: "" })} className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none">
                 <option value="">Select a Category</option>
                 {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
@@ -369,7 +369,7 @@ export default function AdminProductsPage() {
             {selectedCategory && (
               <div>
                 <label className="block text-sm font-medium text-zinc-700 mb-1">Subcategory</label>
-                <select value={newProduct.subcategoryId} onChange={e => setNewProduct({...newProduct, subcategoryId: e.target.value})} className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none">
+                <select value={newProduct.subcategoryId} onChange={e => setNewProduct({ ...newProduct, subcategoryId: e.target.value })} className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none">
                   <option value="">None / Select Subcategory</option>
                   {selectedCategory.subcategories?.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                 </select>
@@ -378,7 +378,7 @@ export default function AdminProductsPage() {
 
             <div>
               <label className="block text-sm font-medium text-zinc-700 mb-1">Target Audience</label>
-              <select required value={newProduct.targetGender} onChange={e => setNewProduct({...newProduct, targetGender: e.target.value as any})} className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none">
+              <select required value={newProduct.targetGender} onChange={e => setNewProduct({ ...newProduct, targetGender: e.target.value as any })} className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none">
                 <option value="both">Both (Unisex)</option>
                 <option value="mens">Men&apos;s</option>
                 <option value="womens">Women&apos;s</option>
@@ -387,12 +387,12 @@ export default function AdminProductsPage() {
 
             <div>
               <label className="block text-sm font-medium text-zinc-700 mb-1">Description</label>
-              <textarea rows={3} value={newProduct.description} onChange={e => setNewProduct({...newProduct, description: e.target.value})} className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none" />
+              <textarea rows={3} value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none" />
             </div>
 
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2 p-3 bg-pink-50 border border-pink-100 rounded-lg">
-                <input type="checkbox" id="featured" checked={newProduct.isFeaturedThisWeek} onChange={e => setNewProduct({...newProduct, isFeaturedThisWeek: e.target.checked})} className="rounded text-rose-600 focus:ring-pink-500" />
+                <input type="checkbox" id="featured" checked={newProduct.isFeaturedThisWeek} onChange={e => setNewProduct({ ...newProduct, isFeaturedThisWeek: e.target.checked })} className="rounded text-rose-600 focus:ring-pink-500" />
                 <label htmlFor="featured" className="text-sm font-medium text-rose-600 flex items-center gap-2">
                   <Star size={16} className="text-rose-600" />
                   Make this the "Featured This Week" item on homepage
@@ -400,7 +400,7 @@ export default function AdminProductsPage() {
               </div>
 
               <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-100 rounded-lg">
-                <input type="checkbox" id="pinned" checked={newProduct.isPinnedForHome} onChange={e => setNewProduct({...newProduct, isPinnedForHome: e.target.checked})} className="rounded text-blue-600 focus:ring-blue-500" />
+                <input type="checkbox" id="pinned" checked={newProduct.isPinnedForHome} onChange={e => setNewProduct({ ...newProduct, isPinnedForHome: e.target.checked })} className="rounded text-blue-600 focus:ring-blue-500" />
                 <label htmlFor="pinned" className="text-sm font-medium text-blue-900 flex items-center gap-2">
                   <Star size={16} className="text-blue-600" />
                   Pin this item to Homepage (Max 3)
@@ -408,7 +408,7 @@ export default function AdminProductsPage() {
               </div>
 
               <div className="flex items-center gap-2 p-3 bg-zinc-100 border border-zinc-200 rounded-lg">
-                <input type="checkbox" id="outofstock" checked={newProduct.isOutOfStock} onChange={e => setNewProduct({...newProduct, isOutOfStock: e.target.checked})} className="rounded text-zinc-600 focus:ring-zinc-500" />
+                <input type="checkbox" id="outofstock" checked={newProduct.isOutOfStock} onChange={e => setNewProduct({ ...newProduct, isOutOfStock: e.target.checked })} className="rounded text-zinc-600 focus:ring-zinc-500" />
                 <label htmlFor="outofstock" className="text-sm font-medium text-zinc-900 flex items-center gap-2">
                   Mark as Out of Stock
                 </label>
@@ -417,29 +417,29 @@ export default function AdminProductsPage() {
 
 
 
-            <div className="flex gap-3 pt-4">
-              <Button type="submit" variant="custom" className="bg-pink-600 hover:bg-pink-500 text-white px-5 rounded-full" disabled={isUploadingImage || !newProduct.name || !newProduct.price || !newProduct.categoryId}>
+            <div className="flex gap-3 pt-6 border-t border-zinc-100 mt-4">
+              <Button type="submit" variant="custom" className="bg-zinc-900 hover:bg-zinc-800 text-white px-6 h-11 rounded-full font-bold uppercase tracking-wider text-[10px] transition-all" disabled={isUploadingImage || !newProduct.name || !newProduct.price || !newProduct.categoryId}>
                 {editingProductId ? "Update Product" : "Save Product"}
               </Button>
               <Button type="button" variant="outline" onClick={() => {
                 setIsAdding(false);
                 setEditingProductId(null);
                 setNewProduct({ name: "", price: "" as any, description: "", categoryId: "", subcategoryId: "", isFeaturedThisWeek: false, isPinnedForHome: false, isCustomizable: false, customizationOptions: [], image: "", images: [], targetGender: "both", isOutOfStock: false, stockQuantity: 0 });
-              }}>Cancel</Button>
+              }} className="h-11 rounded-full px-6 text-zinc-600 font-medium hover:bg-zinc-50 border-zinc-200">Cancel</Button>
             </div>
           </form>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-zinc-200/60 shadow-sm overflow-hidden">
-          <div className="border-b border-zinc-100 bg-zinc-50/50 px-4 sm:px-6 py-4 sm:py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
-            <h2 className="text-lg font-semibold text-zinc-900">All Products</h2>
-            <Button variant="custom" className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto px-5 rounded-full font-medium transition-colors" onClick={() => {
+        <div className="bg-white rounded-[1.5rem] border border-zinc-200/60 shadow-sm overflow-hidden">
+          <div className="border-b border-zinc-100 bg-zinc-50/50 px-5 sm:px-8 py-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
+            <h2 className="text-lg font-bold tracking-tight text-zinc-900">All Products</h2>
+            <Button variant="custom" className="bg-zinc-900 hover:bg-zinc-800 text-white w-full sm:w-auto px-5 h-10 rounded-full font-bold uppercase tracking-wider text-[10px] transition-colors shadow-sm" onClick={() => {
               setEditingProductId(null);
               setNewProduct({ name: "", price: "" as any, description: "", categoryId: "", subcategoryId: "", isFeaturedThisWeek: false, isPinnedForHome: false, isCustomizable: false, customizationOptions: [], image: "", images: [], targetGender: "both", isOutOfStock: false, stockQuantity: 0 });
               setIsAdding(true);
-            }}><Plus size={16} className="mr-2"/> Add Product</Button>
+            }}><Plus size={16} className="mr-2" /> Add Product</Button>
           </div>
-          
+
           {loading ? (
             <div className="p-10 flex justify-center">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-pink-500 border-t-transparent"></div>
@@ -490,7 +490,7 @@ export default function AdminProductsPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <button 
+                        <button
                           onClick={() => handleToggleFeatured(p.id, p.isFeaturedThisWeek)}
                           className="p-1 rounded-md hover:bg-pink-50 transition-colors"
                           title={p.isFeaturedThisWeek ? "Remove from featured" : "Set as featured"}
@@ -499,7 +499,7 @@ export default function AdminProductsPage() {
                         </button>
                       </td>
                       <td className="px-6 py-4">
-                        <button 
+                        <button
                           onClick={() => handleTogglePinned(p.id, p.isPinnedForHome)}
                           className="p-1 rounded-md hover:bg-blue-50 transition-colors"
                           title={p.isPinnedForHome ? "Unpin from home" : "Pin to home"}
@@ -509,7 +509,7 @@ export default function AdminProductsPage() {
                       </td>
                       <td className="px-6 py-4 flex flex-col gap-2 min-w-[120px]">
                         <span className="text-zinc-600 font-medium">Qty: {p.stockQuantity ?? 0}</span>
-                        <button 
+                        <button
                           onClick={() => handleToggleOutOfStock(p.id, p.isOutOfStock || false)}
                           className={`px-2 py-1 rounded-md text-xs font-medium transition-colors w-fit ${p.isOutOfStock ? "bg-red-100 text-red-600 hover:bg-red-200" : "bg-green-100 text-green-600 hover:bg-green-200"}`}
                         >

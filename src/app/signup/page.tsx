@@ -28,7 +28,7 @@ import { Suspense } from "react";
 
 export default function SignupPage() {
   return (
-    <Suspense fallback={<div className="flex min-h-screen flex-col items-center justify-center bg-pink-50"><Loader2 className="animate-spin h-8 w-8 text-rose-600" /></div>}>
+    <Suspense fallback={<div className="flex min-h-screen flex-col items-center justify-center bg-[#FCFBF9]"><Loader2 className="animate-spin h-8 w-8 text-rose-600" /></div>}>
       <SignupContent />
     </Suspense>
   );
@@ -63,7 +63,7 @@ function SignupContent() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col text-zinc-900">
+    <div className="flex min-h-screen flex-col text-zinc-900 bg-[#FCFBF9]">
       <Navbar />
       <main className="flex-1 flex flex-col items-center justify-center px-6 py-20 lg:px-8">
         <div className="w-full max-w-md rounded-3xl border border-zinc-200 bg-white/50 p-8 shadow-[0_0_15px_rgba(219,39,119,0.1)] backdrop-blur-sm">
@@ -117,7 +117,7 @@ function SignupContent() {
               {errors.confirmPassword ? <p className="mt-2 text-sm text-rose-600">{errors.confirmPassword.message}</p> : null}
             </div>
 
-            <Button type="submit" className="w-full bg-pink-600-white mt-4 py-6" disabled={isSubmitting}>
+            <Button type="submit" className="w-full bg-[#E5C98F]-white mt-4 py-6" disabled={isSubmitting}>
               {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
               {isSubmitting ? "Creating account..." : "Sign up"}
             </Button>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
-import { Mail, Phone, MapPin, Clock, Loader2, CheckCircle2 } from "lucide-react";
+import { Loader2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { db } from "@/firebase/config";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
@@ -42,7 +42,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#FCFBF9] font-sans selection:bg-[#E5C98F]/30 text-zinc-900">
       <Navbar />
       <main className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         <div className="text-center mb-16">
@@ -62,50 +62,37 @@ export default function ContactPage() {
             
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                <div className="bg-pink-100 p-3 rounded-full text-rose-600">
-                  <Phone size={20} />
-                </div>
                 <div>
-                  <h4 className="font-semibold text-zinc-900">Phone & WhatsApp</h4>
-                  <p className="text-zinc-600 mt-1"><a href="tel:0722801414" className="hover:text-rose-600 font-medium">072 280 1414</a></p>
+                  <h4 className="font-semibold text-zinc-900 uppercase tracking-widest text-xs mb-2">Phone & WhatsApp</h4>
+                  <p className="text-zinc-600"><a href="tel:0722801414" className="hover:text-rose-600 font-medium">072 280 1414</a></p>
                 </div>
               </div>
               
               <div className="flex items-start gap-4">
-                <div className="bg-pink-100 p-3 rounded-full text-rose-600">
-                  <Mail size={20} />
-                </div>
                 <div>
-                  <h4 className="font-semibold text-zinc-900">Email</h4>
-                  <p className="text-zinc-600 mt-1"><a href="mailto:info@luckyballs.lk" className="hover:text-rose-600 font-medium">info@luckyballs.lk</a></p>
+                  <h4 className="font-semibold text-zinc-900 uppercase tracking-widest text-xs mb-2">Email</h4>
+                  <p className="text-zinc-600"><a href="mailto:info@luckyballs.lk" className="hover:text-rose-600 font-medium">info@luckyballs.lk</a></p>
                 </div>
               </div>
               
               <div className="flex items-start gap-4">
-                <div className="bg-pink-100 p-3 rounded-full text-rose-600">
-                  <MapPin size={20} />
-                </div>
                 <div>
-                  <h4 className="font-semibold text-zinc-900">Location</h4>
-                  <p className="text-zinc-600 mt-1">Colombo, Sri Lanka</p>
+                  <h4 className="font-semibold text-zinc-900 uppercase tracking-widest text-xs mb-2">Location</h4>
+                  <p className="text-zinc-600">Colombo, Sri Lanka</p>
                 </div>
               </div>
               
               <div className="flex items-start gap-4">
-                <div className="bg-pink-100 p-3 rounded-full text-rose-600">
-                  <Clock size={20} />
-                </div>
                 <div>
-                  <h4 className="font-semibold text-zinc-900">Business Hours</h4>
-                  <p className="text-zinc-600 mt-1">Monday - Saturday<br />9:00 AM - 6:00 PM</p>
+                  <h4 className="font-semibold text-zinc-900 uppercase tracking-widest text-xs mb-2">Business Hours</h4>
+                  <p className="text-zinc-600">Monday - Saturday<br />9:00 AM - 6:00 PM</p>
                 </div>
               </div>
             </div>
             
             <div className="pt-6 border-t border-zinc-200">
               <a href="https://wa.me/luckyballs" target="_blank" rel="noopener noreferrer">
-                <Button variant="custom" className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-6 gap-2 font-semibold flex items-center justify-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2">
-                  <Phone size={20} />
+                <Button variant="custom" className="w-full bg-[#25D366] hover:bg-[#128C7E] text-zinc-900 py-6 gap-2 font-semibold flex items-center justify-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2">
                   Message us on WhatsApp
                 </Button>
               </a>

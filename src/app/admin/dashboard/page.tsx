@@ -44,10 +44,10 @@ export default function AdminDashboardPage() {
           getDoc(doc(db, "settings", "store_config")),
           getDocs(query(collection(db, "feedbacks"), orderBy("createdAt", "desc")))
         ]);
-        
+
         setProductCount(productsSnap.size);
         setCategoryCount(categoriesSnap.size);
-        
+
         const lowStock: any[] = [];
         productsSnap.forEach(doc => {
           const data = doc.data();
@@ -56,11 +56,11 @@ export default function AdminDashboardPage() {
           }
         });
         setLowStockProducts(lowStock);
-        
+
         if (configSnap.exists()) {
           setShippingFee(configSnap.data().shippingFee || 0);
         }
-        
+
         let revenue = 0;
         let activeCount = 0;
         const ordersData = ordersSnap.docs.map(document => {
@@ -76,8 +76,8 @@ export default function AdminDashboardPage() {
             ...data
           };
         });
-        
-        
+
+
         const feedbacksData = feedbacksSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setFeedbacks(feedbacksData);
         setTotalRevenue(revenue);
@@ -98,12 +98,12 @@ export default function AdminDashboardPage() {
         status: newStatus
       });
       // Update local state
-      setOrders(orders.map(order => 
+      setOrders(orders.map(order =>
         order.id === orderId ? { ...order, status: newStatus } : order
       ));
-      
+
       if (newStatus === "received") {
-         setActiveOrders(prev => Math.max(0, prev - 1));
+        setActiveOrders(prev => Math.max(0, prev - 1));
       }
     } catch (error) {
       console.error("Error updating order:", error);
@@ -160,13 +160,13 @@ export default function AdminDashboardPage() {
   const renderCancelAction = (order: any) => {
     if (order.status === 'cancelled' || order.status === 'delivered' || order.status === 'completed') return null;
     return (
-      <Button 
+      <Button
         onClick={() => {
           if (confirm('Are you sure you want to cancel this order?')) {
             handleUpdateOrderStatus(order.id, 'cancelled');
           }
         }}
-        size="sm" 
+        size="sm"
         variant="custom"
         className="bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 font-medium h-8 text-xs flex items-center gap-1 transition px-3 rounded-full"
       >
@@ -182,21 +182,22 @@ export default function AdminDashboardPage() {
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.label} className="rounded-2xl border border-zinc-200/60 bg-white p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
+            <div key={stat.label} className="rounded-[1.5rem] border border-zinc-200/60 bg-white p-5 sm:p-7 shadow-[0_8px_30px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
                 <div>
-                  <p className="text-xs sm:text-sm font-medium text-zinc-500">{stat.label}</p>
-                  <p className="mt-1 sm:mt-2 text-xl sm:text-3xl font-bold text-zinc-900">{stat.value}</p>
+                  <p className="text-[10px] sm:text-xs font-bold text-zinc-400 uppercase tracking-widest">{stat.label}</p>
+                  <p className="mt-1 sm:mt-2 text-3xl sm:text-4xl font-bold text-zinc-900 tracking-tight">{stat.value}</p>
                 </div>
-                <div className="hidden">
+                <div className="hidden sm:flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-50 border border-zinc-100 text-zinc-400">
+                  <Icon size={20} />
                 </div>
               </div>
-              <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-[10px] sm:text-sm">
-                <span className={`w-fit flex items-center gap-1 font-medium px-2 py-0.5 rounded-full ${stat.trend === 'Live' ? 'bg-zinc-100 text-zinc-900' : 'bg-zinc-50 text-zinc-500'}`}>
+              <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 text-[10px] sm:text-xs">
+                <span className={`w-fit flex items-center gap-1.5 font-bold px-3 py-1 rounded-full ${stat.trend === 'Live' ? 'bg-emerald-50 text-emerald-600' : 'bg-zinc-50 text-zinc-500'}`}>
                   {stat.trend !== 'Live' && <TrendingUp size={12} className="sm:w-[14px] sm:h-[14px]" />}
                   {stat.trend}
                 </span>
-                <span className="text-zinc-400 hidden sm:inline">{stat.trend === 'Live' ? 'From database' : 'No data yet'}</span>
+                <span className="text-zinc-400 hidden sm:inline font-medium">{stat.trend === 'Live' ? 'Live from database' : 'No data yet'}</span>
               </div>
             </div>
           );
@@ -205,10 +206,10 @@ export default function AdminDashboardPage() {
 
       {/* Low Stock Alerts */}
       {lowStockProducts.length > 0 && (
-        <div className="mt-10 rounded-2xl border border-amber-200/60 bg-white shadow-sm overflow-hidden">
-          <div className="border-b border-amber-100 bg-amber-50/50 px-6 py-4 flex items-center gap-2">
-            <span className="flex h-2.5 w-2.5 rounded-full bg-amber-500 animate-pulse"></span>
-            <h2 className="text-lg font-semibold text-amber-900">Low Stock Alerts</h2>
+        <div className="mt-8 rounded-[1.5rem] border border-rose-100 bg-white shadow-sm overflow-hidden">
+          <div className="border-b border-rose-50 bg-rose-50/50 px-6 py-5 flex items-center gap-3">
+            <span className="flex h-2.5 w-2.5 rounded-full bg-rose-500 animate-pulse ring-4 ring-rose-500/20"></span>
+            <h2 className="text-lg font-bold text-rose-950 tracking-tight">Low Stock Alerts</h2>
           </div>
           <div className="p-0">
             <ul className="divide-y divide-zinc-100">
@@ -234,11 +235,11 @@ export default function AdminDashboardPage() {
       )}
 
       {/* Store Settings Section */}
-      <div className="mt-10 rounded-2xl border border-zinc-200/60 bg-white shadow-sm overflow-hidden p-6">
-        <h2 className="text-lg font-semibold text-zinc-900 mb-4 flex items-center gap-2">
+      <div className="mt-8 rounded-[1.5rem] border border-zinc-200/60 bg-white shadow-sm overflow-hidden p-6 md:p-8">
+        <h2 className="text-lg font-bold tracking-tight text-zinc-900 mb-6 flex items-center gap-2">
           Store Configuration
         </h2>
-        
+
         <div className="flex flex-col sm:flex-row sm:items-end gap-4 max-w-sm">
           <div className="flex-1 w-full">
             <label htmlFor="shippingFee" className="block text-sm font-medium text-zinc-600 mb-1">
@@ -254,7 +255,7 @@ export default function AdminDashboardPage() {
               className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-900 focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500"
             />
           </div>
-          <Button 
+          <Button
             onClick={async () => {
               setIsUpdatingShipping(true);
               try {
@@ -279,14 +280,14 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Recent Orders Section */}
-      <div className="mt-10 rounded-2xl border border-zinc-200/60 bg-white shadow-sm overflow-hidden">
+      <div className="mt-8 rounded-[1.5rem] border border-zinc-200/60 bg-white shadow-sm overflow-hidden">
         <div className="border-b border-zinc-100 bg-zinc-50/50 px-6 py-5 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-zinc-900 flex items-center gap-2">
+          <h2 className="text-lg font-bold tracking-tight text-zinc-900 flex items-center gap-2">
             Recent Orders
           </h2>
-          <Button variant="custom" size="sm" className="text-rose-600 hover:text-rose-700 hover:bg-pink-50 px-4 h-9 rounded-full font-medium transition" onClick={() => window.location.href = '/admin/bookings'}>View All</Button>
+          <Button variant="custom" size="sm" className="text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 px-5 h-9 rounded-full font-bold uppercase tracking-wider text-[10px] transition" onClick={() => window.location.href = '/admin/bookings'}>View All</Button>
         </div>
-        
+
         <div className="">
           <table className="w-full text-left text-sm text-zinc-600 block sm:table">
             <thead className="bg-white text-zinc-500 hidden sm:table-header-group">
@@ -340,11 +341,11 @@ export default function AdminDashboardPage() {
                     <td className="px-0 sm:px-6 py-3 sm:py-4 text-right flex flex-wrap justify-end sm:justify-end gap-2 sm:whitespace-nowrap sm:min-w-[250px] mt-3 sm:mt-0 border-t border-zinc-100 sm:border-0 pt-4 sm:pt-4">
                       {renderCancelAction(order)}
                       {renderNextAction(order)}
-                      <Button 
+                      <Button
                         onClick={() => setSelectedOrder(order)}
-                        size="sm" 
+                        size="sm"
                         variant="ghost"
-                        className="text-zinc-500 hover:text-rose-600 hover:bg-pink-50 h-8 text-xs flex items-center gap-1"
+                        className="text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 h-8 text-xs flex items-center gap-1"
                       >
                         <Eye size={14} /> View
                       </Button>
@@ -358,9 +359,9 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Customer Feedback Section */}
-      <div className="mt-10 rounded-2xl border border-zinc-200/60 bg-white shadow-sm overflow-hidden">
+      <div className="mt-8 rounded-[1.5rem] border border-zinc-200/60 bg-white shadow-sm overflow-hidden">
         <div className="border-b border-zinc-100 bg-zinc-50/50 px-6 py-5 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-zinc-900 flex items-center gap-2">
+          <h2 className="text-lg font-bold tracking-tight text-zinc-900 flex items-center gap-2">
             Customer Feedback
           </h2>
         </div>
@@ -375,7 +376,7 @@ export default function AdminDashboardPage() {
                 <li key={fb.id} className="p-6 hover:bg-zinc-50/50">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pink-100 text-rose-600 font-bold">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-900 font-medium">
                         {fb.customerName?.charAt(0) || 'C'}
                       </div>
                       <div>
@@ -414,7 +415,7 @@ export default function AdminDashboardPage() {
                 <X size={18} />
               </Button>
             </div>
-            
+
             <div className="p-6 overflow-y-auto space-y-8">
               {/* Customer Info */}
               <div>
@@ -435,8 +436,8 @@ export default function AdminDashboardPage() {
                   <div>
                     <p className="text-zinc-500 mb-1">Address</p>
                     <p className="font-medium text-zinc-900">
-                      {selectedOrder.customerInfo?.address ? 
-                        `${selectedOrder.customerInfo.address}, ${selectedOrder.customerInfo.city} ${selectedOrder.customerInfo.postalCode}` 
+                      {selectedOrder.customerInfo?.address ?
+                        `${selectedOrder.customerInfo.address}, ${selectedOrder.customerInfo.city} ${selectedOrder.customerInfo.postalCode}`
                         : 'N/A'}
                     </p>
                   </div>
@@ -458,12 +459,12 @@ export default function AdminDashboardPage() {
                           <Box size={24} className="text-zinc-300" />
                         </div>
                       )}
-                      
+
                       <div className="flex-1 py-1">
                         <h5 className="font-medium text-zinc-900">{item.name}</h5>
                         <p className="text-sm text-zinc-500 mt-1">Qty: {item.quantity} × Rs. {item.price?.toFixed(2) || '0.00'}</p>
                         {item.category && (
-                          <span className="text-[10px] uppercase tracking-wider font-semibold text-rose-600 bg-pink-50 inline-block px-2 py-0.5 rounded-full mt-2">
+                          <span className="text-[10px] uppercase tracking-wider font-semibold text-zinc-700 bg-zinc-100 inline-block px-2 py-0.5 rounded-md mt-2">
                             {item.category}
                           </span>
                         )}
@@ -473,7 +474,7 @@ export default function AdminDashboardPage() {
                       </div>
                     </div>
                   ))}
-                  
+
                   {(!selectedOrder.items || selectedOrder.items.length === 0) && (
                     <p className="text-zinc-500 text-sm italic">No items found for this order.</p>
                   )}
@@ -483,7 +484,7 @@ export default function AdminDashboardPage() {
               {/* Order Summary */}
               <div className="flex items-center justify-between border-t border-zinc-100 pt-6">
                 <span className="font-medium text-zinc-600">Total Price</span>
-                <span className="text-2xl font-bold text-rose-600">Rs. {selectedOrder.totalPrice?.toFixed(2) || '0.00'}</span>
+                <span className="text-2xl font-semibold text-zinc-900">Rs. {selectedOrder.totalPrice?.toFixed(2) || '0.00'}</span>
               </div>
 
               {/* Feedback Summary (if exists) */}
@@ -509,7 +510,7 @@ export default function AdminDashboardPage() {
                 return null;
               })()}
             </div>
-            
+
             <div className="p-6 border-t border-zinc-100 bg-zinc-50/50 rounded-b-2xl flex justify-end">
               <Button variant="custom" onClick={() => setSelectedOrder(null)} className="bg-zinc-900 text-white hover:bg-zinc-800 px-5 h-11 rounded-full font-medium transition">
                 Close

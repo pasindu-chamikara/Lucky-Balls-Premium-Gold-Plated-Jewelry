@@ -30,28 +30,28 @@ export default function FAQPage() {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#FCFBF9]">
       <Navbar />
       <main className="mx-auto max-w-3xl px-6 py-20 lg:px-8">
         <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl">Frequently Asked Questions</h1>
-          <p className="mt-4 text-lg text-zinc-600 max-w-2xl mx-auto">
+          <h1 className="text-4xl font-serif italic tracking-tight text-zinc-900 sm:text-5xl">Frequently Asked Questions</h1>
+          <p className="mt-4 text-xs font-bold uppercase tracking-widest text-zinc-500 max-w-2xl mx-auto">
             Find answers to common questions about our products, shipping, and policies.
           </p>
         </div>
         
         <div className="space-y-6">
           {faqs.map((faq, index) => (
-            <div key={index} className="bg-zinc-50 p-6 rounded-2xl border border-zinc-100">
-              <h3 className="text-lg font-semibold text-zinc-900 mb-2">{faq.question}</h3>
-              <p className="text-zinc-600 leading-relaxed">{faq.answer}</p>
+            <div key={index} className="bg-white p-6 rounded-none border border-zinc-200 hover:border-zinc-900 transition-colors">
+              <h3 className="text-lg font-serif italic text-zinc-900 mb-2">{faq.question}</h3>
+              <p className="text-zinc-500 leading-relaxed text-sm">{faq.answer}</p>
             </div>
           ))}
         </div>
         
         <div className="mt-16 text-center">
-          <p className="text-zinc-600">Still have questions?</p>
-          <a href="/contact" className="mt-2 inline-block font-semibold text-rose-600 hover:text-rose-600 underline underline-offset-4">
+          <p className="text-zinc-500 text-sm font-bold uppercase tracking-widest">Still have questions?</p>
+          <a href="/contact" className="mt-2 inline-block text-xs font-bold uppercase tracking-widest text-zinc-900 hover:text-zinc-500 underline underline-offset-4">
             Contact our support team
           </a>
         </div>

@@ -131,7 +131,7 @@ export function CustomizeModal({ product, onClose }: { product: Product, onClose
               </button>
             </div>
           </div>
-          <Button onClick={handleAddToCart} className="w-full py-6 rounded-xl bg-pink-600 text-zinc-900 font-bold text-lg shadow-[0_0_20px_rgba(219,39,119,0.3)] hover:bg-pink-500 transition-all">
+          <Button onClick={handleAddToCart} className="w-full py-6 rounded-xl bg-[#E5C98F] text-zinc-900 font-bold text-lg shadow-[0_0_20px_rgba(219,39,119,0.3)] hover:bg-[#BD9142] transition-all">
             Add to Cart - Rs. {(product.price * quantity).toFixed(2)}
           </Button>
         </div>

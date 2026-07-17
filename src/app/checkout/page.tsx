@@ -11,7 +11,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, MapPin, Truck, ChevronRight, Loader2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2, ChevronRight, Loader2 } from "lucide-react";
 import emailjs from '@emailjs/browser';
 import Image from "next/image";
 import { useAuth } from "@/context/auth-context";
@@ -162,7 +162,7 @@ export default function CheckoutPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-pink-50">
+      <div className="flex min-h-screen items-center justify-center bg-[#FCFBF9]">
         <Loader2 className="h-8 w-8 animate-spin text-rose-600" />
       </div>
     );
@@ -172,7 +172,7 @@ export default function CheckoutPage() {
 
   if (isSuccess) {
     return (
-      <div className="flex min-h-screen flex-col text-zinc-900">
+      <div className="flex min-h-screen flex-col text-zinc-900 bg-[#FCFBF9]">
         <Navbar />
         <main className="flex flex-1 items-center justify-center px-6 pt-28 pb-20 lg:px-8">
           <div className="mx-auto max-w-md rounded-2xl border border-pink-500/30 bg-white/80 p-10 text-center shadow-[0_0_30px_rgba(219,39,119,0.15)] backdrop-blur-sm">
@@ -186,7 +186,7 @@ export default function CheckoutPage() {
               Please save your order ID for future reference.
             </p>
             <Link href="/">
-              <Button className="w-full bg-pink-600 text-white hover:bg-pink-500 shadow-[0_0_15px_rgba(219,39,119,0.3)] transition-all">
+              <Button className="w-full bg-[#E5C98F] text-zinc-900 hover:bg-[#BD9142] shadow-[0_0_15px_rgba(219,39,119,0.3)] transition-all">
                 Return to Shop
               </Button>
             </Link>
@@ -199,14 +199,14 @@ export default function CheckoutPage() {
 
   if (cart.length === 0) {
     return (
-      <div className="flex min-h-screen flex-col text-zinc-900">
+      <div className="flex min-h-screen flex-col text-zinc-900 bg-[#FCFBF9]">
         <Navbar />
         <main className="flex flex-1 items-center justify-center px-6 pt-28 pb-20 lg:px-8">
           <div className="text-center">
             <h1 className="mb-4 text-3xl font-bold text-zinc-900">Your cart is empty</h1>
             <p className="mb-8 text-zinc-700">Please add items to your cart before checking out.</p>
             <Link href="/">
-              <Button className="bg-pink-600 text-white hover:bg-pink-500">Go to Shop</Button>
+              <Button className="bg-[#E5C98F] text-zinc-900 hover:bg-[#BD9142]">Go to Shop</Button>
             </Link>
           </div>
         </main>
@@ -216,7 +216,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col text-zinc-900">
+    <div className="flex min-h-screen flex-col text-zinc-900 bg-[#FCFBF9]">
       <Navbar />
       <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 pt-28 pb-12 lg:px-8">
         <h1 className="mb-8 text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl">Checkout</h1>
@@ -305,7 +305,7 @@ export default function CheckoutPage() {
               <Button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full py-6 text-lg bg-pink-600 text-white hover:bg-pink-500 shadow-[0_0_15px_rgba(219,39,119,0.3)] transition-all"
+                className="w-full py-6 text-lg bg-[#E5C98F] text-zinc-900 hover:bg-[#BD9142] shadow-[0_0_15px_rgba(219,39,119,0.3)] transition-all"
               >
                 {isSubmitting ? (
                   <>

@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Truck, Coins, Headset, ShieldCheck, RefreshCcw, ArrowUp } from "lucide-react";
+import { ArrowUp, Phone, Mail, MapPin, Clock } from "lucide-react";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/firebase/config";
 
 export function Footer() {
   const [showTopBtn, setShowTopBtn] = useState(false);
-  const [categories, setCategories] = useState<{id: string, name: string}[]>([]);
+  const [categories, setCategories] = useState<{ id: string, name: string }[]>([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,7 +20,7 @@ export function Footer() {
       }
     };
     window.addEventListener("scroll", handleScroll);
-    
+
     // Fetch categories
     const fetchCats = async () => {
       try {
@@ -32,7 +32,7 @@ export function Footer() {
       }
     };
     fetchCats();
-    
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -45,27 +45,23 @@ export function Footer() {
 
   return (
     <>
-      <section className="bg-black border-t border-zinc-800 py-6 relative overflow-hidden">
+      <section className="bg-[#FCFBF9] border-t border-[var(--border)] py-6 relative overflow-hidden">
         {/* Subtle gold glow behind features */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-pink-400/5 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-zinc-900/5 blur-[100px] pointer-events-none"></div>
 
         <div className="mx-auto max-w-7xl relative z-10">
           <div className="flex overflow-x-auto md:grid md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8 items-start px-6 lg:px-8 pb-4 md:pb-0 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {[
-              { icon: Truck, title: "Islandwide Delivery", desc: "Fast & reliable" },
-              { icon: Coins, title: "Cash On Delivery", desc: "Pay at your door" },
-              { icon: Headset, title: "24/7 SUPPORT", desc: "Always here for you" },
-              { icon: ShieldCheck, title: "100% SAFE", desc: "Secure shopping" },
-              { icon: RefreshCcw, title: "No Exchange", desc: "Quality guaranteed" },
+              { title: "Islandwide Delivery", desc: "Fast & reliable" },
+              { title: "Cash On Delivery", desc: "Pay at your door" },
+              { title: "24/7 SUPPORT", desc: "Always here for you" },
+              { title: "100% SAFE", desc: "Secure shopping" },
+              { title: "No Exchange", desc: "Quality guaranteed" },
             ].map((feature, i) => {
-              const Icon = feature.icon;
               return (
-                <div key={i} className="flex-shrink-0 w-[140px] md:w-auto flex flex-col items-center text-center group snap-center">
-                  <div className="h-12 w-12 md:h-16 md:w-16 bg-pink-400/10 text-pink-400 rounded-full flex items-center justify-center mb-3 md:mb-4 transition-transform group-hover:-translate-y-1 group-hover:scale-110 duration-300 shadow-[0_0_15px_rgba(244,114,182,0.1)] group-hover:shadow-[0_0_20px_rgba(244,114,182,0.3)]">
-                    <Icon className="w-6 h-6 md:w-8 md:h-8" strokeWidth={1.5} />
-                  </div>
-                  <h4 className="text-white font-semibold text-[13px] uppercase tracking-wider mb-2">{feature.title}</h4>
-                  <p className="text-zinc-400 text-xs">{feature.desc}</p>
+                <div key={i} className="flex-shrink-0 w-[140px] md:w-auto flex flex-col items-center text-center group snap-center pt-2">
+                  <h4 className="text-zinc-900 font-semibold text-[13px] uppercase tracking-wider mb-2 transition-transform group-hover:-translate-y-1 duration-300">{feature.title}</h4>
+                  <p className="text-zinc-500 text-xs transition-transform group-hover:-translate-y-1 duration-300">{feature.desc}</p>
                 </div>
               );
             })}
@@ -74,38 +70,36 @@ export function Footer() {
       </section>
 
       {/* Gradient Divider */}
-      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-pink-400 to-transparent opacity-50"></div>
+      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-amber-500 to-transparent opacity-30"></div>
 
-      <footer className="bg-black text-white relative overflow-hidden">
+      <footer className="bg-[#FCFBF9] text-zinc-900 relative overflow-hidden">
         {/* Background glow effects */}
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-pink-400/5 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-pink-400/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-zinc-900/5 blur-[120px] pointer-events-none"></div>
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-zinc-900/5 blur-[120px] pointer-events-none"></div>
 
-        <div className="mx-auto max-w-7xl px-6 py-8 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5 md:gap-12 lg:gap-8 text-center md:text-left">
+        <div className="mx-auto max-w-7xl px-6 py-12 lg:py-16 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-5 md:gap-12 lg:gap-8 text-center md:text-left">
             {/* Column 1: Brand */}
             <div className="space-y-4 md:space-y-6 flex flex-col items-center md:items-start">
               <div className="relative inline-flex flex-col items-center md:items-start gap-3 overflow-hidden group cursor-pointer">
-                <div className="relative h-16 w-16 md:h-20 md:w-20 shrink-0 overflow-hidden rounded-full border border-pink-400/50 shadow-[0_0_10px_rgba(244,114,182,0.3)]">
+                <div className="relative h-16 w-16 md:h-20 md:w-20 shrink-0 overflow-hidden rounded-none border border-zinc-900/50">
                   <Image src="/logo.jpeg" alt="Lucky Balls Logo" fill sizes="(max-width: 768px) 64px, 80px" className="object-cover" />
                 </div>
-                <h2 className="text-2xl font-bold font-serif text-pink-400 tracking-tight relative z-10">
+                <h2 className="text-2xl font-bold font-serif text-zinc-900 tracking-tight relative z-10 italic">
                   Lucky Balls
                 </h2>
-                {/* Animated shimmer on logo */}
-                <div className="absolute top-0 -inset-full h-full w-1/2 z-0 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 animate-[shimmer_2s_infinite]"></div>
               </div>
-              <p className="text-sm leading-relaxed font-sans text-zinc-400 max-w-xs">
+              <p className="text-sm leading-relaxed font-sans text-zinc-500 max-w-xs font-bold uppercase tracking-widest text-[10px]">
                 Premium Jewellery Crafted With Elegance. Discover stylish pieces designed to make every moment extraordinary.
               </p>
             </div>
 
             {/* Column 2: Quick Links */}
             <div className="flex flex-col items-center md:items-start">
-              <h3 className="text-sm font-bold font-sans text-white uppercase tracking-wider mb-4">
+              <h3 className="text-xs font-bold font-sans text-zinc-900 uppercase tracking-[0.2em] mb-4">
                 Quick Links
               </h3>
-              <ul className="space-y-2 text-sm font-medium text-zinc-400 font-sans flex flex-col items-center md:items-start">
+              <ul className="space-y-2 text-sm font-medium text-zinc-500 font-sans flex flex-col items-center md:items-start">
                 {[
                   { label: "Home", href: "/" },
                   { label: "About Us", href: "/about" },
@@ -115,9 +109,9 @@ export function Footer() {
                   { label: "Shipping Policy", href: "/shipping-policy" }
                 ].map((link) => (
                   <li key={link.label}>
-                    <Link href={link.href} className="relative inline-block group hover:text-pink-400 transition-colors duration-300">
+                    <Link href={link.href} className="relative inline-block group hover:text-zinc-500 transition-colors duration-300">
                       {link.label}
-                      <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-pink-400 transition-all duration-300 group-hover:w-full"></span>
+                      <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-amber-400 transition-all duration-300 group-hover:w-full"></span>
                     </Link>
                   </li>
                 ))}
@@ -126,15 +120,15 @@ export function Footer() {
 
             {/* Column 3: Categories */}
             <div className="flex flex-col items-center md:items-start">
-              <h3 className="text-sm font-bold font-sans text-white uppercase tracking-wider mb-4">
+              <h3 className="text-xs font-bold font-sans text-zinc-900 uppercase tracking-[0.2em] mb-4">
                 Categories
               </h3>
-              <ul className="space-y-2 text-sm font-medium text-zinc-400 font-sans flex flex-col items-center md:items-start">
+              <ul className="space-y-2 text-sm font-medium text-zinc-500 font-sans flex flex-col items-center md:items-start">
                 {categories.length > 0 ? categories.map((cat) => (
                   <li key={cat.id}>
-                    <Link href={`/shop?category=${cat.id}`} className="relative inline-block group hover:text-pink-400 transition-colors duration-300">
+                    <Link href={`/shop?category=${cat.id}`} className="relative inline-block group hover:text-zinc-500 transition-colors duration-300">
                       {cat.name}
-                      <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-pink-400 transition-all duration-300 group-hover:w-full"></span>
+                      <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-amber-400 transition-all duration-300 group-hover:w-full"></span>
                     </Link>
                   </li>
                 )) : (
@@ -145,32 +139,31 @@ export function Footer() {
 
             {/* Column 4: Contact Details */}
             <div className="flex flex-col items-center md:items-start">
-              <h3 className="text-sm font-bold font-sans text-white uppercase tracking-wider mb-4">
+              <h3 className="text-xs font-bold font-sans text-zinc-900 uppercase tracking-[0.2em] mb-4">
                 Contact
               </h3>
-              <ul className="space-y-2 text-sm font-medium text-zinc-400 font-sans flex flex-col items-center md:items-start">
+              <ul className="space-y-2 text-sm font-medium text-zinc-500 font-sans flex flex-col items-center md:items-start">
                 <li className="flex items-center md:items-start gap-3 text-left">
-                  <span className="text-pink-400 mt-0.5">📞</span>
-                  <a href="tel:0722801414" className="hover:text-pink-400 transition-colors duration-300">072 280 1414</a>
+                  <Phone size={16} className="text-zinc-900 mt-0.5 shrink-0" />
+                  <a href="tel:0722801414" className="hover:text-zinc-500 transition-colors duration-300">072 280 1414</a>
                 </li>
                 <li className="flex items-center md:items-start gap-3 text-left">
-                  <span className="text-pink-400 mt-0.5">✉️</span>
+                  <Mail size={16} className="text-zinc-900 mt-0.5 shrink-0" />
                   <span>info@luckyballs.lk</span>
                 </li>
                 <li className="flex items-center md:items-start gap-3 text-left">
-                  <span className="text-pink-400 mt-0.5">📍</span>
+                  <MapPin size={16} className="text-zinc-900 mt-0.5 shrink-0" />
                   <span>Colombo, Sri Lanka</span>
                 </li>
                 <li className="flex items-center md:items-start gap-3 text-left">
-                  <span className="text-pink-400 mt-0.5">🕘</span>
+                  <Clock size={16} className="text-zinc-900 mt-0.5 shrink-0" />
                   <span>Mon - Sat | 9AM - 6PM</span>
                 </li>
               </ul>
             </div>
 
-            {/* Column 5: Social Media */}
             <div className="flex flex-col items-center md:items-start">
-              <h3 className="text-sm font-bold font-sans text-white uppercase tracking-wider mb-4">
+              <h3 className="text-xs font-bold font-sans text-zinc-900 uppercase tracking-[0.2em] mb-4">
                 We're Social
               </h3>
               <div className="flex flex-wrap justify-center md:justify-start gap-4">
@@ -197,7 +190,7 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="h-10 w-10 rounded-full border border-zinc-800 bg-white/5 flex items-center justify-center text-zinc-400 transition-all duration-300 hover:border-pink-400 hover:text-pink-400 hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(244,114,182,0.3)]"
+                    className="h-10 w-10 rounded-none border border-zinc-200 bg-white/5 flex items-center justify-center text-zinc-500 transition-all duration-300 hover:border-zinc-900 hover:text-zinc-900 hover:-translate-y-1"
                   >
                     {social.icon}
                   </a>
@@ -216,12 +209,12 @@ export function Footer() {
 
 
 
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-zinc-500">
-              <Link href="/privacy" className="hover:text-pink-400 transition-colors">Privacy Policy</Link>
-              <Link href="/terms" className="hover:text-pink-400 transition-colors">Terms & Conditions</Link>
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-zinc-9000">
+              <Link href="/privacy" className="hover:text-zinc-900 transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-zinc-900 transition-colors">Terms & Conditions</Link>
             </div>
 
-            <p className="text-sm text-zinc-500 text-center md:text-right">
+            <p className="text-sm text-zinc-9000 text-center md:text-right">
               © {new Date().getFullYear()} Lucky Balls.<br className="md:hidden" /> All Rights Reserved.
             </p>
           </div>
@@ -231,7 +224,7 @@ export function Footer() {
       {/* Back to Top Button */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 p-2.5 md:p-3 rounded-full bg-pink-400 text-black shadow-[0_0_20px_rgba(244,114,182,0.4)] hover:bg-pink-500 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(244,114,182,0.6)] transition-all duration-300 ${showTopBtn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"
+        className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 p-2.5 md:p-3 rounded-none bg-zinc-900 text-white shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:bg-zinc-800 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(245,158,11,0.6)] transition-all duration-300 ${showTopBtn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"
           }`}
         aria-label="Back to top"
       >
