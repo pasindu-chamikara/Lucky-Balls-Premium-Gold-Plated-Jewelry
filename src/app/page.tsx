@@ -387,7 +387,7 @@ export default function Home() {
                     />
                     <div className="absolute inset-0 z-30 flex items-end justify-center pb-12 pointer-events-none opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-500">
                       <p
-                        className="text-zinc-900 text-6xl"
+                        className="text-zinc-900 text-4xl sm:text-6xl"
                         style={{ fontFamily: "'Palace Script MT', cursive" }}
                       >
                         {video.tag}

@@ -4,6 +4,7 @@ import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useRef } from "react";
 
@@ -61,23 +62,23 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-              className="text-6xl sm:text-7xl lg:text-[9rem] font-serif italic tracking-tighter leading-[1] sm:leading-[0.85] text-zinc-900 drop-shadow-sm"
+              className="text-5xl sm:text-7xl lg:text-[9rem] font-serif italic tracking-tighter leading-[1] sm:leading-[0.85] text-zinc-900 drop-shadow-sm"
             >
-              Quiet <br className="hidden sm:block" />
+              Quiet <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#BD9142] to-[#E5C98F]">Elegance</span>
             </motion.h1>
           </div>
         </section>
 
         {/* 2. Editorial Narrative Section */}
-        <section className="w-full bg-[#FCFBF9] py-16 sm:py-24 lg:py-40">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-center">
+        <section className="w-full bg-[#FCFBF9] py-12 sm:py-24 lg:py-40">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col lg:flex-row gap-10 lg:gap-24 items-center">
               <motion.div
                 {...fadeIn}
-                className="w-full lg:w-5/12"
+                className="w-full lg:w-5/12 text-center lg:text-left"
               >
-                <h2 className="text-3xl sm:text-5xl font-serif italic text-zinc-900 leading-tight mb-8">
+                <h2 className="text-4xl sm:text-5xl font-serif italic text-zinc-900 leading-tight mb-6 sm:mb-8">
                   Born from a passion <br /> for beautiful things.
                 </h2>
               </motion.div>
@@ -106,6 +107,31 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* 3. Image Gallery */}
+        <section className="w-full bg-[#FCFBF9] py-12 sm:py-24">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-8">
+              {[1, 2, 3].map((num, idx) => (
+                <motion.div
+                  key={num}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 1, delay: idx * 0.2, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative aspect-[4/5] w-full mx-auto overflow-hidden rounded-none shadow-lg sm:shadow-xl"
+                >
+                  <Image
+                    src={`/images/ab${num}.jpg`}
+                    alt={`Lucky Balls Craftsmanship ${num}`}
+                    fill
+                    className="object-cover transition-transform duration-700 hover:scale-105"
+                    sizes="(max-width: 768px) 33vw, 33vw"
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* 4. The Standard (Values) - Staggered List with Video */}
         <section className="w-full py-16 sm:py-32 bg-white border-t border-zinc-200">
@@ -114,23 +140,23 @@ export default function AboutPage() {
               
               {/* Left Side: Content */}
               <div>
-                <motion.div {...fadeIn} className="mb-16">
+                <motion.div {...fadeIn} className="mb-12 sm:mb-16 text-center sm:text-left">
                   <span className="text-[#BD9142] text-xs font-bold uppercase tracking-[0.3em] mb-4 block">Our Commitment</span>
                   <h2 className="text-4xl sm:text-6xl font-serif italic text-zinc-900">The Standard</h2>
                 </motion.div>
 
-                <div className="space-y-12">
+                <div className="space-y-8 sm:space-y-12">
                   <motion.div 
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 1 }}
-                    className="group relative flex flex-col sm:flex-row items-start text-left gap-6 p-6 rounded-2xl hover:bg-zinc-50 transition-colors border border-transparent hover:border-zinc-200"
+                    className="group relative flex flex-row items-start text-left gap-4 sm:gap-6 p-4 sm:p-6 rounded-2xl hover:bg-zinc-50 transition-colors border border-transparent hover:border-zinc-200"
                   >
-                    <div className="text-[#BD9142] text-5xl font-serif italic opacity-50 group-hover:opacity-100 transition-opacity">01</div>
+                    <div className="text-[#BD9142] text-3xl sm:text-5xl font-serif italic opacity-50 group-hover:opacity-100 transition-opacity mt-1 sm:mt-0">01</div>
                     <div>
-                      <h3 className="text-2xl sm:text-3xl font-serif italic text-zinc-900 mb-3">Craftsmanship</h3>
-                      <p className="text-base text-zinc-600 font-light leading-relaxed">
+                      <h3 className="text-xl sm:text-3xl font-serif italic text-zinc-900 mb-2 sm:mb-3">Craftsmanship</h3>
+                      <p className="text-sm sm:text-base text-zinc-600 font-light leading-relaxed">
                         Every piece is meticulously crafted using durable materials, including premium 18K gold plating, ensuring a finish that endures beautifully over time.
                       </p>
                     </div>
@@ -141,12 +167,12 @@ export default function AboutPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 1, delay: 0.1 }}
-                    className="group relative flex flex-col sm:flex-row items-start text-left gap-6 p-6 rounded-2xl hover:bg-zinc-50 transition-colors border border-transparent hover:border-zinc-200"
+                    className="group relative flex flex-row items-start text-left gap-4 sm:gap-6 p-4 sm:p-6 rounded-2xl hover:bg-zinc-50 transition-colors border border-transparent hover:border-zinc-200"
                   >
-                    <div className="text-[#BD9142] text-5xl font-serif italic opacity-50 group-hover:opacity-100 transition-opacity">02</div>
+                    <div className="text-[#BD9142] text-3xl sm:text-5xl font-serif italic opacity-50 group-hover:opacity-100 transition-opacity mt-1 sm:mt-0">02</div>
                     <div>
-                      <h3 className="text-2xl sm:text-3xl font-serif italic text-zinc-900 mb-3">Timeless Design</h3>
-                      <p className="text-base text-zinc-600 font-light leading-relaxed">
+                      <h3 className="text-xl sm:text-3xl font-serif italic text-zinc-900 mb-2 sm:mb-3">Timeless Design</h3>
+                      <p className="text-sm sm:text-base text-zinc-600 font-light leading-relaxed">
                         We balance timeless elegance with modern aesthetics, creating collections that feel both fresh and eternally relevant to your personal style.
                       </p>
                     </div>
@@ -157,12 +183,12 @@ export default function AboutPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 1, delay: 0.2 }}
-                    className="group relative flex flex-col sm:flex-row items-start text-left gap-6 p-6 rounded-2xl hover:bg-zinc-50 transition-colors border border-transparent hover:border-zinc-200"
+                    className="group relative flex flex-row items-start text-left gap-4 sm:gap-6 p-4 sm:p-6 rounded-2xl hover:bg-zinc-50 transition-colors border border-transparent hover:border-zinc-200"
                   >
-                    <div className="text-[#BD9142] text-5xl font-serif italic opacity-50 group-hover:opacity-100 transition-opacity">03</div>
+                    <div className="text-[#BD9142] text-3xl sm:text-5xl font-serif italic opacity-50 group-hover:opacity-100 transition-opacity mt-1 sm:mt-0">03</div>
                     <div>
-                      <h3 className="text-2xl sm:text-3xl font-serif italic text-zinc-900 mb-3">Dedicated Service</h3>
-                      <p className="text-base text-zinc-600 font-light leading-relaxed">
+                      <h3 className="text-xl sm:text-3xl font-serif italic text-zinc-900 mb-2 sm:mb-3">Dedicated Service</h3>
+                      <p className="text-sm sm:text-base text-zinc-600 font-light leading-relaxed">
                         From a seamless online experience to reliable, secure delivery, your satisfaction is the absolute cornerstone of our brand.
                       </p>
                     </div>
@@ -176,7 +202,7 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-                className="relative w-full aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] overflow-hidden shadow-2xl"
+                className="relative w-3/4 max-w-[280px] sm:max-w-[360px] mx-auto lg:max-w-none lg:w-full lg:mx-0 aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] overflow-hidden shadow-2xl rounded-none"
               >
                 <video
                   src="/videos/about2.mp4"
@@ -195,18 +221,18 @@ export default function AboutPage() {
         </section>
 
         {/* 5. Majestic CTA */}
-        <section className="relative w-full bg-[#FCFBF9] py-32 overflow-hidden border-t border-zinc-200">
+        <section className="relative w-full bg-[#FCFBF9] py-20 sm:py-32 overflow-hidden border-t border-zinc-200">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#BD9142]/5 via-[#FCFBF9] to-[#FCFBF9]" />
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1.5, ease: "easeOut" }}
-            className="relative z-10 max-w-2xl mx-auto text-center px-6"
+            className="relative z-10 max-w-2xl mx-auto text-center px-4 sm:px-6"
           >
-            <h2 className="text-4xl sm:text-6xl font-serif italic text-zinc-900 mb-10">Discover the Collection</h2>
+            <h2 className="text-3xl sm:text-6xl font-serif italic text-zinc-900 mb-8 sm:mb-10">Discover the Collection</h2>
             <Link href="/shop">
-              <Button size="lg" className="bg-[#E5C98F] text-zinc-900 hover:bg-[#A37B35] px-12 h-14 text-xs font-bold uppercase tracking-[0.2em] transition-all rounded-none">
+              <Button size="lg" className="bg-[#E5C98F] text-zinc-900 hover:bg-[#A37B35] px-10 sm:px-12 h-12 sm:h-14 text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] transition-all rounded-none w-full sm:w-auto">
                 Enter Boutique
               </Button>
             </Link>
