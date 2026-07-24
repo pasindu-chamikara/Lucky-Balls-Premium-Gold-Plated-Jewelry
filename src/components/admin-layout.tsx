@@ -128,13 +128,13 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#FCFBF9] font-sans">
+    <div className="flex h-screen overflow-hidden bg-[#FCFBF9] font-sans">
       {/* Sidebar (Desktop) */}
       <aside className="hidden w-64 flex-col bg-zinc-950 text-zinc-400 md:flex z-20 shadow-2xl">
         <div className="p-6">
-          <Link href="/" className="text-2xl font-serif italic text-white tracking-tight">
+          <p className="text-2xl font-serif italic text-white tracking-tight">
             Lucky Balls
-          </Link>
+          </p>
           <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.24em] text-zinc-500">Admin Workspace</p>
         </div>
 

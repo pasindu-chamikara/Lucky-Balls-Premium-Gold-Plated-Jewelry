@@ -38,9 +38,9 @@ export default function CartPage() {
   return (
     <div className="flex min-h-screen flex-col text-zinc-900 bg-[#FCFBF9]">
       <Navbar />
-      <main className="flex-1 px-6 pt-28 pb-12 lg:px-8">
+      <main className="flex-1 px-4 md:px-6 pt-24 md:pt-28 pb-12 lg:px-8">
         <div className="mx-auto max-w-4xl">
-          <h1 className="mb-8 text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl">
+          <h1 className="mb-6 md:mb-8 text-3xl md:text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl">
             Your <span className="bg-gradient-to-r from-pink-400 to-pink-600 bg-clip-text text-transparent">Cart</span>
           </h1>
           
@@ -61,8 +61,8 @@ export default function CartPage() {
             <div className="grid gap-8 lg:grid-cols-[1fr_350px]">
               <div className="space-y-4">
                 {cart.map((item) => (
-                  <div key={item.id} className="flex gap-4 rounded-2xl border border-zinc-200 bg-white/50 p-4 shadow-md backdrop-blur-sm">
-                    <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50">
+                  <div key={item.id} className="flex flex-col sm:flex-row gap-4 rounded-2xl border border-zinc-200 bg-white/50 p-4 shadow-md backdrop-blur-sm">
+                    <div className="relative h-20 w-20 sm:h-24 sm:w-24 shrink-0 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 mx-auto sm:mx-0">
                       <Image 
                         src={item.image || "/images/gift-basket.svg"} 
                         alt={item.name} 
@@ -72,16 +72,16 @@ export default function CartPage() {
                       />
                     </div>
                     <div className="flex flex-1 flex-col justify-between">
-                      <div className="flex items-start justify-between">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-2 sm:gap-0 text-center sm:text-left">
                         <div>
-                          <h3 className="text-lg font-bold text-zinc-900">{item.name}</h3>
+                          <h3 className="text-base sm:text-lg font-bold text-zinc-900">{item.name}</h3>
                           {item.choices && Object.entries(item.choices).map(([key, value]) => (
-                            <p key={key} className="text-sm text-zinc-700">
+                            <p key={key} className="text-xs sm:text-sm text-zinc-700">
                               <span className="capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}:</span> {value}
                             </p>
                           ))}
                         </div>
-                        <p className="text-lg font-bold text-rose-600">Rs. {(item.price * item.quantity).toFixed(2)}</p>
+                        <p className="text-base sm:text-lg font-bold text-rose-600 self-center sm:self-start">Rs. {(item.price * item.quantity).toFixed(2)}</p>
                       </div>
                       <div className="flex items-center justify-between mt-4">
                         <span className="text-sm font-medium text-zinc-700">Qty: {item.quantity}</span>

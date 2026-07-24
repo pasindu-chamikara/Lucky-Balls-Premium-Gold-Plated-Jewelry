@@ -174,7 +174,7 @@ export default function CheckoutPage() {
     return (
       <div className="flex min-h-screen flex-col text-zinc-900 bg-[#FCFBF9]">
         <Navbar />
-        <main className="flex flex-1 items-center justify-center px-6 pt-28 pb-20 lg:px-8">
+        <main className="flex flex-1 items-center justify-center px-4 md:px-6 pt-24 md:pt-28 pb-20 lg:px-8">
           <div className="mx-auto max-w-md rounded-2xl border border-pink-500/30 bg-white/80 p-10 text-center shadow-[0_0_30px_rgba(219,39,119,0.15)] backdrop-blur-sm">
             <CheckCircle2 className="mx-auto mb-6 h-20 w-20 text-rose-600" />
             <h1 className="mb-4 text-3xl font-bold text-zinc-900">Order Confirmed!</h1>
@@ -201,7 +201,7 @@ export default function CheckoutPage() {
     return (
       <div className="flex min-h-screen flex-col text-zinc-900 bg-[#FCFBF9]">
         <Navbar />
-        <main className="flex flex-1 items-center justify-center px-6 pt-28 pb-20 lg:px-8">
+        <main className="flex flex-1 items-center justify-center px-4 md:px-6 pt-24 md:pt-28 pb-20 lg:px-8">
           <div className="text-center">
             <h1 className="mb-4 text-3xl font-bold text-zinc-900">Your cart is empty</h1>
             <p className="mb-8 text-zinc-700">Please add items to your cart before checking out.</p>
@@ -218,8 +218,8 @@ export default function CheckoutPage() {
   return (
     <div className="flex min-h-screen flex-col text-zinc-900 bg-[#FCFBF9]">
       <Navbar />
-      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 pt-28 pb-12 lg:px-8">
-        <h1 className="mb-8 text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl">Checkout</h1>
+      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 md:px-6 pt-24 md:pt-28 pb-12 lg:px-8">
+        <h1 className="mb-6 md:mb-8 text-3xl md:text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl">Checkout</h1>
         
         <div className="grid gap-12 lg:grid-cols-[1fr_400px]">
           {/* Checkout Form */}

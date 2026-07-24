@@ -137,7 +137,7 @@ export default function AboutPage() {
         <section className="w-full py-16 sm:py-32 bg-white border-t border-zinc-200">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-              
+
               {/* Left Side: Content */}
               <div>
                 <motion.div {...fadeIn} className="mb-12 sm:mb-16 text-center sm:text-left">
@@ -146,7 +146,7 @@ export default function AboutPage() {
                 </motion.div>
 
                 <div className="space-y-8 sm:space-y-12">
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
@@ -162,7 +162,7 @@ export default function AboutPage() {
                     </div>
                   </motion.div>
 
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
@@ -178,7 +178,7 @@ export default function AboutPage() {
                     </div>
                   </motion.div>
 
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
@@ -197,7 +197,7 @@ export default function AboutPage() {
               </div>
 
               {/* Right Side: Video */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}

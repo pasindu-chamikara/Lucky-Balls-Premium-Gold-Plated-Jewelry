@@ -122,12 +122,12 @@ function ShopContent() {
     <div className="min-h-screen text-zinc-900 bg-[#FCFBF9] font-sans selection:bg-[var(--accent)]/30 flex flex-col">
       <Navbar />
       
-      <main className="flex-1 mx-auto max-w-7xl px-6 pt-28 pb-16 lg:px-8 w-full">
-        <div className="mb-10 text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl drop-shadow-sm mb-4">
+      <main className="flex-1 mx-auto max-w-7xl px-4 md:px-6 pt-24 md:pt-28 pb-16 lg:px-8 w-full">
+        <div className="mb-8 md:mb-10 text-center">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl drop-shadow-sm mb-3 md:mb-4">
             The Shop
           </h1>
-          <p className="text-lg text-zinc-600 max-w-2xl mx-auto mb-8">
+          <p className="text-base md:text-lg text-zinc-600 max-w-2xl mx-auto mb-6 md:mb-8">
             Browse our entire collection of handpicked, 18K gold plated pieces designed to bring everyday luxury into your life.
           </p>
           
@@ -144,7 +144,7 @@ function ShopContent() {
             />
           </div>
 
-          <div className="flex flex-nowrap sm:flex-wrap items-center justify-start sm:justify-center gap-2 sm:gap-4 w-full max-w-3xl mx-auto overflow-x-auto pb-4 px-2 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <div className="flex flex-nowrap sm:flex-wrap items-center justify-start sm:justify-center gap-2 sm:gap-4 w-full max-w-3xl mx-auto overflow-x-auto pb-4 px-4 mx-[-1rem] md:mx-0 md:px-0 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             <div className="flex shrink-0 items-center gap-2 text-sm text-zinc-600 bg-white/50 border border-zinc-200 rounded-lg px-3 py-2 backdrop-blur-sm shadow-sm snap-start">
               <Filter size={16} /> Filters:
             </div>

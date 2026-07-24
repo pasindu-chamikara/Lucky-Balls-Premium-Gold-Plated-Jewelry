@@ -72,12 +72,12 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FCFBF9] font-sans flex flex-col">
+      <div className="min-h-screen bg-[#FAF8F5] font-sans flex flex-col">
         <Navbar />
         <main className="flex-1 flex items-center justify-center py-20">
           <div className="flex flex-col items-center gap-4">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-pink-500 border-t-transparent"></div>
-            <p className="text-zinc-500 font-medium tracking-wide">Loading product details...</p>
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#1F1F1F] border-t-transparent"></div>
+            <p className="text-[#1F1F1F]/60 text-xs uppercase tracking-widest">Loading...</p>
           </div>
         </main>
         <Footer />
@@ -87,13 +87,13 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-[#FCFBF9] font-sans flex flex-col">
+      <div className="min-h-screen bg-[#FAF8F5] font-sans flex flex-col">
         <Navbar />
         <main className="flex-1 flex items-center justify-center py-20">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-zinc-900 mb-4">Product Not Found</h2>
-            <p className="text-zinc-600 mb-8">The product you're looking for doesn't exist or has been removed.</p>
-            <Button onClick={() => router.push("/shop")} className="bg-[#E5C98F] hover:bg-[#BD9142] text-zinc-900">
+            <h2 className="text-3xl font-serif text-[#1F1F1F] mb-4">Product Not Found</h2>
+            <p className="text-[#1F1F1F]/60 mb-8 font-light">The product you're looking for doesn't exist.</p>
+            <Button onClick={() => router.push("/shop")} className="rounded-none bg-transparent border border-[#1F1F1F] text-[#1F1F1F] hover:bg-[#1F1F1F] hover:text-[#FAF8F5] uppercase tracking-widest text-[10px] h-12 px-8">
               Back to Shop
             </Button>
           </div>
@@ -106,91 +106,88 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
   const isOutOfStock = product.isOutOfStock || (product.stockQuantity !== undefined && product.stockQuantity <= 0);
 
   return (
-    <div className="min-h-screen bg-[#FCFBF9] font-sans flex flex-col">
+    <div className="min-h-screen bg-[#FAF8F5] font-sans flex flex-col">
       <Navbar />
       
-      <main className="flex-1 mx-auto max-w-7xl px-6 py-8 lg:px-8 lg:py-12 w-full">
+      <main className="flex-1 mx-auto max-w-[1100px] px-4 md:px-6 pt-20 md:pt-32 pb-4 lg:px-12 lg:pb-6 w-full">
         <button 
           onClick={() => router.back()}
-          className="flex items-center gap-2 text-zinc-500 hover:text-[#BD9142] mb-6 transition-colors text-sm font-medium"
+          className="flex items-center gap-2 text-[#1F1F1F]/60 hover:text-[#1F1F1F] mb-4 transition-colors text-[10px] uppercase tracking-widest font-medium"
         >
-          <ArrowLeft size={16} /> Back
+          <ArrowLeft size={14} /> Back
         </button>
 
-        <div className="grid grid-cols-1 md:grid-cols-[0.8fr_1.2fr] lg:grid-cols-[1fr_1.5fr] gap-8 lg:gap-12 mb-12">
-          <div className="relative aspect-square md:aspect-auto md:h-[320px] lg:h-[450px] rounded-3xl overflow-hidden shadow-xl shadow-pink-500/5 border border-zinc-200/60 max-w-[260px] sm:max-w-sm md:max-w-md mx-auto md:mx-0 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 mb-8 items-start justify-center">
+          <div className="relative aspect-square w-full max-w-[400px] mx-auto md:ml-auto md:mr-0">
             <Image
               src={product.image || "/images/gift-basket.svg"}
               alt={product.name}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className={`object-contain scale-[0.85] ${isOutOfStock ? "grayscale" : ""}`}
+              className={`object-contain transition-transform duration-700 hover:scale-105 ${isOutOfStock ? "grayscale opacity-70" : ""}`}
               priority
             />
             {product.isFeaturedThisWeek && !isOutOfStock && (
-              <span className="absolute top-6 left-6 z-10 rounded-full bg-rose-500 text-zinc-900 px-4 py-1.5 text-sm font-bold shadow-md">
+              <span className="absolute top-6 left-6 z-10 bg-[#1F1F1F] text-white px-3 py-1 text-[9px] uppercase tracking-widest">
                 Featured
               </span>
             )}
             {isOutOfStock && (
-              <span className="absolute top-6 left-6 z-10 rounded-full bg-zinc-800 text-zinc-900 px-4 py-1.5 text-sm font-bold shadow-md">
+              <span className="absolute top-6 left-6 z-10 bg-[#EDE5DF] text-[#1F1F1F] px-3 py-1 text-[9px] uppercase tracking-widest">
                 Out of Stock
               </span>
             )}
           </div>
 
           {/* Product Info */}
-          <div className="flex flex-col py-4 md:py-8">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 tracking-tight mb-4">
+          <div className="flex flex-col py-2 md:py-6 lg:py-8 max-w-md mx-auto md:mx-0 w-full">
+            <p className="text-[10px] uppercase tracking-widest text-[#1F1F1F]/50 mb-3">By Lucky Balls</p>
+            <h1 className="text-2xl md:text-3xl font-serif text-[#1F1F1F] mb-3 leading-tight">
               {product.name}
             </h1>
             
-            <p className="text-2xl sm:text-3xl font-bold text-rose-600 mb-6">
-              Rs. {Math.round(product.price).toLocaleString('en-US')}
+            <p className="text-base font-medium text-[#1F1F1F] mb-6">
+              LKR {Math.round(product.price).toLocaleString('en-US')}
             </p>
             
-            <div className="prose prose-zinc mb-8 max-w-none text-zinc-600">
-              <p className="leading-relaxed whitespace-pre-wrap">{product.description}</p>
+            <div className="mb-6">
+              <p className="font-serif italic text-base leading-relaxed text-[#1F1F1F]/80 whitespace-pre-wrap">{product.description}</p>
             </div>
             
             {!isOutOfStock ? (
               <div className="mt-auto space-y-6">
-                <div>
-                  <h3 className="text-sm font-semibold text-zinc-900 mb-3 uppercase tracking-wider">Quantity</h3>
-                  <div className="flex items-center border border-zinc-200 rounded-xl bg-white w-fit h-12 shadow-sm">
+                <div className="flex flex-row md:flex-row gap-3 md:gap-4 w-full">
+                  <div className="flex items-center border border-[#1F1F1F] bg-transparent h-12 md:h-10 w-32 md:w-28 shrink-0">
                     <button
                       onClick={() => quantity > 1 && setQuantity(q => q - 1)}
-                      className="px-4 h-full text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 transition-colors disabled:opacity-50 rounded-l-xl flex items-center justify-center"
+                      className="px-4 h-full text-[#1F1F1F] hover:bg-[#1F1F1F]/5 transition-colors disabled:opacity-30 flex items-center justify-center"
                       disabled={quantity <= 1}
                     >
-                      <Minus size={16} />
+                      <Minus size={14} />
                     </button>
-                    <span className="w-12 text-center font-semibold text-zinc-900">{quantity}</span>
+                    <span className="flex-1 text-center font-medium text-[#1F1F1F] text-sm md:text-base">{quantity}</span>
                     <button
                       onClick={() => setQuantity(q => q + 1)}
-                      className="px-4 h-full text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 transition-colors rounded-r-xl flex items-center justify-center"
+                      className="px-4 h-full text-[#1F1F1F] hover:bg-[#1F1F1F]/5 transition-colors flex items-center justify-center"
                     >
-                      <Plus size={16} />
+                      <Plus size={14} />
                     </button>
                   </div>
+                  
+                  <Button 
+                    onClick={handleAddToCart}
+                    disabled={addingToCart}
+                    className="flex-1 h-12 md:h-10 rounded-none bg-[#1F1F1F] text-white hover:bg-[#D6A77A] uppercase tracking-widest text-[10px] font-medium disabled:opacity-70 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {addingToCart ? "Added!" : "Add to Cart"}
+                  </Button>
                 </div>
-                
-                <Button 
-                  size="lg" 
-                  variant="rose"
-                  onClick={handleAddToCart}
-                  disabled={addingToCart}
-                  className="w-full sm:w-auto min-w-[200px] font-bold disabled:opacity-70 disabled:cursor-not-allowed transition-all hover:-translate-y-0.5 gap-2"
-                >
-                  <ShoppingCart size={20} />
-                  {addingToCart ? "Added!" : "Add to Cart"}
-                </Button>
               </div>
             ) : (
               <div className="mt-auto">
-                <div className="bg-zinc-100 border border-zinc-200 rounded-xl p-6 text-center">
-                  <p className="font-semibold text-zinc-700 mb-1">Currently Unavailable</p>
-                  <p className="text-sm text-zinc-500">We're working hard to restock this beautiful piece.</p>
+                <div className="border border-[#1F1F1F]/10 bg-white p-6 text-center">
+                  <p className="font-medium text-[#1F1F1F] mb-2 text-sm uppercase tracking-widest">Out of Stock</p>
+                  <p className="text-xs text-[#1F1F1F]/60 font-light">We're working hard to restock this beautiful piece.</p>
                 </div>
               </div>
             )}
@@ -199,8 +196,8 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
-          <div className="pt-10 border-t border-zinc-200">
-            <h2 className="text-2xl font-bold text-zinc-900 mb-6 tracking-tight">You might also like</h2>
+          <div className="pt-12 border-t border-[#1F1F1F]/10">
+            <h2 className="text-2xl md:text-3xl font-serif text-[#1F1F1F] mb-6">You might also like</h2>
             <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
               {relatedProducts.map((p, index) => (
                 <ProductCard 

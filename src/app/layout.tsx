@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Poppins, Cormorant_Garamond, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
@@ -26,6 +26,13 @@ export const metadata: Metadata = {
   keywords: ["Lucky Balls Sri Lanka", "Lucky Balls Products Sri Lanka", "Buy Lucky Balls Online", "Lucky Balls Shop", "COD Sri Lanka", "Online Shopping Sri Lanka"],
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 import { CartProvider } from "@/context/cart-context";
 import { AuthProvider } from "@/context/auth-context";
 export default function RootLayout({
@@ -36,12 +43,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${cormorantGaramond.variable} ${playfairDisplay.variable} h-full antialiased`}
+      className={`${poppins.variable} ${cormorantGaramond.variable} ${playfairDisplay.variable} h-full antialiased overflow-x-hidden`}
       data-scroll-behavior="smooth"
     >
       <head>
       </head>
-      <body className="min-h-full flex flex-col bg-[#fdf7f3] text-zinc-900 font-sans antialiased selection:bg-[#f2d8d0] selection:text-zinc-900">
+      <body className="min-h-full flex flex-col bg-[#fdf7f3] text-zinc-900 font-sans antialiased selection:bg-[#f2d8d0] selection:text-zinc-900 overflow-x-hidden">
         {/* Marketing Pixels */}
         {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
           <script dangerouslySetInnerHTML={{

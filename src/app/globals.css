@@ -2,15 +2,16 @@
 @plugin "tailwindcss-animate";
 
 :root {
-  --background: #fdf5f7;
-  --foreground: #2a1b1e;
-  --surface: #ffffff;
-  --surface-2: #faebee;
-  --border: #f2d5da;
-  --accent: #BD9142;
-  --accent-deep: #977435;
-  --gold: #BD9142;
-  --gold-deep: #977435;
+  --background: #FAF8F5; /* Ivory White */
+  --foreground: #1F1F1F; /* Matte Black */
+  --surface: #FFFFFF;
+  --surface-2: #EDE5DF; /* Nude Beige */
+  --border: #EDE5DF; 
+  --accent: #D6A77A; /* Rose Gold */
+  --accent-deep: #B58455;
+  --gold: #D6A77A;
+  --gold-deep: #B58455;
+  --blush: #F3E8E6; /* Soft Blush Pink */
 }
 
 @theme inline {

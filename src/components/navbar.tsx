@@ -12,6 +12,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/auth";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/firebase/config";
+import { motion, AnimatePresence } from "framer-motion";
 
 const standardLinks = [
   { href: "/", label: "Home" },
@@ -32,6 +33,15 @@ export function Navbar() {
   const [categories, setCategories] = useState<{ id: string, name: string }[]>([]);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [mobileShopOpen, setMobileShopOpen] = useState(false);
+
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isMobileMenuOpen]);
 
   useEffect(() => {
     // Fetch categories for Mega Menu
@@ -235,8 +245,15 @@ export function Navbar() {
       </div>
 
       {/* Mobile Menu Dropdown */}
+      <AnimatePresence>
       {isMobileMenuOpen && (
-        <div className="md:hidden fixed top-[69px] left-0 right-0 bottom-0 bg-white/95 backdrop-blur-2xl animate-in slide-in-from-top-2 shadow-2xl overflow-y-auto pb-24 pt-4 pointer-events-auto z-40 border-t border-zinc-100">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="md:hidden fixed top-[69px] left-0 right-0 bottom-0 bg-white/95 backdrop-blur-2xl shadow-2xl overflow-y-auto pb-24 pt-4 pointer-events-auto z-40 border-t border-zinc-100"
+        >
           <nav className="flex flex-col px-6 sm:px-8 gap-3">
 
             <Link
@@ -300,8 +317,9 @@ export function Navbar() {
               </div>
             )}
           </nav>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </>
   );
 }

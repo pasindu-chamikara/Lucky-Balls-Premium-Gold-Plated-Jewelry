@@ -3,140 +3,61 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
-import { SectionTitle } from "@/components/section-title";
-import { CustomizeModal } from "@/components/customize-modal";
 import { ProductCard } from "@/components/product-card";
-import { Button } from "@/components/ui/button";
-import { collection, getDocs, query, where, limit, orderBy } from "firebase/firestore";
+import { Footer } from "@/components/footer";
+import { CustomizeModal } from "@/components/customize-modal";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/firebase/config";
-import { useCart } from "@/context/cart-context";
+import { Star, ShieldCheck, Gem, Gift, Heart, Eye, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type Product = {
   id: string;
-  categoryId: string;
-  subcategoryId: string;
   name: string;
   price: number;
-  description: string;
-  isFeaturedThisWeek: boolean;
-  isPinnedForHome: boolean;
-  isCustomizable: boolean;
-  customizationOptions?: any[];
   image?: string;
-  images?: string[];
-  isOutOfStock?: boolean;
-  stockQuantity?: number;
+  isPinnedForHome: boolean;
+  isFeaturedThisWeek?: boolean;
 };
 
 type Category = {
   id: string;
   name: string;
-  slug: string;
   image?: string;
 };
 
-const highlights = [
-  {
-    title: "Fast local delivery",
-    description: "Reliable dispatch and same-day processing for most orders.",
-  },
-  {
-    title: "Secure checkout",
-    description: "Flexible cash-on-delivery with a smooth, modern order flow.",
-  },
-  {
-    title: "Carefully curated",
-    description: "Every piece is crafted for a memorable and elegant experience.",
-  },
+const reviewsList = [
+  { name: "Sarah L.", text: "Absolutely stunning pieces. The packaging itself felt so premium. Will definitely buy again!" },
+  { name: "Nethmi D.", text: "I wear my necklace every day and it still hasn't lost its shine. Truly high-quality." },
+  { name: "Amaya P.", text: "The perfect gift. The customer service was exceptionally helpful and polite." },
+  { name: "Jessica M.", text: "I'm in love with the modern designs. I always get compliments when I wear my new bracelet." },
+  { name: "Dilrukshi K.", text: "Fast shipping and the quality is outstanding. Highly recommend to anyone looking for elegant jewelry." }
 ];
-
-const REVIEW_COL_1 = [
-  ["“Every piece I ordered looked even more beautiful in person. The quality exceeded my expectations.”", "— Chathu"],
-  ["“The packaging was absolutely gorgeous. Opening my order felt like receiving a luxury gift.”", "— Sandu"],
-  ["“I've worn my bracelet almost every day and it still looks brand new. I'm so happy with my purchase.”", "— Tharu"],
-  ["“The ordering process was smooth and the customer service was incredibly friendly.”", "— Nimasha"],
-  ["“I received so many compliments the very first time I wore it. Definitely coming back for more!”", "— Nethu"]
-];
-
-const REVIEW_COL_2 = [
-  ["“Beautiful designs, amazing quality, and such elegant packaging. Everything felt premium.”", "— Kavindi"],
-  ["“I bought this as a birthday gift and my sister absolutely loved it. Highly recommend!”", "— Dinushi"],
-  ["“The jewelry shines beautifully and feels much more expensive than its price.”", "— Hashini"],
-  ["“Lucky Balls has become my favorite place to shop for accessories. Every collection is stunning.”", "— Ishara"],
-  ["“Fast delivery, secure packaging, and the product was exactly as shown. I'm impressed!”", "— Sachini"]
-];
-
-const REVIEW_COL_3 = [
-  ["“The attention to detail is incredible. You can truly see the care put into every order.”", "— Upeksha"],
-  ["“Simple, elegant, and timeless. These pieces match every outfit I wear.”", "— Ama"],
-  ["“Shopping with Lucky Balls was such a lovely experience from start to finish.”", "— Dilki"],
-  ["“The quality is outstanding and the pink-themed packaging is absolutely adorable.”", "— Shenali"],
-  ["“I've already recommended Lucky Balls to all my friends. They loved my jewelry too!”", "— Piumi"]
-];
-
-function ReviewBox({ messages, delay }: { messages: string[][], delay: number }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      const interval = setInterval(() => {
-        setCurrentIndex(prev => (prev + 1) % messages.length);
-      }, 4000);
-      return () => clearInterval(interval);
-    }, delay);
-    return () => clearTimeout(timeout);
-  }, [messages.length, delay]);
-
-  return (
-    <div className="bg-white p-6 md:p-8 h-[240px] md:h-[320px] flex flex-col relative overflow-hidden group border border-zinc-200 transition-all duration-300 hover:border-zinc-900">
-      <div className="relative flex-1">
-        {messages.map(([quote, name], idx) => {
-          let transformClass = "opacity-0 translate-y-4";
-          if (idx === currentIndex) {
-            transformClass = "opacity-100 translate-y-0";
-          } else if (idx === (currentIndex - 1 + messages.length) % messages.length) {
-            transformClass = "opacity-0 -translate-y-4";
-          }
-
-          return (
-            <div
-              key={idx}
-              className={`absolute inset-0 transition-all duration-1000 ease-in-out flex flex-col justify-center ${transformClass}`}
-            >
-              <span className="text-6xl font-serif text-zinc-900/10 absolute top-4 left-4">"</span>
-              <p className="text-lg md:text-xl leading-relaxed text-zinc-900 font-serif italic tracking-wide relative z-10 px-4 mt-6">{quote}</p>
-              <p className="mt-6 md:mt-8 font-bold text-zinc-500 text-[10px] tracking-widest uppercase px-4">{name}</p>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
 
 export default function Home() {
-  const { addToCart } = useCart();
+  const [currentReview, setCurrentReview] = useState(0);
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [featuredItem, setFeaturedItem] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [featuredProduct, setFeaturedProduct] = useState<Product | null>(null);
+  const categoriesRef = useRef<HTMLDivElement>(null);
 
   const scrollCategories = (direction: 'left' | 'right') => {
-    if (scrollContainerRef.current) {
-      const itemWidth = scrollContainerRef.current.firstElementChild?.clientWidth || 200;
-      const gap = window.innerWidth >= 1024 ? 32 : window.innerWidth >= 640 ? 16 : 12;
-      scrollContainerRef.current.scrollBy({
-        left: direction === 'left' ? -(itemWidth + gap) : (itemWidth + gap),
-        behavior: 'smooth'
-      });
+    if (categoriesRef.current) {
+      const scrollAmount = categoriesRef.current.offsetWidth / 2;
+      categoriesRef.current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
     }
   };
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentReview((prev) => (prev + 1) % reviewsList.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     async function fetchStoreData() {
@@ -147,17 +68,11 @@ export default function Home() {
         ]);
 
         const allProducts = prodSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+        setProducts(allProducts.filter(p => p.isPinnedForHome).slice(0, 4));
+        setFeaturedProduct(allProducts.find(p => p.isFeaturedThisWeek) || null);
+
         const allCats = catSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));
-
-        // Filter to only show pinned products, up to 4
-        const pinnedProducts = allProducts.filter(p => p.isPinnedForHome).slice(0, 4);
-        setProducts(pinnedProducts);
         setCategories(allCats);
-
-        const featured = allProducts.find(p => p.isFeaturedThisWeek);
-        if (featured) {
-          setFeaturedItem(featured);
-        }
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -168,385 +83,312 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen font-sans selection:bg-zinc-900/30 text-zinc-900 bg-[#FCFBF9]">
+    <div className="min-h-screen font-sans bg-[#FAF8F5] text-[#1F1F1F]">
       <Navbar />
-      <main className="flex-1">
-        {/* Section 1: Hero */}
-        <motion.section
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="mx-auto grid max-w-7xl px-4 sm:px-6 pt-24 sm:pt-32 pb-10 lg:grid-cols-[1.2fr_0.8fr] lg:px-8 border-b border-zinc-200 gap-0"
-        >
-          <div className="flex flex-col justify-center items-center sm:items-start text-center sm:text-left lg:border-r lg:border-zinc-200 lg:pr-12 w-full">
-            <h1 className="max-w-4xl text-4xl sm:text-6xl font-serif italic tracking-tighter lg:text-[5rem] leading-[1]">
-              <span className="text-black">Beautiful jewellery <br /> delivered with </span>
-              <span className="text-[var(--accent)]">elegance.</span>
-            </h1>
-            <p className="mt-8 sm:mt-12 max-w-xl text-xs sm:text-base leading-relaxed text-[var(--foreground)]/70 uppercase tracking-widest font-bold">
-              Lucky Balls brings together curated 18K gold plated pieces, premium pink packaging, and a seamless shopping experience for everyday luxury.
-            </p>
-            <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-4 w-full">
-              <Link href="/shop" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full sm:w-auto bg-[var(--accent)] text-white hover:bg-[var(--accent-deep)] px-10 h-14 text-sm font-bold uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 border-none">
-                  Shop Now <ArrowRight size={16} />
-                </Button>
-              </Link>
-              <Link href="/about" className="w-full sm:w-auto">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto border border-[var(--accent)] text-[var(--accent-deep)] bg-transparent hover:bg-[var(--surface-2)] px-10 h-14 text-sm font-bold uppercase tracking-[0.2em] transition-all flex items-center justify-center">
+
+      <main className="flex-1 overflow-hidden">
+
+        {/* 1. Hero Section */}
+        <section className="relative w-full min-h-[95vh] md:min-h-[85vh] flex items-center bg-gradient-to-r from-[#EDE5DF] to-[#FAF8F5] overflow-hidden pt-32 pb-20 md:py-32">
+          <div className="max-w-7xl mx-auto px-6 lg:px-12 w-full grid lg:grid-cols-2 gap-8 md:gap-12 items-center z-10 relative">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              className="bg-white/30 backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-none p-6 rounded-2xl lg:p-0"
+            >
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-serif text-[#1F1F1F] leading-[1.1] mb-4 md:mb-6">
+                Jewelry That <br />Speaks <span className="italic text-[#D6A77A]">Elegance</span>
+              </h1>
+              <p className="text-base md:text-lg text-[#1F1F1F]/80 md:text-[#1F1F1F]/70 font-light mb-8 md:mb-10 max-w-md">
+                Premium gold-plated pieces designed to celebrate your everyday moments.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/shop" className="bg-[#1F1F1F] text-[#FAF8F5] px-6 py-4 md:px-8 text-center uppercase tracking-widest text-xs font-medium hover:bg-[#D6A77A] transition-colors duration-500">
+                  Shop Collection
+                </Link>
+                <Link href="/about" className="bg-transparent border border-[#1F1F1F] text-[#1F1F1F] px-6 py-4 md:px-8 text-center uppercase tracking-widest text-xs font-medium hover:bg-[#1F1F1F] hover:text-[#FAF8F5] transition-colors duration-500">
                   Our Story
-                </Button>
-              </Link>
-            </div>
-            <div className="mt-12 sm:mt-16 grid grid-cols-3 sm:flex sm:flex-row items-start sm:items-center justify-center sm:justify-start gap-2 sm:gap-12 w-full pt-8 border-t border-zinc-200">
-              <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
-                <span className="text-xl sm:text-3xl font-serif text-zinc-900">500+</span>
-                <span className="text-[8px] sm:text-[10px] font-bold text-zinc-900 uppercase tracking-widest mt-1">Happy Customers</span>
-              </div>
-              <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
-                <span className="text-xl sm:text-3xl font-serif text-zinc-900">250+</span>
-                <span className="text-[8px] sm:text-[10px] font-bold text-zinc-900 uppercase tracking-widest mt-1">Products</span>
-              </div>
-              <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
-                <span className="text-xl sm:text-3xl font-serif text-zinc-900">4.9</span>
-                <span className="text-[8px] sm:text-[10px] font-bold text-zinc-900 uppercase tracking-widest mt-1">Avg. Rating</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-center lg:justify-end mt-12 lg:mt-0 lg:pl-12">
-            <div className="relative w-full max-w-[320px] sm:max-w-md md:max-w-lg aspect-[3/4] overflow-hidden group border border-zinc-200 bg-white">
-              <div className="h-full w-full bg-[#FCFBF9] flex items-center justify-center">
-                {featuredItem ? (
-                  <Image
-                    src={featuredItem.image || "/images/gift-basket.svg"}
-                    alt={featuredItem.name}
-                    width={600}
-                    height={800}
-                    priority
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full w-full text-zinc-300">
-                    <span className="mb-2 opacity-30 text-xs font-bold uppercase tracking-widest">Image Unavailable</span>
-                  </div>
-                )}
+                </Link>
               </div>
 
-              {/* Always visible minimalist overlay */}
-              <div className="absolute inset-0 flex flex-col justify-end items-center p-8 pb-10 text-center bg-gradient-to-t from-black/60 via-black/20 to-transparent">
-                <div className="flex flex-col items-center">
-                  <p className="text-[10px] font-bold text-white uppercase tracking-[0.3em] mb-3">This week&apos;s feature</p>
-                  <p className="text-2xl sm:text-3xl font-serif italic text-white mb-6">
-                    {featuredItem ? featuredItem.name : "Select a featured item"}
-                  </p>
-                  {featuredItem && (
-                    <Link href={`/product/${featuredItem.id}`}>
-                      <span className="inline-flex items-center gap-2 text-zinc-900 bg-white px-6 py-3 font-bold text-xs uppercase tracking-widest hover:bg-zinc-200 transition-all">
-                        View Product
-                      </span>
-                    </Link>
-                  )}
+              <div className="mt-8 md:mt-10 flex flex-row items-center justify-between lg:justify-start gap-2 sm:gap-6 lg:gap-12 pt-6 border-t border-[#1F1F1F]/10">
+                <div className="flex flex-col">
+                  <p className="text-xl sm:text-2xl lg:text-3xl font-serif text-[#1F1F1F]">500+</p>
+                  <p className="text-[9px] lg:text-[10px] uppercase tracking-[0.15em] sm:tracking-widest text-[#1F1F1F]/60 mt-1">Customers</p>
+                </div>
+                <div className="w-[1px] h-8 bg-[#1F1F1F]/10 hidden sm:block"></div>
+                <div className="flex flex-col">
+                  <p className="text-xl sm:text-2xl lg:text-3xl font-serif text-[#1F1F1F]">250+</p>
+                  <p className="text-[9px] lg:text-[10px] uppercase tracking-[0.15em] sm:tracking-widest text-[#1F1F1F]/60 mt-1">Products</p>
+                </div>
+                <div className="w-[1px] h-8 bg-[#1F1F1F]/10 hidden sm:block"></div>
+                <div className="flex flex-col">
+                  <p className="text-xl sm:text-2xl lg:text-3xl font-serif text-[#1F1F1F]">4.9</p>
+                  <p className="text-[9px] lg:text-[10px] uppercase tracking-[0.15em] sm:tracking-widest text-[#1F1F1F]/60 mt-1">Rating</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </motion.section>
 
-        {/* Section 2: Browse By Category */}
-        <motion.section
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7 }}
-          className="py-6 sm:py-10 border-t border-zinc-200 bg-zinc-50"
-        >
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-4xl font-serif italic text-zinc-900 md:text-5xl">Shop by Category</h2>
-              <p className="mt-4 text-xs sm:text-sm text-zinc-500 font-bold uppercase tracking-widest">Find exactly what you're looking for.</p>
-            </div>
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="absolute right-0 top-0 w-full lg:w-[55%] h-full z-0 overflow-hidden"
+          >
+            <Image src="/images/home main.jpg" alt="Lucky Balls Premium Jewelry" fill className="object-cover object-[center_right] md:object-center" priority />
+            <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-l from-transparent via-[#EDE5DF]/40 to-[#EDE5DF]/90 md:to-[#EDE5DF] block"></div>
+          </motion.div>
+        </section>
 
-            <div className="relative group">
-              <div
-                ref={scrollContainerRef}
-                className="grid grid-flow-col auto-cols-[140px] sm:auto-cols-[180px] md:auto-cols-[calc(25%-12px)] lg:auto-cols-[calc(25%-24px)] gap-3 sm:gap-4 lg:gap-8 overflow-x-auto pb-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-              >
-                {loading ? (
-                  <div className="col-span-full flex justify-center py-10 w-[90vw]">
-                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-900 border-t-transparent"></div>
+        {/* 2. Featured Collections */}
+        <section className="py-20 bg-[#F8F4F1]">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="text-center mb-16">
+            <h2 className="text-4xl md:text-[2.75rem] font-serif text-[#1F1F1F] italic mb-4">Shop by Category</h2>
+            <p className="uppercase tracking-[0.25em] text-[10px] md:text-[11px] text-[#B8865C] font-bold">FIND EXACTLY WHAT YOU'RE LOOKING FOR.</p>
+          </motion.div>
+
+          <div className="max-w-[1400px] mx-auto px-4 md:px-12 relative group">
+            <button onClick={() => scrollCategories('left')} className="absolute left-4 md:left-8 top-[35%] -translate-y-1/2 z-10 w-10 h-10 bg-white flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-[#1F1F1F] hidden md:flex hover:bg-[#FAF8F5] transition-colors">
+              <ChevronLeft size={20} strokeWidth={1.5} />
+            </button>
+            <button onClick={() => scrollCategories('right')} className="absolute right-4 md:right-8 top-[35%] -translate-y-1/2 z-10 w-10 h-10 bg-white flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-[#1F1F1F] hidden md:flex hover:bg-[#FAF8F5] transition-colors">
+              <ChevronRight size={20} strokeWidth={1.5} />
+            </button>
+
+            <div ref={categoriesRef} className="flex gap-4 md:gap-8 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-8 px-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              {loading ? (
+                Array(4).fill(0).map((_, i) => (
+                  <div key={i} className="min-w-[calc(50%-1rem)] md:min-w-[calc(25%-1.5rem)] flex flex-col items-center shrink-0 snap-start">
+                    <div className="w-[80%] aspect-square bg-[#EDE5DF] animate-pulse mb-6 shadow-sm mx-auto"></div>
                   </div>
-                ) : categories.length === 0 ? (
-                  <div className="col-span-full text-center py-10 text-zinc-9000 w-[90vw]">Categories will appear here.</div>
-                ) : (
-                  categories.map((cat, index) => (
-                    <Link href={`/shop?category=${cat.id}`} key={cat.id} className="group block relative snap-start w-full">
-                      <div className="relative aspect-square overflow-hidden bg-[#FCFBF9] w-full border border-zinc-200 group-hover:border-zinc-900 group-hover:border-2 transition-all">
-                        <Image
-                          src={cat.image || `/images/gift-basket.svg`}
-                          alt={cat.name}
-                          width={400}
-                          height={400}
-                          className={`object-cover w-full h-full transition-transform duration-1000 group-hover:scale-105 ${cat.image ? '' : 'opacity-10'}`}
-                        />
-                      </div>
+                ))
+              ) : (
+                categories.map((cat, i) => {
+                  const imageSrc = cat.image || `/images/cat-${cat.name.toLowerCase()}.jpg`;
 
-                      <div className="pt-4 pb-2 text-center border-t border-zinc-200 mt-4">
-                        <h3 className="text-zinc-900 font-serif italic text-xl group-hover:text-zinc-500 transition-colors">{cat.name}</h3>
-                        <p className="text-zinc-9000 text-[10px] mt-2 transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-widest font-bold group-hover:text-zinc-500">
-                          Explore <ArrowRight size={12} />
-                        </p>
-                      </div>
-                    </Link>
-                  ))
-                )}
-              </div>
-
-              {/* Navigation Arrows */}
-              <button
-                onClick={() => scrollCategories('left')}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -ml-3 sm:-ml-4 z-30 bg-white border border-zinc-300 text-zinc-900 p-3 opacity-0 group-hover:opacity-100 transition-all hover:bg-zinc-900 hover:text-white hover:border-zinc-900 hidden md:flex disabled:opacity-0"
-                aria-label="Scroll left"
-              >
-                <ChevronLeft size={20} />
-              </button>
-              <button
-                onClick={() => scrollCategories('right')}
-                className="absolute right-0 top-1/2 -translate-y-1/2 -mr-3 sm:-mr-4 z-30 bg-white border border-zinc-300 text-zinc-900 p-3 opacity-0 group-hover:opacity-100 transition-all hover:bg-zinc-900 hover:text-white hover:border-zinc-900 hidden md:flex disabled:opacity-0"
-                aria-label="Scroll right"
-              >
-                <ChevronRight size={20} />
-              </button>
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Section 3: Video Showcase */}
-        <motion.section
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7 }}
-          className="py-8 sm:py-12 overflow-hidden"
-        >
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
-              <SectionTitle
-                eyebrow="See it in action"
-                title="Styled for your everyday elegance"
-                description="Discover how our curated pieces catch the light and complete your look."
-              />
-              <Link href="/shop" className="shrink-0 mb-4 sm:mb-8">
-                <Button size="sm" variant="outline" className="gap-2 border-zinc-300 text-zinc-900 bg-white hover:bg-zinc-900 hover:text-white hover:border-zinc-900 rounded-none px-6 h-10 text-xs font-bold uppercase tracking-widest transition-all">
-                  Shop the Look <ArrowRight size={14} />
-                </Button>
-              </Link>
-            </div>
-
-            <div className="max-w-5xl mx-auto">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 lg:gap-6 w-full mx-auto">
-                {[
-                  { src: "/videos/Evileye%20neckless.mp4", tag: "Necklaces" },
-                  { src: "/videos/Bangle.mp4", tag: "Bangles" },
-                  { src: "/videos/Rings.mp4", tag: "Rings" }
-                ].map((video, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 100 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.7, delay: idx * 0.2, ease: "easeOut" }}
-                    className="relative aspect-[4/5] overflow-hidden group bg-[#FCFBF9] border border-zinc-200 flex items-center justify-center transition-all duration-500 hover:border-zinc-900"
-                    onMouseEnter={(e) => {
-                      const videoEl = e.currentTarget.querySelector('.desktop-video') as HTMLVideoElement;
-                      if (videoEl) videoEl.play().catch(() => { });
-                    }}
-                    onMouseLeave={(e) => {
-                      const videoEl = e.currentTarget.querySelector('.desktop-video') as HTMLVideoElement;
-                      if (videoEl) videoEl.pause();
-                    }}
-                  >
-                    {/* Mobile Video: Autoplays */}
-                    <video
-                      src={video.src}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      preload="auto"
-                      className="sm:hidden relative z-10 w-full h-full object-cover transition-transform duration-700"
-                    />
-                    {/* Desktop Video: Plays on hover */}
-                    <video
-                      src={video.src}
-                      loop
-                      muted
-                      playsInline
-                      preload="auto"
-                      className="desktop-video hidden sm:block relative z-10 w-full h-full object-cover transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 z-30 flex items-end justify-center pb-12 pointer-events-none opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-500">
-                      <p
-                        className="text-zinc-900 text-4xl sm:text-6xl"
-                        style={{ fontFamily: "'Palace Script MT', cursive" }}
-                      >
-                        {video.tag}
-                      </p>
+                  return (
+                    <div key={cat.id} className="min-w-[calc(50%-1rem)] md:min-w-[calc(25%-1.5rem)] shrink-0 snap-start flex flex-col items-center">
+                      <Link href={`/shop?category=${cat.id}`} className="w-[80%] mx-auto aspect-square relative mb-6 overflow-hidden bg-[#EDE5DF] group/img block shadow-sm">
+                        <Image src={imageSrc} alt={cat.name} fill sizes="(max-width: 768px) 33vw, 33vw" className="object-cover transition-transform duration-[1.5s] ease-in-out group-hover/img:scale-105" onError={(e) => (e.target as HTMLElement).style.display = 'none'} />
+                      </Link>
+                      <h3 className="font-serif text-[1.35rem] text-[#1F1F1F] mb-3 italic">{cat.name}</h3>
+                      <Link href={`/shop?category=${cat.id}`} className="uppercase tracking-[0.2em] text-[9px] text-[#1F1F1F] font-bold hover:text-[#B8865C] transition-colors flex items-center gap-1.5">
+                        EXPLORE <span className="text-[12px] leading-none mb-[2px]">&rarr;</span>
+                      </Link>
                     </div>
-                  </motion.div>
-                ))}
-              </div>
+                  );
+                })
+              )}
             </div>
+            <style jsx>{`
+              .hide-scrollbar::-webkit-scrollbar {
+                display: none;
+              }
+            `}</style>
           </div>
-        </motion.section>
+        </section>
 
-        {/* Section 4: Featured Collection */}
-        <motion.section
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7 }}
-          id="shop"
-          className="mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-10 lg:px-8 border-t border-zinc-200"
-        >
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
-            <SectionTitle
-              eyebrow="Featured collection"
-              title="Handpicked jewelry that feels extraordinary"
-              description="From premium 18K gold plated necklaces to elegant earrings, each piece is designed to delight."
-            />
-            <Link href="/shop" className="shrink-0 mb-4 sm:mb-8">
-              <Button size="sm" variant="outline" className="gap-2 border border-zinc-300 text-zinc-900 bg-white hover:bg-zinc-900 hover:text-white hover:border-zinc-900 px-6 h-12 transition-all font-bold uppercase tracking-[0.2em] text-xs">
-                View All <ArrowRight size={14} />
-              </Button>
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
-            {loading ? (
-              <div className="col-span-full flex justify-center py-20">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-900 border-t-transparent"></div>
-              </div>
-            ) : products.length === 0 ? (
-              <div className="col-span-full text-center py-20 text-zinc-9000 bg-white border border-zinc-200 shadow-sm">
-                No products have been pinned to the homepage yet.
-              </div>
-            ) : (
-              products.map((product, index) => (
-                <motion.div
-                  key={product.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                >
-                  <ProductCard
-                    id={product.id}
-                    priority={index < 4}
-                    name={product.name}
-                    price={`Rs. ${Math.round(product.price).toLocaleString('en-US')}`}
-                    description={product.description}
-                    badge={product.isFeaturedThisWeek ? "Featured" : undefined}
-                    image={product.image || "/images/gift-basket.svg"}
-                    isOutOfStock={product.isOutOfStock || (product.stockQuantity !== undefined && product.stockQuantity <= 0)}
-                    onShopClick={(quantity) => addToCart(product, undefined, quantity)}
-                  />
-                </motion.div>
-              ))
-            )}
-          </div>
-        </motion.section>
-
-        {/* Section 5: Why Lucky Balls */}
-        <motion.section
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7 }}
-          id="about"
-          className="mx-auto max-w-7xl px-4 sm:px-6 py-10 sm:py-16 lg:px-8 border-t border-zinc-200 mt-8 bg-white"
-        >
-          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] relative overflow-hidden">
-            <div className="relative z-10 flex flex-col justify-center">
-              <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-zinc-900 mb-6">
-                A polished experience from first click to delivery.
-              </h2>
-              <Link href="/about" className="mt-6 inline-block">
-                <Button variant="custom" className="bg-zinc-900 text-white hover:bg-zinc-800 hover:text-white rounded-none px-8 h-12 text-xs font-bold uppercase tracking-widest transition-all">
-                  Read our full story
-                </Button>
-              </Link>
-            </div>
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-3 relative z-10">
-              {highlights.map((item) => {
-                return (
-                  <div key={item.title} className="p-2">
-                    <h3 className="font-bold text-zinc-900 text-lg uppercase tracking-wider">{item.title}</h3>
-                    <p className="mt-4 text-sm leading-relaxed text-zinc-500 font-light">{item.description}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Section 5: Reviews */}
-        <motion.section
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7 }}
-          id="reviews"
-          className="py-6 sm:py-10"
-        >
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-16">
-              <SectionTitle
-                eyebrow="Customer love"
-                title="Loved by besties planning birthdays, weddings, and everyday surprises"
-              />
-            </div>
-
-            <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-              <ReviewBox messages={REVIEW_COL_1} delay={0} />
-              <div className="hidden md:block">
-                <ReviewBox messages={REVIEW_COL_2} delay={1000} />
-              </div>
-              <div className="hidden lg:block">
-                <ReviewBox messages={REVIEW_COL_3} delay={2000} />
-              </div>
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Section 6: Join the Community */}
-        <motion.section
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.8 }}
-          className="mt-8 sm:mt-16 w-full"
-        >
-          <div className="bg-[#FCFBF9] border-t border-zinc-200 text-center py-12 sm:py-20 px-4 sm:px-6 relative overflow-hidden">
-            <div className="relative z-10 max-w-2xl mx-auto">
-              <h2 className="text-4xl sm:text-6xl font-serif italic text-zinc-500 mb-6 uppercase tracking-[0.05em]">Join the Club</h2>
-              <p className="text-zinc-500 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] mb-10 leading-relaxed">
-                Be the first to know about exclusive drops, behind-the-scenes content, and styling tips. Follow us on Facebook and TikTok.
+        {/* 3. Luxury Campaign Section */}
+        <section className="py-8 md:py-16 bg-[#1F1F1F] text-[#FAF8F5] overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6 lg:px-12 grid md:grid-cols-2 gap-6 md:gap-16 items-center">
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1 }} className="order-2 md:order-1 text-center md:text-left">
+              <h2 className="text-3xl md:text-6xl font-serif leading-tight mb-4 md:mb-8">Crafted For <br className="hidden md:block" /><span className="italic text-[#D6A77A]">Modern Women</span></h2>
+              <p className="text-xs md:text-base font-light text-[#FAF8F5]/70 leading-relaxed mb-6 md:mb-10 max-w-md mx-auto md:mx-0">
+                Every piece is meticulously designed to empower, inspire, and elevate your personal style. Embrace the luxury you deserve.
               </p>
-              <div className="flex justify-center gap-6">
-                <a href="https://www.facebook.com/share/1DDmyjedcE/" target="_blank" rel="noopener noreferrer">
-                  <button className="inline-flex items-center justify-center w-14 h-14 bg-zinc-900 text-white hover:bg-zinc-800 rounded-none transition-all" aria-label="Follow on Facebook">
-                    <svg viewBox="0 0 320 512" className="w-5 h-5" fill="currentColor"><path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z" /></svg>
-                  </button>
-                </a>
-                <a href="https://www.tiktok.com/@lucky.balls?_r=1&_t=ZS-97fRtHuHIiD" target="_blank" rel="noopener noreferrer">
-                  <button className="inline-flex items-center justify-center w-14 h-14 bg-zinc-900 text-white hover:bg-zinc-800 rounded-none transition-all" aria-label="Follow on TikTok">
-                    <svg viewBox="0 0 448 512" className="w-5 h-5" fill="currentColor"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z" /></svg>
-                  </button>
-                </a>
+              <div>
+                <Link href={featuredProduct ? `/product/${featuredProduct.id}` : "/shop"} className="group block w-full max-w-sm mx-auto md:mx-0 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
+                  <div className="flex items-center gap-5">
+                    <div className="w-16 h-16 rounded-xl bg-[#2A2A2A] relative overflow-hidden shrink-0 flex items-center justify-center border border-white/5 group-hover:border-[#D6A77A]/30 transition-colors">
+                      <Image src={featuredProduct?.image || "/images/cat-necklaces.jpg"} alt={featuredProduct?.name || "Signature Gold Collection"} fill sizes="64px" className="object-cover group-hover:scale-110 transition-transform duration-500 z-0" />
+                      <div className="absolute inset-0 bg-gradient-to-tr from-[#D6A77A]/40 to-black/20 mix-blend-overlay z-10 pointer-events-none"></div>
+                    </div>
+                    <div className="text-left flex-1">
+                      <div className="text-[10px] uppercase tracking-[0.2em] text-[#D6A77A] mb-1 font-semibold">Featured Item</div>
+                      <div className="font-serif text-lg text-[#FAF8F5] mb-0.5 line-clamp-1">{featuredProduct?.name || "Signature Gold Collection"}</div>
+                      <div className="text-xs text-[#FAF8F5]/50 flex items-center gap-2">
+                        <span>Explore now</span>
+                        <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
               </div>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.2 }} className="order-1 md:order-2 relative aspect-[4/3] md:aspect-video lg:aspect-square bg-[#333] overflow-hidden">
+              <video src="/videos/crafted.mp4" autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover" />
+            </motion.div>
+          </div>
+        </section>
+
+        {/* 4. Best Sellers Section */}
+        <section className="py-16 bg-[#FAF8F5]">
+          <div className="max-w-7xl mx-auto px-6 lg:px-12">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="flex justify-between items-end mb-8 md:mb-10">
+              <h2 className="text-3xl md:text-4xl font-serif text-[#1F1F1F]">Best Selling</h2>
+              <Link href="/shop" className="uppercase tracking-widest text-xs font-medium border-b border-[#1F1F1F] pb-1 hover:text-[#D6A77A] hover:border-[#D6A77A] transition-colors hidden md:block">
+                View All
+              </Link>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.2 }} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
+              {loading ? (
+                Array(4).fill(0).map((_, i) => <div key={i} className="aspect-square bg-[#EDE5DF] animate-pulse"></div>)
+              ) : products.length > 0 ? (
+                products.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    id={product.id}
+                    name={product.name}
+                    price={product.price}
+                    image={product.image || "/images/gift-basket.svg"}
+                    onShopClick={(quantity) => {
+                      setSelectedProduct(product);
+                    }}
+                  />
+                ))
+              ) : (
+                <div className="col-span-full py-12 text-center text-[#1F1F1F]/50">No products found.</div>
+              )}
+            </motion.div>
+          </div>
+        </section>
+
+
+
+        {/* 6. Customer Reviews (Glassmorphism Slider) */}
+        <section id="reviews" className="py-20 bg-[#FAF8F5] relative overflow-hidden">
+          <div className="absolute top-0 right-[-10%] w-[40vw] h-[40vw] bg-[#F3E8E6] rounded-full blur-[100px] opacity-60 pointer-events-none"></div>
+          <div className="absolute bottom-0 left-[-10%] w-[30vw] h-[30vw] bg-[#EDE5DF] rounded-full blur-[100px] opacity-60 pointer-events-none"></div>
+
+          <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
+            <h2 className="text-4xl font-serif mb-12">Words Of Elegance</h2>
+
+            <div className="relative min-h-[300px] flex items-center justify-center">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentReview}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.4 }}
+                  className="absolute w-full grid grid-cols-1 md:grid-cols-3 gap-8"
+                >
+                  {[0, 1, 2].map((offset) => {
+                    const reviewIndex = (currentReview + offset) % reviewsList.length;
+                    const review = reviewsList[reviewIndex];
+                    return (
+                      <div key={offset} className={`bg-white/40 backdrop-blur-xl border border-white/60 p-8 rounded-[28px] shadow-[0_8px_32px_rgba(0,0,0,0.04)] flex-col justify-between h-full min-h-[250px] ${offset > 0 ? 'hidden md:flex' : 'flex'}`}>
+                        <div>
+                          <div className="flex justify-center md:justify-start mb-6">
+                            {Array(5).fill(0).map((_, i) => <Star key={i} size={14} className="text-[#D6A77A] fill-[#D6A77A] mx-[1px]" />)}
+                          </div>
+                          <p className="font-serif italic text-lg text-[#1F1F1F]/80 mb-6 leading-relaxed md:text-left">"{review.text}"</p>
+                        </div>
+                        <p className="uppercase tracking-widest text-xs font-bold text-[#1F1F1F] md:text-left">{review.name}</p>
+                      </div>
+                    )
+                  })}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            <div className="flex justify-center gap-3 mt-8">
+              {reviewsList.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentReview(i)}
+                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === currentReview ? 'bg-[#1F1F1F] w-8' : 'bg-[#1F1F1F]/20'}`}
+                />
+              ))}
             </div>
           </div>
-        </motion.section>
+        </section>
+
+        {/* 7. Brand Story Timeline */}
+        <section className="py-16 bg-[#1F1F1F] text-[#FAF8F5]">
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <h2 className="text-4xl md:text-5xl font-serif mb-6">Our Journey</h2>
+            <p className="font-serif text-xl md:text-2xl italic text-[#FAF8F5]/90 leading-relaxed mb-16">
+              Started in 2024, Lucky Balls has grown through social media into a trusted Sri Lankan jewelry brand, bringing affordable luxury to over <span className="text-[#D6A77A] font-semibold not-italic">5,000</span> happy customers.
+            </p>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-white/10 pt-16">
+              {[
+                { stat: "2024", label: "Founded" },
+                { stat: "5000+", label: "Happy Customers" },
+                { stat: "300+", label: "Unique Designs" },
+                { stat: "100%", label: "Satisfaction" }
+              ].map((s, i) => (
+                <div key={i}>
+                  <h3 className="text-3xl font-serif text-[#D6A77A] mb-2">{s.stat}</h3>
+                  <p className="uppercase tracking-widest text-[10px] text-white/50">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 8. Instagram Editorial Gallery (Masonry) */}
+        <section className="py-16 bg-[#FAF8F5]">
+          <div className="max-w-[1600px] mx-auto px-4 md:px-8">
+            <div className="text-center mb-12">
+              <p className="uppercase tracking-[0.2em] text-xs text-[#1F1F1F]/50 font-medium mb-4">The Style Journal</p>
+              <h2 className="text-4xl md:text-5xl font-serif text-[#1F1F1F]">Curated <span className="italic text-[#D6A77A]">Elegance</span></h2>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 lg:gap-8 md:auto-rows-[300px]">
+              {[
+                { src: "/images/1.jpg", span: "col-span-2 aspect-[4/3] md:col-span-2 md:row-span-2 md:aspect-auto", subtitle: "Timeless Elegance", title: "The Gold Standard" },
+                { src: "/images/2.jpg", span: "col-span-1 aspect-[4/5] md:col-span-1 md:row-span-2 md:aspect-auto", subtitle: "Everyday Luxury", title: "Subtle Statements" },
+                { src: "/images/3.jpg", span: "col-span-1 aspect-[4/5] md:col-span-1 md:row-span-1 md:aspect-auto", subtitle: "Handcrafted", title: "Artisan Details" },
+                { src: "/images/4.jpg", span: "col-span-2 aspect-[21/9] md:col-span-1 md:row-span-1 md:aspect-auto", subtitle: "New Arrivals", title: "Modern Classics" }
+              ].map((img, i) => (
+                <motion.div 
+                  key={i} 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.7, delay: i * 0.15, ease: "easeOut" }}
+                  className={`relative w-full h-full bg-[#EDE5DF] overflow-hidden group ${img.span} shadow-sm border border-black/5`}
+                >
+                  <Image src={img.src} alt="Facebook" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105" onError={(e) => (e.target as HTMLElement).style.display = 'none'} />
+                  {/* Premium overlay with subtle gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-700 flex flex-col justify-end p-4 md:p-8">
+                    <p className="text-white/80 text-[9px] md:text-[10px] uppercase tracking-[0.3em] font-medium mb-1 md:mb-2 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-700 delay-100">{img.subtitle}</p>
+                    <p className="text-white font-serif italic text-lg md:text-2xl md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-700 delay-150">{img.title}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 9. Join The Club Section */}
+        <section className="py-20 bg-[#EDE5DF] relative overflow-hidden">
+          <Image src="/images/become.gif" alt="Background" fill sizes="100vw" className="object-cover opacity-20 mix-blend-multiply" onError={(e) => (e.target as HTMLElement).style.display = 'none'} />
+          <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
+            <h2 className="text-[2.75rem] md:text-6xl font-serif text-[#1F1F1F] mb-6 tracking-wide italic uppercase">Join The Club</h2>
+            <p className="uppercase tracking-[0.2em] text-[10px] md:text-[11px] text-[#1F1F1F]/80 font-bold leading-[2] max-w-[600px] mx-auto mb-10">
+              Be the first to know about exclusive drops, behind-the-scenes content, and styling tips. Follow us on Facebook and TikTok.
+            </p>
+            <div className="flex justify-center items-center gap-4">
+              <a href="https://facebook.com/luckyballs.jewelry" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-[#9C7F4B] flex items-center justify-center hover:bg-[#856B3D] transition-colors shadow-sm">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                  <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                </svg>
+              </a>
+              <a href="https://tiktok.com/@luckyballs.jewelry" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-[#9C7F4B] flex items-center justify-center hover:bg-[#856B3D] transition-colors shadow-sm">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                  <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.12-3.44-3.17-3.64-5.46-.22-2.31.81-4.72 2.66-6.15 1.53-1.18 3.51-1.64 5.43-1.32v4.06c-1.31-.22-2.73.08-3.7 1.01-.98.92-1.28 2.45-.73 3.69.58 1.34 2.22 2.06 3.65 1.63 1.51-.44 2.43-2 2.4-3.59.04-5.4.02-10.8.03-16.2z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </section>
+
       </main>
 
       {selectedProduct && (
@@ -557,5 +399,3 @@ export default function Home() {
     </div>
   );
 }
-
-
